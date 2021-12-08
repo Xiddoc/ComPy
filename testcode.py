@@ -13,5 +13,10 @@ print("The answer is... ")
 print(c)
 
 
-# def mul(x, y):
+# noinspection PyMissingOrEmptyDocstring
+# def mul(x: int, y: int) -> int:
 # 	return x * y
+
+
+# mul(1, 2)
+# mul(3, 4)
