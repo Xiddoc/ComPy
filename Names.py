@@ -17,13 +17,13 @@ class Value:
 		self.__has_value = not not value
 		self.__value = value
 
-	def has_value(self):
+	def has_value(self) -> bool:
 		"""
 		Returns whether or not there is a value.
 		"""
 		return self.__has_value
 
-	def get_value(self):
+	def get_value(self) -> str:
 		"""
 		Returns the TRANSPILED value.
 		"""
@@ -46,7 +46,7 @@ class Variable(Name):
 	"""
 	initial_value: Value
 
-	def get_init(self):
+	def get_init(self) -> str:
 		"""
 		Transpiles the code for the initialization of the variable.
 		"""
@@ -67,27 +67,27 @@ class Function(Name):
 	func_body: str = ""
 	dependencies: list[str] = field(default_factory=lambda: [])
 
-	def get_init(self):
+	def get_init(self) -> str:
 		"""
 		Transpiles the code for the initialization of the function.
 		"""
 		return f"{self.var_type} {self.var_name}{self.get_args()}{self.get_block()}"
 
-	def get_args(self):
+	def get_args(self) -> str:
 		"""
 		Returns the argument list formatted into it's block.
 		For example: (int test_one, char test_two)
 		"""
 		return f"({','.join(f'{arg.var_type} {arg.var_name}' for arg in self.arguments)})"
 
-	def get_block(self):
+	def get_block(self) -> str:
 		"""
 		Returns the code block formatted in it's block.
 		For example: {test(1);}
 		"""
 		return "{" + self.func_body + "}"
 
-	def get_dependencies(self):
+	def get_dependencies(self) -> list[str]:
 		"""
 		Returns the list of dependencies for this function.
 		"""

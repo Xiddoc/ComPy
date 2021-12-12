@@ -4,8 +4,10 @@ Compiler class.
 from argparse import Namespace
 from ast import Module, AnnAssign, Name, Constant, expr, BinOp, operator, Add, Sub, Div, Mult, AST, parse, Expr, Call
 
+from DependencyManager import DependencyManager
 from Errors import UnsupportedFeatureException, VariableNotDefinedError
-from Names import Value, Block
+from Names import Value
+from Output import Output
 from Utilities import translate_constant
 from VarHandler import VarHandler
 
@@ -17,8 +19,9 @@ class Compiler:
 
 	__node: AST
 	__args: Namespace
-	__output: dict[str, list[Block]]
+	__output: Output
 	__var_handler: VarHandler
+	__dependency_manager: DependencyManager
 
 	def __init__(self, args: Namespace):
 		# Initialize the parser with the inputted parser instance
@@ -32,6 +35,8 @@ class Compiler:
 		"""
 		# Initialize an empty dictionary for variables
 		self.__var_handler = VarHandler()
+		# Initialize the dependency manager
+		self.__dependency_manager = DependencyManager()
 		# Initialize segment for code
 		self.__init_output()
 		# Parse the node into an abstract tree
@@ -59,7 +64,7 @@ class Compiler:
 					initial_value=self.eval_expr(node.value)
 				)
 				# Write to header
-				self.__write_to("code", var.get_init())
+				self.__output.code(var.get_init())
 
 			# Name (variable) usage
 			elif node_type == Name:
@@ -74,7 +79,7 @@ class Compiler:
 				# Make sure
 				# Evaluate the expression
 				# Write it to the code segment
-				self.__write_to("code", self.eval_expr(node.value).get_value() + ";")
+				self.__output.code(self.eval_expr(node.value).get_value() + ";")
 
 			else:
 				# If the compiler could not understand the operation
@@ -83,7 +88,7 @@ class Compiler:
 					f"Python feature '{node_type.__name__}' is not supported by the compiler.")
 
 		# Complete by injecting headers
-		self.__inject_headers()
+		self.__output.header(self.__dependency_manager.format_dependencies())
 
 	def eval_expr(self, expression: expr) -> Value:
 		"""
@@ -128,69 +133,24 @@ class Compiler:
 		# Transpile operation
 		return Value(self.eval_expr(left).get_value() + self.__op_to_str[type(op)] + self.eval_expr(right).get_value())
 
-	def get_output_as_list(self) -> list[str]:
-		"""
-		Returns the compiled output as a list of strings.
-		"""
-		# Make list
-		output_list: list[str] = []
-		# For each section of the code
-		for section in self.__output:
-			# For each block of code
-			for block in self.__output[section]:
-				# Append the code sample to output (join the sample together)
-				output_list.append(block.get_as_string())
-		# Return the output
-		return output_list
-
 	def get_output(self) -> str:
 		"""
 		Returns the compiled output as a string.
 		"""
-		return "\n".join(self.get_output_as_list())
+		return self.__output.get_output()
 
 	def __init_output(self) -> None:
 		"""
 		Initialize the output dictionary structure.
 		"""
-		# Init the actual dictionary
-		self.__output = {"header": [], "func": [], "code": [], "footer": []}
+		# Init output handler
+		self.__output = Output()
 		# Write defaults to sections
-		self.__write_to("code", "int main() {")
-		self.__write_to("footer", "return 0; }")
+		self.__output.code("int main() {")
+		self.__output.footer("return 0; }")
 		# Implement builtins
 		for func in self.__var_handler.get_funcs():
 			# Write init of func
-			self.__write_to("func", func.get_init())
-
-	def __write_to(self, segment: str, code_data: str) -> Block:
-		"""
-		Writes a snippet of data to a segment in the code.
-		:param segment: The segment to write to.
-		:param code_data: The code to write.
-		"""
-		# Create new code segment
-		code_block = Block(code_data)
-		# Append the code block to the current segment
-		self.__output[segment].append(code_block)
-		# Return a reference to the block
-		return code_block
-
-	def __inject_headers(self) -> None:
-		"""
-		Inject the headers into the header segment.
-		Perform optimization by removing duplicates.
-		"""
-		# Dependencies set (no duplicates)
-		all_depends = set()
-		# For each function
-		for func in self.__var_handler.get_funcs():
-			# For each dependency
-			for dependency in func.get_dependencies():
-				# Add it to the set
-				all_depends.add(dependency)
-
-		# For each dependency, include it
-		# Join it all together with new lines
-		# Add to headers
-		self.__write_to("header", "\n".join(f"#include <{dependency}>" for dependency in all_depends))
+			self.__output.func(func.get_init())
+			# Add dependencies
+			self.__dependency_manager.add_dependencies(func.get_dependencies())
