@@ -5,9 +5,9 @@ from argparse import Namespace
 from ast import Module, AnnAssign, Name, Constant, expr, BinOp, operator, Add, Sub, Div, Mult, AST, parse, Expr, Call
 
 from Errors import UnsupportedFeatureException, VariableNotDefinedError
+from Names import Value, Block
 from Utilities import translate_constant
 from VarHandler import VarHandler
-from Names import Value
 
 
 class Compiler:
@@ -17,7 +17,7 @@ class Compiler:
 
 	__node: AST
 	__args: Namespace
-	__output: dict[str, list[str]]
+	__output: dict[str, list[Block]]
 	__var_handler: VarHandler
 
 	def __init__(self, args: Namespace):
@@ -136,10 +136,10 @@ class Compiler:
 		output_list: list[str] = []
 		# For each section of the code
 		for section in self.__output:
-			# For each line of code
-			for line in self.__output[section]:
-				# Append to output
-				output_list.append(line)
+			# For each block of code
+			for block in self.__output[section]:
+				# Append the code sample to output (join the sample together)
+				output_list.append(block.get_as_string())
 		# Return the output
 		return output_list
 
@@ -153,26 +153,28 @@ class Compiler:
 		"""
 		Initialize the output dictionary structure.
 		"""
-		self.__output = {
-			"header": [],
-			"func": [
-				func.get_init() for func in self.__var_handler.get_funcs()
-			],
-			"code": [
-				"int main() {"
-			],
-			"footer": [
-				"return 0; }"
-			]
-		}
+		# Init the actual dictionary
+		self.__output = {"header": [], "func": [], "code": [], "footer": []}
+		# Write defaults to sections
+		self.__write_to("code", "int main() {")
+		self.__write_to("footer", "return 0; }")
+		# Implement builtins
+		for func in self.__var_handler.get_funcs():
+			# Write init of func
+			self.__write_to("func", func.get_init())
 
-	def __write_to(self, segment: str, code_data: str) -> None:
+	def __write_to(self, segment: str, code_data: str) -> Block:
 		"""
 		Writes a snippet of data to a segment in the code.
 		:param segment: The segment to write to.
 		:param code_data: The code to write.
 		"""
-		self.__output[segment].append(code_data)
+		# Create new code segment
+		code_block = Block(code_data)
+		# Append the code block to the current segment
+		self.__output[segment].append(code_block)
+		# Return a reference to the block
+		return code_block
 
 	def __inject_headers(self) -> None:
 		"""
