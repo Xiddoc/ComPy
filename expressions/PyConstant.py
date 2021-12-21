@@ -4,8 +4,8 @@ Constant literal.
 from _ast import Constant
 from json import dumps
 
-from Errors import UnsupportedFeatureException
 from expressions.PyExpression import PyExpression
+from Errors import UnsupportedFeatureException
 
 
 class PyConstant(PyExpression):
@@ -14,6 +14,7 @@ class PyConstant(PyExpression):
 	"""
 
 	def __init__(self, expression: Constant):
+		super().__init__(expression)
 		# Translate the value
 		self.__value = self.translate_constant(expression)
 
