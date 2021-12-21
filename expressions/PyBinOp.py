@@ -2,8 +2,7 @@
 Binary operation.
 """
 from _ast import BinOp
-from _ast import operator, Add, Sub, Mult
-from typing import Dict, Type
+from _ast import operator
 
 from Errors import UnsupportedFeatureException
 from expressions.PyExpression import PyExpression
@@ -41,8 +40,12 @@ class PyBinOp(PyExpression):
 		@param op: The operator to translate
 		@return: The operator as a C++ string.
 		"""
+		# Local import to avoid circular import errors
+		from Constants import AST_OP_TO_STR
+
 		# Get the operator type
 		op_type = type(op)
+
 		# Check if the operator is supported
 		if op_type in AST_OP_TO_STR:
 			# Return the translated operator
@@ -51,10 +54,3 @@ class PyBinOp(PyExpression):
 		else:
 			raise UnsupportedFeatureException(
 				f"Python feature '{op.__name__}' is not supported by the compiler.")
-
-
-AST_OP_TO_STR: Dict[Type[operator], str] = {
-	Add: "+",
-	Sub: "-",
-	Mult: "*"
-}

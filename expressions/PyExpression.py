@@ -2,9 +2,9 @@
 PyExpression base class.
 Used in extending for other expressions.
 """
-from _ast import expr, BinOp, Constant
+from _ast import expr
 from abc import abstractmethod, ABCMeta
-from typing import List, Dict, Type
+from typing import List
 
 from Errors import UnsupportedFeatureException
 
@@ -53,8 +53,12 @@ class PyExpression(metaclass=ABCMeta):
 		@param expression: The expression to convert.
 		@return: A PyExpression object of the matching type.
 		"""
+		# Local import to avoid circular import errors
+		from Constants import AST_EXPR_TO_PYEXPR
+
 		# Get the expression type
 		expr_type = type(expression)
+
 		# If the expression is valid
 		if expr_type in AST_EXPR_TO_PYEXPR:
 			# Convert to PyExpression and return
@@ -63,12 +67,3 @@ class PyExpression(metaclass=ABCMeta):
 		else:
 			raise UnsupportedFeatureException(
 				f"Python feature '{expr_type.__name__}' is not supported by the compiler.")
-
-
-from expressions.PyBinOp import PyBinOp
-from expressions.PyConstant import PyConstant
-
-AST_EXPR_TO_PYEXPR: Dict[Type[expr], Type[PyExpression]] = {
-	Constant: PyConstant,
-	BinOp: PyBinOp
-}
