@@ -10,12 +10,3 @@ builtin_names: dict[str, Name] = {
 	# "input": Function("input", "std::string", [])
 }
 
-escaped_python_strings = {
-	"\\": "\\\\",
-	"\n": "\\n",
-	"\t": "\\t",
-	"\r": "\\r",
-	"\b": "\\b",
-	"\'": "\\'",
-	"\f": "\\f"
-}
