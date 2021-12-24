@@ -77,7 +77,7 @@ class Compiler:
 				node: Expr
 				# Evaluate the expression
 				# Write it to the code segment
-				self.__output.write(PyExpression.from_expr(node.value))
+				self.__output.write(PyExpression.from_ast(node.value))
 
 			else:
 				# If the compiler could not understand the operation

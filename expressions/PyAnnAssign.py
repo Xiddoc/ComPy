@@ -1,23 +1,23 @@
 """
-Binary operation.
+Assign (an annotation) to a variable.
 """
-from _ast import BinOp
+from _ast import AST
 from _ast import operator
 
 from Errors import UnsupportedFeatureException
 from expressions.PyExpression import PyExpression
 
 
-class PyBinOp(PyExpression):
+class PyAnnAssign(PyExpression):
 	"""
-	Expression for binary operation.
+	Expression for assigning a variable.
 	"""
 
 	__left: PyExpression
 	__right: PyExpression
 	__op_type: str
 
-	def __init__(self, expression: BinOp):
+	def __init__(self, expression: AST):
 		super().__init__(expression)
 		# Convert op to string
 		self.__op_type = self.op_to_str(expression.op)

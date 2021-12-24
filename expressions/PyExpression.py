@@ -2,7 +2,7 @@
 PyExpression base class.
 Used in extending for other expressions.
 """
-from _ast import expr
+from _ast import AST
 from abc import abstractmethod, ABCMeta
 from typing import List
 
@@ -18,7 +18,7 @@ class PyExpression(metaclass=ABCMeta):
 	__depends: List[str]
 
 	@abstractmethod
-	def __init__(self, expression: expr):
+	def __init__(self, expression: AST):
 		"""
 		Constructor for the expression.
 		"""
@@ -46,7 +46,7 @@ class PyExpression(metaclass=ABCMeta):
 		self.__depends.append(dependency)
 
 	@staticmethod
-	def from_expr(expression: expr) -> "PyExpression":
+	def from_ast(expression: AST) -> "PyExpression":
 		"""
 		Converts an AST expression to a PyExpression object.
 

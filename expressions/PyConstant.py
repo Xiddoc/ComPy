@@ -4,8 +4,8 @@ Constant literal.
 from _ast import Constant
 from json import dumps
 
-from expressions.PyExpression import PyExpression
 from Errors import UnsupportedFeatureException
+from expressions.PyExpression import PyExpression
 
 
 class PyConstant(PyExpression):
