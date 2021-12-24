@@ -2,14 +2,12 @@
 Compiler class.
 """
 from argparse import Namespace
-from ast import Module, AnnAssign, Name, Constant, expr, BinOp, operator, Add, Sub, Div, Mult, AST, parse, Expr, Call
+from ast import Module, AST, parse
 
 from DependencyManager import DependencyManager
-from Errors import UnsupportedFeatureException, VariableNotDefinedError
-from Names import Value
 from Output import Output
-from Utilities import translate_constant
 from VarHandler import VarHandler
+from expressions.PyExpression import PyExpression
 
 
 class Compiler:
@@ -24,8 +22,6 @@ class Compiler:
 	__dependency_manager: DependencyManager
 
 	def __init__(self, args: Namespace):
-		# Initialize the parser with the inputted parser instance
-		self.__op_to_str: dict[type, str] = {Add: "+", Sub: "-", Div: "/", Mult: "*"}
 		# Use the given arguments
 		self.__args = args
 
@@ -54,62 +50,34 @@ class Compiler:
 			if node_type == Module:
 				# Do something later if necessary with imports
 				continue
-
-			# Type defenition
-			elif node_type == AnnAssign:
-				# Initialize the varaible in the manager
-				var = self.__var_handler.init_var(
-					var_name=node.target.id,
-					var_type=node.annotation.id,
-					initial_value=self.eval_expr(node.value)
-				)
-				# Write to header
-				self.__output.code(var.get_init())
-
-			# Name (variable) usage
-			elif node_type == Name:
-				# Verify that name has been initialized
-				# If it is not
-				if not self.__var_handler.is_var_exists(node.id):
-					# Raise an error
-					raise VariableNotDefinedError(f"Variable '{node.id}' has was not initialized before usage.")
-
-			# Base expression (function, literal string comment / mutliline comment)
-			elif node_type == Expr:
-				# Make sure
+			else:
 				# Evaluate the expression
 				# Write it to the code segment
-				self.__output.code(self.eval_expr(node.value).get_value() + ";")
-
-			else:
-				# If the compiler could not understand the operation
-				# Then throw an unsupported operation error
-				raise UnsupportedFeatureException(
-					f"Python feature '{node_type.__name__}' is not supported by the compiler.")
+				self.__output.write(PyExpression.from_ast(node))
 
 		# Complete by injecting headers
-		self.__output.header(self.__dependency_manager.format_dependencies())
-
-	def eval_expr(self, expression: expr) -> Value:
+		# self.__output.header(self.__dependency_manager.format_dependencies())
 		"""
-		Takes an expression and evaluates it to code.
-		:param expression: AST expression class or class that extends it.
+		#Type defenition
+		elif node_type == AnnAssign:
+			# Initialize the varaible in the manager
+			var = self.__var_handler.init_var(
+				var_name=node.target.id,
+				var_type=node.annotation.id,
+				initial_value=self.eval_expr(node.value)
+			)
+			# Write to header
+			self.__output.code(var.get_init())
+
+		# Name (variable) usage
+		elif node_type == Name:
+			# Verify that name has been initialized
+			# If it is not
+			if not self.__var_handler.is_var_exists(node.id):
+				# Raise an error
+				raise VariableNotDefinedError(f"Variable '{node.id}' has was not initialized before usage.")
 		"""
-		# Get the type of the constant
-		expr_type = type(expression)
-
-		# If value is a constant
-		if expr_type == Constant:
-			# Transpile the constant
-			# Return the constant
-			expression: Constant
-			return Value(translate_constant(expression))
-
-		elif expr_type == BinOp:
-			# If value is a binary operation
-			# Then evaluate the operation
-			return self.eval_op(expression.left, expression.op, expression.right)
-
+		"""
 		elif expr_type == Name:
 			# If the value is a name (variable)
 			# Then return the variable name
@@ -118,20 +86,9 @@ class Compiler:
 		elif expr_type == Call:
 			# If value is an expression (function, literals)
 			return Value(f"{expression.func.id}({','.join(self.eval_expr(arg).get_value() for arg in expression.args)})")
-
 		# Guess we can not do anything :(
 		raise UnsupportedFeatureException(f"Python feature '{expr_type.__name__}' is not supported by the compiler.")
-
-	def eval_op(self, left: expr, op: operator, right: expr) -> Value:
 		"""
-		Evaluates (transpiles) an operation.
-		:param left: The left side of the operation.
-		:param op: The operation given.
-		:param right: The right side of the operation.
-		:return: A string representing the transpiled version of the operation.
-		"""
-		# Transpile operation
-		return Value(self.eval_expr(left).get_value() + self.__op_to_str[type(op)] + self.eval_expr(right).get_value())
 
 	def get_output(self) -> str:
 		"""
@@ -145,6 +102,7 @@ class Compiler:
 		"""
 		# Init output handler
 		self.__output = Output()
+		"""
 		# Write defaults to sections
 		self.__output.code("int main() {")
 		self.__output.footer("return 0; }")
@@ -154,3 +112,4 @@ class Compiler:
 			self.__output.func(func.get_init())
 			# Add dependencies
 			self.__dependency_manager.add_dependencies(func.get_dependencies())
+		"""
