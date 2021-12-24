@@ -15,6 +15,7 @@ class PyExpression(metaclass=ABCMeta):
 	PyExpression base class.
 	"""
 
+	__expression: AST
 	__depends: List[str]
 
 	@abstractmethod
@@ -22,6 +23,7 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		Constructor for the expression.
 		"""
+		self.__expression = expression
 
 	@abstractmethod
 	def transpile(self) -> str:
@@ -44,6 +46,12 @@ class PyExpression(metaclass=ABCMeta):
 		@param dependency: The dependency to add.
 		"""
 		self.__depends.append(dependency)
+
+	def get_expression(self) -> AST:
+		"""
+		@return: Returns the expression this instance is holding (was initialized with).
+		"""
+		return self.__expression
 
 	@staticmethod
 	def from_ast(expression: AST) -> "PyExpression":

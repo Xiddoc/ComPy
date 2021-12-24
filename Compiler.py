@@ -53,7 +53,7 @@ class Compiler:
 			else:
 				# Evaluate the expression
 				# Write it to the code segment
-				self.__output.write(PyExpression.from_ast(node.value))
+				self.__output.write(PyExpression.from_ast(node))
 
 		# Complete by injecting headers
 		# self.__output.header(self.__dependency_manager.format_dependencies())
