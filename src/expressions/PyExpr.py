@@ -3,7 +3,7 @@ Expression statement.
 """
 from _ast import Expr
 
-from expressions.PyExpression import PyExpression
+from src.expressions.PyExpression import PyExpression
 
 
 class PyExpr(PyExpression):

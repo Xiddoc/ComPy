@@ -7,7 +7,7 @@ from ast import Module, AST, parse
 from src.DependencyManager import DependencyManager
 from src.Output import Output
 from src.VarHandler import VarHandler
-from expressions.PyExpression import PyExpression
+from src.expressions.PyExpression import PyExpression
 
 
 class Compiler:

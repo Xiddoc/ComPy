@@ -5,7 +5,7 @@ from _ast import BinOp
 from _ast import operator
 
 from src.Errors import UnsupportedFeatureException
-from expressions.PyExpression import PyExpression
+from src.expressions.PyExpression import PyExpression
 
 
 class PyBinOp(PyExpression):
