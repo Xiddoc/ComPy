@@ -4,9 +4,9 @@ Compiler class.
 from argparse import Namespace
 from ast import Module, AST, parse
 
-from DependencyManager import DependencyManager
-from Output import Output
-from VarHandler import VarHandler
+from src.DependencyManager import DependencyManager
+from src.Output import Output
+from src.VarHandler import VarHandler
 from expressions.PyExpression import PyExpression
 
 

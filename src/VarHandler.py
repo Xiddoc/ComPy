@@ -1,9 +1,9 @@
 """
 Compiler class for managing variables, their types, and possibly values.
 """
-from Builtins import builtin_names
-from Errors import VariableAlreadyDefinedError, VariableNotDefinedError
-from Names import Value, Variable, Name, Function
+from src.Builtins import builtin_names
+from src.Errors import VariableAlreadyDefinedError, VariableNotDefinedError
+from src.Names import Value, Variable, Name, Function
 
 
 class VarHandler:

@@ -1,7 +1,7 @@
 """
 Python Builtin functions and types.
 """
-from Names import Value, Variable, Function, Name
+from src.Names import Value, Variable, Function, Name
 
 builtin_names: dict[str, Name] = {
 	"int": Variable("int", "type", Value()),

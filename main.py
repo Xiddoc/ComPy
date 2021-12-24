@@ -2,10 +2,9 @@
 Main script for ASManifest
 """
 from argparse import ArgumentParser, FileType
-from os.path import basename
 from typing import IO
 
-from Compiler import Compiler
+from src.Compiler import Compiler
 
 print("\n[ ASManifest Compiler ]\n")
 
@@ -40,7 +39,7 @@ print("Successfully compiled!")
 ioStream: IO = args.output if args.output else open(args.file + '.cpp', "w")
 
 # Write to the file
-print(f"Writing to output file '{basename(ioStream.name)}'...")
+print(f"Writing to output file '{ioStream.name}'...")
 ioStream.write(c.get_output())
 # Close the stream
 ioStream.close()

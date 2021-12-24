@@ -4,7 +4,7 @@ Binary operation.
 from _ast import BinOp
 from _ast import operator
 
-from Errors import UnsupportedFeatureException
+from src.Errors import UnsupportedFeatureException
 from expressions.PyExpression import PyExpression
 
 
@@ -41,7 +41,7 @@ class PyBinOp(PyExpression):
 		@return: The operator as a C++ string.
 		"""
 		# Local import to avoid circular import errors
-		from Constants import AST_OP_TO_STR
+		from src.Constants import AST_OP_TO_STR
 
 		# Get the operator type
 		op_type = type(op)

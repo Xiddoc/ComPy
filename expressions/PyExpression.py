@@ -6,7 +6,7 @@ from _ast import AST
 from abc import abstractmethod, ABCMeta
 from typing import List
 
-from Errors import UnsupportedFeatureException
+from src.Errors import UnsupportedFeatureException
 
 
 # noinspection PyUnusedFunction
@@ -62,7 +62,7 @@ class PyExpression(metaclass=ABCMeta):
 		@return: A PyExpression object of the matching type.
 		"""
 		# Local import to avoid circular import errors
-		from Constants import AST_EXPR_TO_PYEXPR
+		from src.Constants import AST_EXPR_TO_PYEXPR
 
 		# Get the expression type
 		expr_type = type(expression)
