@@ -30,7 +30,7 @@ class PyBinOp(PyExpression):
 		Transpile the operation to a string.
 		@return:
 		"""
-		return self.__left.transpile() + self.__op_type + self.__right.transpile()
+		return "(" + self.__left.transpile() + self.__op_type + self.__right.transpile() + ")"
 
 	@staticmethod
 	def op_to_str(op: operator) -> str:
