@@ -62,7 +62,7 @@ class PyExpression(metaclass=ABCMeta):
 		# If the expression is valid
 		if expr_type in AST_EXPR_TO_PYEXPR:
 			# Convert to PyExpression and return
-			return AST_EXPR_TO_PYEXPR[type(expression)](expression)
+			return AST_EXPR_TO_PYEXPR[expr_type](expression)
 		# Otherwise, it is probably a feature we do not support
 		else:
 			raise UnsupportedFeatureException(

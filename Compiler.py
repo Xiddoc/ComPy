@@ -2,10 +2,9 @@
 Compiler class.
 """
 from argparse import Namespace
-from ast import Module, AST, parse, Expr
+from ast import Module, AST, parse
 
 from DependencyManager import DependencyManager
-from Errors import UnsupportedFeatureException
 from Output import Output
 from VarHandler import VarHandler
 from expressions.PyExpression import PyExpression
@@ -51,42 +50,33 @@ class Compiler:
 			if node_type == Module:
 				# Do something later if necessary with imports
 				continue
-
-			# Type defenition
-			# elif node_type == AnnAssign:
-			# 	# Initialize the varaible in the manager
-			# 	var = self.__var_handler.init_var(
-			# 		var_name=node.target.id,
-			# 		var_type=node.annotation.id,
-			# 		initial_value=self.eval_expr(node.value)
-			# 	)
-			# 	# Write to header
-			# 	self.__output.code(var.get_init())
-			#
-			# # Name (variable) usage
-			# elif node_type == Name:
-			# 	# Verify that name has been initialized
-			# 	# If it is not
-			# 	if not self.__var_handler.is_var_exists(node.id):
-			# 		# Raise an error
-			# 		raise VariableNotDefinedError(f"Variable '{node.id}' has was not initialized before usage.")
-
-			# Base expression (function, literal string comment / mutliline comment)
-			elif node_type == Expr:
-				# Type hint
-				node: Expr
+			else:
 				# Evaluate the expression
 				# Write it to the code segment
 				self.__output.write(PyExpression.from_ast(node.value))
 
-			else:
-				# If the compiler could not understand the operation
-				# Then throw an unsupported operation error
-				raise UnsupportedFeatureException(
-					f"Python feature '{node_type.__name__}' is not supported by the compiler.")
-
 		# Complete by injecting headers
 		# self.__output.header(self.__dependency_manager.format_dependencies())
+		"""
+		#Type defenition
+		elif node_type == AnnAssign:
+			# Initialize the varaible in the manager
+			var = self.__var_handler.init_var(
+				var_name=node.target.id,
+				var_type=node.annotation.id,
+				initial_value=self.eval_expr(node.value)
+			)
+			# Write to header
+			self.__output.code(var.get_init())
+
+		# Name (variable) usage
+		elif node_type == Name:
+			# Verify that name has been initialized
+			# If it is not
+			if not self.__var_handler.is_var_exists(node.id):
+				# Raise an error
+				raise VariableNotDefinedError(f"Variable '{node.id}' has was not initialized before usage.")
+		"""
 		"""
 		elif expr_type == Name:
 			# If the value is a name (variable)
