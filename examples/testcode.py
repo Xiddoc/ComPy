@@ -15,8 +15,8 @@ b: int = a + 4
 c: int = b
 
 # Built-in function calls
-# print("The answer is... ")
-# print(c)
+print("The answer is... ")
+print(c)
 
 
 # noinspection PyMissingOrEmptyDocstring
