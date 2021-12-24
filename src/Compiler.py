@@ -43,7 +43,8 @@ class Compiler:
 			# Get the type of the node
 			node_type = type(node)
 
-			print(node)
+			# Basic logger, remove later and add better UI
+			print(f"Compiling expression {node}...")
 
 			# Switch-like statement (if/elif) for matching node type
 			# If multiline comment (Python literal string which is not assigned to a variable)
@@ -58,17 +59,6 @@ class Compiler:
 		# Complete by injecting headers
 		# self.__output.header(self.__dependency_manager.format_dependencies())
 		"""
-		#Type defenition
-		elif node_type == AnnAssign:
-			# Initialize the varaible in the manager
-			var = self.__var_handler.init_var(
-				var_name=node.target.id,
-				var_type=node.annotation.id,
-				initial_value=self.eval_expr(node.value)
-			)
-			# Write to header
-			self.__output.code(var.get_init())
-
 		# Name (variable) usage
 		elif node_type == Name:
 			# Verify that name has been initialized
@@ -76,18 +66,14 @@ class Compiler:
 			if not self.__var_handler.is_var_exists(node.id):
 				# Raise an error
 				raise VariableNotDefinedError(f"Variable '{node.id}' has was not initialized before usage.")
-		"""
-		"""
+		
 		elif expr_type == Name:
 			# If the value is a name (variable)
 			# Then return the variable name
 			return Value(self.__var_handler.get_var(expression.id).var_name)
-
 		elif expr_type == Call:
 			# If value is an expression (function, literals)
 			return Value(f"{expression.func.id}({','.join(self.eval_expr(arg).get_value() for arg in expression.args)})")
-		# Guess we can not do anything :(
-		raise UnsupportedFeatureException(f"Python feature '{expr_type.__name__}' is not supported by the compiler.")
 		"""
 
 	def get_output(self) -> str:

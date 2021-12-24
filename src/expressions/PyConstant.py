@@ -13,6 +13,8 @@ class PyConstant(PyExpression):
 	Literal constant value.
 	"""
 
+	__value: str
+
 	def __init__(self, expression: Constant):
 		super().__init__(expression)
 		# Translate the value

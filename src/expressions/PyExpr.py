@@ -11,6 +11,8 @@ class PyExpr(PyExpression):
 	Expression statement.
 	"""
 
+	__value: PyExpression
+
 	def __init__(self, expression: Expr):
 		super().__init__(expression)
 		# Translate the value

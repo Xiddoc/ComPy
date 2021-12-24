@@ -9,10 +9,10 @@ Lots of escaped characters!
 a: int = (1 + 2) * 3
 
 # Assignment of type and name with binary operation
-# b: int = a + 4
+b: int = a + 4
 
 # Assignment of type and name
-# c: int = b
+c: int = b
 
 # Built-in function calls
 # print("The answer is... ")
