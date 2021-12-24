@@ -19,10 +19,14 @@ print("The answer is... ")
 print(c)
 
 
-# noinspection PyMissingOrEmptyDocstring
-# def mul(x: int, y: int) -> int:
-# 	return x * y
+# Function declaration
+def mul(x: int, y: int) -> int:
+	"""
+	Test function.
+	"""
+	return x * y
 
 
-# mul(1, 2)
-# mul(3, 4)
+# Custom function usage
+mul(1, 2)
+mul(3, 4)
