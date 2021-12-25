@@ -5,6 +5,12 @@ Lots of escaped characters!
 ' " ` ; / % @ { } \
 """
 
+# # Importing a local file
+# import examples.testimport
+#
+# # Incrementing variables from imported file
+# examples.testimport.n += 1
+
 # Assignment of type and value of constant or binary operation
 a: int = (1 + 2) * 3
 
