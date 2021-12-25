@@ -23,7 +23,7 @@ class PyExpr(PyExpression):
 			self.__value = None
 		else:
 			# Otherwise, translate the value
-			self.__value = PyExpression.from_ast(expression.value)
+			self.__value = self.from_ast(expression.value)
 
 	def transpile(self) -> str:
 		"""

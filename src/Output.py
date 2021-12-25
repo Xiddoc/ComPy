@@ -1,7 +1,7 @@
 """
 Output manager / Compiled data handler.
 """
-from typing import List
+from typing import List, Set
 
 from src.pyexpressions.PyExpression import PyExpression
 
@@ -29,12 +29,21 @@ class Output:
 		"""
 		Returns the compiled output as a list of strings.
 		"""
-		# Make list
+		# Make lists
 		output_list: List[str] = []
+		depends_list: Set[str] = set()
 		# For each section of the code
 		for expression in self.__output:
-			# Transpile each segment
+			# Add dependencies to the output
+			depends_list.update(expression.get_dependencies())
+			# Transpile each segment and add it to the output
 			output_list.append(expression.transpile())
+		# For each dependency
+		# This runs in exponential time (.insert is linear, external 'for' loop is linear)
+		# If optimizations are required later, check out "collections.deque".
+		for dependency in depends_list:
+			# Insert dependency
+			output_list.insert(0, f"#include <{dependency}>")
 		# Return the output
 		return output_list
 

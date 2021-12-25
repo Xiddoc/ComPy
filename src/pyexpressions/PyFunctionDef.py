@@ -24,7 +24,7 @@ class PyFunctionDef(PyExpression):
 		# Convert and store
 		self.__func_name = expression.name
 		self.__args = [PyArg(arg) for arg in expression.args.args]
-		self.__code = [PyExpression.from_ast(ast) for ast in expression.body]
+		self.__code = [self.from_ast(ast) for ast in expression.body]
 		self.__return_type = PyName(expression.returns)
 
 	def transpile(self) -> str:

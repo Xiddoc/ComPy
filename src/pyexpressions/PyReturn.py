@@ -16,7 +16,7 @@ class PyReturn(PyExpression):
 	def __init__(self, expression: Return):
 		super().__init__(expression)
 		# Translate the value
-		self.__value = PyExpression.from_ast(expression.value)
+		self.__value = self.from_ast(expression.value)
 
 	def transpile(self) -> str:
 		"""

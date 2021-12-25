@@ -1,5 +1,5 @@
 """
-Compiler class for managing variables, their types, and possibly values.
+Compiler class for managing variables and their types between scopes.
 """
 from src.Builtins import builtin_names
 from src.Errors import VariableAlreadyDefinedError, VariableNotDefinedError

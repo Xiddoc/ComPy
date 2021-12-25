@@ -1,7 +1,7 @@
 """
 Expression statement.
 """
-from _ast import Expr, Call
+from _ast import Call
 from typing import List
 
 from src.pyexpressions.PyExpression import PyExpression
@@ -20,7 +20,7 @@ class PyCall(PyExpression):
 		super().__init__(expression)
 		# Convert and store
 		self.__func = PyName(expression.func)
-		self.__args = [PyExpression.from_ast(arg) for arg in expression.args]
+		self.__args = [self.from_ast(arg) for arg in expression.args]
 
 	def transpile(self) -> str:
 		"""

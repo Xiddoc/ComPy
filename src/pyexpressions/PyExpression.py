@@ -4,7 +4,7 @@ Used in extending for other pyexpressions.
 """
 from _ast import AST
 from abc import abstractmethod, ABCMeta
-from typing import List
+from typing import List, Set, Union
 
 from src.Errors import UnsupportedFeatureException
 
@@ -16,14 +16,17 @@ class PyExpression(metaclass=ABCMeta):
 	"""
 
 	__expression: AST
-	__depends: List[str]
+	__depends: Set[str]
 
 	@abstractmethod
 	def __init__(self, expression: AST):
 		"""
 		Constructor for the expression.
 		"""
+		# Set base expression
 		self.__expression = expression
+		# Create depenency set
+		self.__depends = set()
 
 	@abstractmethod
 	def transpile(self) -> str:
@@ -31,13 +34,13 @@ class PyExpression(metaclass=ABCMeta):
 		Transpiles this expression to a C++ string.
 		"""
 
-	def add_dependencies(self, dependencies: List[str]) -> None:
+	def add_dependencies(self, dependencies: Union[Set[str], List[str]]) -> None:
 		"""
 		Adds multiple dependencies to the dependency list.
 
 		@param dependencies: A list of native dependencies that this object relies on.
 		"""
-		self.__depends.extend(dependencies)
+		self.__depends.update(dependencies)
 
 	def add_dependency(self, dependency: str) -> None:
 		"""
@@ -45,7 +48,13 @@ class PyExpression(metaclass=ABCMeta):
 
 		@param dependency: The dependency to add.
 		"""
-		self.__depends.append(dependency)
+		self.__depends.add(dependency)
+
+	def get_dependencies(self) -> Set[str]:
+		"""
+		Returns the list of dependencies that this expression relies on.
+		"""
+		return self.__depends
 
 	def get_expression(self) -> AST:
 		"""
@@ -53,8 +62,25 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		return self.__expression
 
+	def from_ast(self, expression: AST) -> "PyExpression":
+		"""
+		Converts an AST expression to a PyExpression object.
+
+		As opposed to the static from_ast method, this one
+		inherits dependencies directly to the current object.
+
+		@param expression: The expression to convert.
+		@return: A PyExpression object of the matching type.
+		"""
+		# Convert to PyExpression
+		obj: PyExpression = PyExpression.from_ast_statically(expression)
+		# Extend dependencies to this object
+		self.add_dependencies(obj.get_dependencies())
+		# Return new object
+		return obj
+
 	@staticmethod
-	def from_ast(expression: AST) -> "PyExpression":
+	def from_ast_statically(expression: AST) -> "PyExpression":
 		"""
 		Converts an AST expression to a PyExpression object.
 

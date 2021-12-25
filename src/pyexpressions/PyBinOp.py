@@ -22,8 +22,8 @@ class PyBinOp(PyExpression):
 		# Convert op to string
 		self.__op_type = self.op_to_str(expression.op)
 		# Store sides
-		self.__left = PyExpression.from_ast(expression.left)
-		self.__right = PyExpression.from_ast(expression.right)
+		self.__left = self.from_ast(expression.left)
+		self.__right = self.from_ast(expression.right)
 
 	def transpile(self) -> str:
 		"""
