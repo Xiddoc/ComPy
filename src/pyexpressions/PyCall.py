@@ -1,11 +1,11 @@
 """
 Expression statement.
 """
-from _ast import Expr
+from _ast import Expr, Call
 from typing import List
 
-from src.expressions.PyExpression import PyExpression
-from src.expressions.PyName import PyName
+from src.pyexpressions.PyExpression import PyExpression
+from src.pyexpressions.PyName import PyName
 
 
 class PyCall(PyExpression):
@@ -16,7 +16,7 @@ class PyCall(PyExpression):
 	__args: List[PyExpression]
 	__func: PyName
 
-	def __init__(self, expression: Expr):
+	def __init__(self, expression: Call):
 		super().__init__(expression)
 		# Convert and store
 		self.__func = PyName(expression.func)

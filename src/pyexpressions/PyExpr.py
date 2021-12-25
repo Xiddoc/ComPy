@@ -4,7 +4,7 @@ Expression statement.
 from _ast import Expr, Constant
 from typing import Union
 
-from src.expressions.PyExpression import PyExpression
+from src.pyexpressions.PyExpression import PyExpression
 
 
 class PyExpr(PyExpression):

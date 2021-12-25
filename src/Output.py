@@ -3,7 +3,7 @@ Output manager / Compiled data handler.
 """
 from typing import List
 
-from src.expressions.PyExpression import PyExpression
+from src.pyexpressions.PyExpression import PyExpression
 
 
 class Output:

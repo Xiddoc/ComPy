@@ -5,7 +5,7 @@ from _ast import Constant
 from json import dumps
 
 from src.Errors import UnsupportedFeatureException
-from src.expressions.PyExpression import PyExpression
+from src.pyexpressions.PyExpression import PyExpression
 
 
 class PyConstant(PyExpression):

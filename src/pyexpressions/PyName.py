@@ -3,7 +3,7 @@ Name statement (usage of an object).
 """
 from _ast import Name
 
-from src.expressions.PyExpression import PyExpression
+from src.pyexpressions.PyExpression import PyExpression
 
 
 class PyName(PyExpression):

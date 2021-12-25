@@ -1,6 +1,6 @@
 """
 PyExpression base class.
-Used in extending for other expressions.
+Used in extending for other pyexpressions.
 """
 from _ast import AST
 from abc import abstractmethod, ABCMeta

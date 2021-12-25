@@ -3,8 +3,8 @@ Function argument name declaration.
 """
 from _ast import arg
 
-from src.expressions.PyExpression import PyExpression
-from src.expressions.PyName import PyName
+from src.pyexpressions.PyExpression import PyExpression
+from src.pyexpressions.PyName import PyName
 
 
 class PyArg(PyExpression):

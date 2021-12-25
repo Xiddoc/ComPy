@@ -4,7 +4,7 @@ Assign (an annotation) to a variable.
 from _ast import AnnAssign
 from typing import Union
 
-from src.expressions.PyExpression import PyExpression
+from src.pyexpressions.PyExpression import PyExpression
 
 
 class PyAnnAssign(PyExpression):

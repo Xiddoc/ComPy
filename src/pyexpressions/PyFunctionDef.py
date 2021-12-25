@@ -1,12 +1,12 @@
 """
 Function defenition.
 """
-from _ast import Expr
+from _ast import FunctionDef
 from typing import List
 
-from src.expressions.PyArg import PyArg
-from src.expressions.PyExpression import PyExpression
-from src.expressions.PyName import PyName
+from src.pyexpressions.PyArg import PyArg
+from src.pyexpressions.PyExpression import PyExpression
+from src.pyexpressions.PyName import PyName
 
 
 class PyFunctionDef(PyExpression):
@@ -19,7 +19,7 @@ class PyFunctionDef(PyExpression):
 	__code: List[PyExpression]
 	__return_type: PyName
 
-	def __init__(self, expression: Expr):
+	def __init__(self, expression: FunctionDef):
 		super().__init__(expression)
 		# Convert and store
 		self.__func_name = expression.name
