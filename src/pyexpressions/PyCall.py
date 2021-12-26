@@ -4,6 +4,7 @@ Expression statement.
 from _ast import Call
 from typing import List
 
+from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.pyexpressions.PyExpression import PyExpression
 from src.pyexpressions.PyName import PyName
 
@@ -30,8 +31,12 @@ class PyCall(PyExpression):
 
 		# Check if called function is a builtin module
 		if self.__func.get_name() in objs:
+			# Get function
+			native_func: PyPortFunction = objs[self.__func.get_name()]
+			# Inherit dependencies
+			self.add_dependencies(native_func.get_dependencies())
 			# Add as dependency
-			self.add_native_dependency(objs[self.__func.get_name()])
+			self.add_native_dependency(native_func)
 
 	def transpile(self) -> str:
 		"""

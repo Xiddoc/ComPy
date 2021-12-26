@@ -3,7 +3,7 @@ Native port for the Python builtin standard library.
 """
 from typing import Dict
 
-from src.pybuiltins.PyPort import PyPort
+from src.pybuiltins.PyPortFunction import PyPortFunction
 
 
 # noinspection PyShadowingBuiltins
@@ -34,17 +34,18 @@ def pow(value: int, exponent: int) -> int:
 	"""
 
 
-objs: Dict[str, PyPort] = {
-	"print": PyPort(
-		obj=print,
-		code="cout << print_string << endl;"
+objs: Dict[str, PyPortFunction] = {
+	"print": PyPortFunction(
+		function=print,
+		code="std::cout<<print_string<<std::endl;",
+		dependencies={"iostream"}
 	),
-	"inc": PyPort(
-		obj=inc,
+	"inc": PyPortFunction(
+		function=inc,
 		code="return ++my_integer;"
 	),
-	"pow": PyPort(
-		obj=pow,
+	"pow": PyPortFunction(
+		function=pow,
 		code="return pow(value, exponent);",
 		dependencies={"cmath"}
 	)

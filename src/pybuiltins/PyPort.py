@@ -1,38 +1,41 @@
 """
 Port a native function or object to Python.
 """
-from typing import Any, Set
+from abc import ABCMeta, abstractmethod
+from typing import Set, Iterable
 
 
-class PyPort:
+class PyPort(metaclass=ABCMeta):
 	"""
-	Port a native function or object to Python.
+	Port a native object or object to Python.
+
+	Technically this does no porting at all, and is quite the opposite-
+	Porting only allows the compiler how to link between the Python
+	objects and functions that call these ported objects.
+
+	The transpiler will take this native defenition and bake it
+	directly into the outputted transpilation. However, the important
+	part of this process is that the transpiler will also remember this
+	object for later usage (if necessary).
 	"""
 
-	__func: Any
-	__code: str
+	__depends: Set[str]
 
-	def __init__(self, obj: Any, code: str, dependencies: Set[str] = None):
+	@abstractmethod
+	def __init__(self, dependencies: Iterable[str] = None):
 		"""
-		@param obj: The object to port.
-		@param code: The native code for the function.
 		@param dependencies: A list of dependencies to require.
 		"""
-		# Import locally so that PyExpression can use this directly
-		from src.pyexpressions.PyFunctionDef import PyFunctionDef
-
-		# Convert the object to an expression that can be represented locally
-		self.__func: PyFunctionDef = PyFunctionDef.from_single_object(obj)
-
-		# Store the native code segment
-		self.__code = code
-		# Optional parameter
+		# If default value
 		if dependencies is None:
-			# Use immutable object for "default" value
+			# Set default value
 			dependencies = set()
 
-	def transpile(self) -> str:
+		# Initialize dependencies
+		self.__depends = dependencies
+
+	def get_dependencies(self) -> Set[str]:
 		"""
-		Transpile the ported function to an entirely native function.
+		Returns the list of dependencies that this expression relies on.
 		"""
-		return f"{self.__func.transpile_header()}{{{self.__code}}}"
+		return self.__depends

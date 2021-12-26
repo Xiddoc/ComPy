@@ -4,7 +4,6 @@ Compiler class.
 from argparse import Namespace
 from ast import AST, parse
 
-from src.DependencyManager import DependencyManager
 from src.Output import Output
 from src.VarHandler import VarHandler
 from src.pyexpressions.PyExpression import PyExpression
@@ -19,7 +18,6 @@ class Compiler:
 	__args: Namespace
 	__output: Output
 	__var_handler: VarHandler
-	__dependency_manager: DependencyManager
 
 	def __init__(self, args: Namespace):
 		# Use the given arguments
@@ -31,8 +29,6 @@ class Compiler:
 		"""
 		# Initialize an empty dictionary for variables
 		self.__var_handler = VarHandler()
-		# Initialize the dependency manager
-		self.__dependency_manager = DependencyManager()
 		# Init output handler
 		self.__output = Output()
 		# Parse the node into an abstract tree

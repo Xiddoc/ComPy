@@ -1,7 +1,6 @@
 """
 Compiler class for managing variables and their types between scopes.
 """
-from src.Builtins import builtin_names
 from src.Errors import VariableAlreadyDefinedError, VariableNotDefinedError
 from src.Names import Value, Variable, Name, Function
 
@@ -15,7 +14,7 @@ class VarHandler:
 
 	def __init__(self):
 		# Initialize the handler with builtin_names
-		self.__vars = builtin_names
+		self.__vars = {}
 
 	def is_var_exists(self, var_name: str) -> bool:
 		"""

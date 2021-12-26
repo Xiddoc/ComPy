@@ -3,7 +3,7 @@ Output manager / Compiled data handler.
 """
 from typing import List, Set
 
-from src.pybuiltins.PyPort import PyPort
+from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.pyexpressions.PyExpression import PyExpression
 
 
@@ -33,7 +33,7 @@ class Output:
 		# Make lists
 		output_list: List[str] = []
 		depends_list: Set[str] = set()
-		native_depends_list: Set[PyPort] = set()
+		native_depends_list: Set[PyPortFunction] = set()
 
 		# For each section of the code
 		for expression in self.__output:

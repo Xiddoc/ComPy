@@ -4,10 +4,10 @@ Used in extending for other pyexpressions.
 """
 from _ast import AST
 from abc import abstractmethod, ABCMeta
-from typing import List, Set, Union
+from typing import Set, Iterable
 
 from src.Errors import UnsupportedFeatureException
-from src.pybuiltins.PyPort import PyPort
+from src.pybuiltins.PyPortFunction import PyPortFunction
 
 
 class PyExpression(metaclass=ABCMeta):
@@ -17,7 +17,7 @@ class PyExpression(metaclass=ABCMeta):
 
 	__expression: AST
 	__depends: Set[str]
-	__native_depends: Set["PyPort"]
+	__native_depends: Set["PyPortFunction"]
 
 	@abstractmethod
 	def __init__(self, expression: AST):
@@ -36,7 +36,7 @@ class PyExpression(metaclass=ABCMeta):
 		Transpiles this expression to a C++ string.
 		"""
 
-	def add_dependencies(self, dependencies: Union[Set[str], List[str]]) -> None:
+	def add_dependencies(self, dependencies: Iterable[str]) -> None:
 		"""
 		Adds multiple dependencies to the dependency list.
 
@@ -58,7 +58,7 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		return self.__depends
 
-	def add_native_dependencies(self, native_dependencies: Union[Set["PyPort"], List["PyPort"]]) -> None:
+	def add_native_dependencies(self, native_dependencies: Iterable["PyPortFunction"]) -> None:
 		"""
 		Adds multiple native dependencies to the dependency list.
 
@@ -66,7 +66,7 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		self.__native_depends.update(native_dependencies)
 
-	def add_native_dependency(self, native_dependency: "PyPort") -> None:
+	def add_native_dependency(self, native_dependency: "PyPortFunction") -> None:
 		"""
 		Adds a single native dependency to the list.
 
@@ -74,7 +74,7 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		self.__native_depends.add(native_dependency)
 
-	def get_native_dependencies(self) -> Set["PyPort"]:
+	def get_native_dependencies(self) -> Set["PyPortFunction"]:
 		"""
 		Returns the list of native (ported) dependencies that this expression relies on.
 		"""
@@ -98,7 +98,7 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		# Convert to PyExpression
 		obj: PyExpression = PyExpression.from_ast_statically(expression)
-		# Extend dependencies to this object
+		# Inherit / extend dependencies to this object
 		self.add_dependencies(obj.get_dependencies())
 		self.add_native_dependencies(obj.get_native_dependencies())
 		# Return new object
