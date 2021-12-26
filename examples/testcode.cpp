@@ -1,3 +1,4 @@
+void print(str print_string){cout << print_string << endl;}
 
 int a = ((1+2)*3);
 int b = (a+4);

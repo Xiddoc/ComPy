@@ -18,14 +18,26 @@ class PyCall(PyExpression):
 
 	def __init__(self, expression: Call):
 		super().__init__(expression)
-		# Convert and store
+		# Convert to name
 		self.__func = PyName(expression.func)
+
+		# For each argument
+		# Convert to argument object and store
 		self.__args = [self.from_ast(arg) for arg in expression.args]
+
+		# Import locally to avoid import error
+		from src.pybuiltins.builtins import objs
+
+		# Check if called function is a builtin module
+		if self.__func.get_name() in objs:
+			# Add as dependency
+			self.add_native_dependency(objs[self.__func.get_name()])
 
 	def transpile(self) -> str:
 		"""
 		Transpiles the constant to a string.
 		"""
+		# Transpile the actual function call to the matching native code...
 		# Take function name
 		# Add parenthesis
 		# For each argument, transpile

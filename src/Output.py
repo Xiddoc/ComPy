@@ -3,6 +3,7 @@ Output manager / Compiled data handler.
 """
 from typing import List, Set
 
+from src.pybuiltins.PyPort import PyPort
 from src.pyexpressions.PyExpression import PyExpression
 
 
@@ -32,18 +33,31 @@ class Output:
 		# Make lists
 		output_list: List[str] = []
 		depends_list: Set[str] = set()
+		native_depends_list: Set[PyPort] = set()
+
 		# For each section of the code
 		for expression in self.__output:
 			# Add dependencies to the output
 			depends_list.update(expression.get_dependencies())
+			# Add native dependencies to the output
+			native_depends_list.update(expression.get_native_dependencies())
 			# Transpile each segment and add it to the output
 			output_list.append(expression.transpile())
-		# For each dependency
+
+		# Inject dependencies
 		# This runs in exponential time (.insert is linear, external 'for' loop is linear)
 		# If optimizations are required later, check out "collections.deque".
+
+		# For each native dependency
+		for native_dependency in native_depends_list:
+			# Insert dependency
+			output_list.insert(0, native_dependency.transpile())
+
+		# For each dependency
 		for dependency in depends_list:
 			# Insert dependency
 			output_list.insert(0, f"#include <{dependency}>")
+
 		# Return the output
 		return output_list
 

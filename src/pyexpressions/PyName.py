@@ -18,6 +18,12 @@ class PyName(PyExpression):
 		# Store the variable name
 		self.__target = expression.id
 
+	def get_name(self) -> str:
+		"""
+		Return the name of the object.
+		"""
+		return self.__target
+
 	def transpile(self) -> str:
 		"""
 		Transpiles the constant to a string.

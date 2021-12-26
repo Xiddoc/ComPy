@@ -2,7 +2,9 @@
 Function defenition.
 """
 from _ast import FunctionDef, Constant
-from typing import List, Union
+from ast import parse
+from inspect import getsource
+from typing import List, Union, Callable
 
 from src.pyexpressions.PyArg import PyArg
 from src.pyexpressions.PyExpression import PyExpression
@@ -35,9 +37,33 @@ class PyFunctionDef(PyExpression):
 
 	def transpile(self) -> str:
 		"""
-		Transpiles the constant to a string.
+		Transpiles the constant to a native string.
+		"""
+		return f"{self.transpile_header()}{{{''.join([expr.transpile() for expr in self.__code])}}}"
+
+	def transpile_header(self) -> str:
+		"""
+		Transpiles the header of the function to a native string.
 		"""
 		return f"{self.__return_type.transpile() if self.__return_type else 'void'}" \
 		       f" {self.__func_name}(" \
-		       f"{','.join([arg.transpile() for arg in self.__args])})" \
-		       f"{{{''.join([expr.transpile() for expr in self.__code])}}}"
+		       f"{','.join([arg.transpile() for arg in self.__args])})"
+
+	@staticmethod
+	def from_single_object(obj: Callable) -> "PyFunctionDef":
+		"""
+		Converts any singular (function, object, class, etc.) Python object to an AST node.
+
+		@param obj: The object to convert.
+		@return: The parsed AST node.
+		"""
+		# Get the source code of the object
+		# Parse it to an AST tree
+		# Get the body of the AST tree (scope is Module)
+		# Get the first line
+		# Turn it into a PyExpression
+		# Return the expression object
+
+		# Ignore typechecker since you cannot cast to PyFunctionDef
+		# noinspection PyTypeChecker
+		return PyExpression.from_ast_statically(parse(getsource(obj)).body[0])
