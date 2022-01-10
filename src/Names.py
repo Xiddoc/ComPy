@@ -94,36 +94,3 @@ class Function(Name):
 		return self.dependencies
 
 
-class Block:
-	"""
-	Block of code to be used instead of directly writing strings to the code output.
-	Another upside to this is that you can reference this object as an instance later and therefore "inject" code
-	between lines, rather than trying to use string methods to do so.
-	"""
-	__code: list[str]
-
-	def __init__(self, code: str = None):
-		# Initialize the code
-		self.__code = []
-		# If the user gave code, add it to the segment
-		if code:
-			self.write(code)
-
-	def write(self, code: str) -> None:
-		"""
-		Writes code to a new line in the segment.
-		"""
-		# Write code to segment
-		self.__code.append(code)
-
-	def get_as_list(self) -> list[str]:
-		"""
-		Returns all the code in the segment as a list of strings.
-		"""
-		return self.__code
-
-	def get_as_string(self) -> str:
-		"""
-		Returns all the code as one big string.
-		"""
-		return "\n".join(self.get_as_list())

@@ -4,7 +4,7 @@ Assign (an annotation) to a variable.
 from _ast import AnnAssign
 from typing import Union
 
-from src.expressions.PyExpression import PyExpression
+from src.pyexpressions.PyExpression import PyExpression
 
 
 class PyAnnAssign(PyExpression):
@@ -25,7 +25,7 @@ class PyAnnAssign(PyExpression):
 		# (Then the value of expression.value will not be None)
 		if expression.value:
 			# Convert and store
-			self.__value = PyExpression.from_ast(expression.value)
+			self.__value = self.from_ast(expression.value)
 		else:
 			# Otherwise, leave as None
 			self.__value = None

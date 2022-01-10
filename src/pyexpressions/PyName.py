@@ -3,7 +3,7 @@ Name statement (usage of an object).
 """
 from _ast import Name
 
-from src.expressions.PyExpression import PyExpression
+from src.pyexpressions.PyExpression import PyExpression
 
 
 class PyName(PyExpression):
@@ -17,6 +17,12 @@ class PyName(PyExpression):
 		super().__init__(expression)
 		# Store the variable name
 		self.__target = expression.id
+
+	def get_name(self) -> str:
+		"""
+		Return the name of the object.
+		"""
+		return self.__target
 
 	def transpile(self) -> str:
 		"""

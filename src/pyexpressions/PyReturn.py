@@ -1,9 +1,9 @@
 """
 Return statement.
 """
-from _ast import Expr
+from _ast import Return
 
-from src.expressions.PyExpression import PyExpression
+from src.pyexpressions.PyExpression import PyExpression
 
 
 class PyReturn(PyExpression):
@@ -13,10 +13,10 @@ class PyReturn(PyExpression):
 
 	__value: PyExpression
 
-	def __init__(self, expression: Expr):
+	def __init__(self, expression: Return):
 		super().__init__(expression)
 		# Translate the value
-		self.__value = PyExpression.from_ast(expression.value)
+		self.__value = self.from_ast(expression.value)
 
 	def transpile(self) -> str:
 		"""

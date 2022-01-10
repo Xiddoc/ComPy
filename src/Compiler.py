@@ -2,12 +2,11 @@
 Compiler class.
 """
 from argparse import Namespace
-from ast import Module, AST, parse
+from ast import AST, parse
 
-from src.DependencyManager import DependencyManager
 from src.Output import Output
 from src.VarHandler import VarHandler
-from src.expressions.PyExpression import PyExpression
+from src.pyexpressions.PyExpression import PyExpression
 
 
 class Compiler:
@@ -19,7 +18,6 @@ class Compiler:
 	__args: Namespace
 	__output: Output
 	__var_handler: VarHandler
-	__dependency_manager: DependencyManager
 
 	def __init__(self, args: Namespace):
 		# Use the given arguments
@@ -31,10 +29,8 @@ class Compiler:
 		"""
 		# Initialize an empty dictionary for variables
 		self.__var_handler = VarHandler()
-		# Initialize the dependency manager
-		self.__dependency_manager = DependencyManager()
-		# Initialize segment for code
-		self.__init_output()
+		# Init output handler
+		self.__output = Output()
 		# Parse the node into an abstract tree
 		self.__node = parse(source, self.__args.file.name)
 
@@ -46,15 +42,9 @@ class Compiler:
 			# Basic logger, remove later and add better UI
 			print(f"Compiling expression {node}...")
 
-			# Switch-like statement (if/elif) for matching node type
-			# If multiline comment (Python literal string which is not assigned to a variable)
-			if node_type == Module:
-				# Do something later if necessary with imports
-				continue
-			else:
-				# Evaluate the expression
-				# Write it to the code segment
-				self.__output.write(PyExpression.from_ast(node))
+			# Evaluate the expression
+			# Write it to the code segment
+			self.__output.write(PyExpression.from_ast_statically(node))
 
 		# Complete by injecting headers
 		# self.__output.header(self.__dependency_manager.format_dependencies())
@@ -81,21 +71,3 @@ class Compiler:
 		Returns the compiled output as a string.
 		"""
 		return self.__output.get_output()
-
-	def __init_output(self) -> None:
-		"""
-		Initialize the output dictionary structure.
-		"""
-		# Init output handler
-		self.__output = Output()
-		"""
-		# Write defaults to sections
-		self.__output.code("int main() {")
-		self.__output.footer("return 0; }")
-		# Implement builtins
-		for func in self.__var_handler.get_funcs():
-			# Write init of func
-			self.__output.func(func.get_init())
-			# Add dependencies
-			self.__dependency_manager.add_dependencies(func.get_dependencies())
-		"""
