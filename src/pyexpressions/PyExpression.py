@@ -8,6 +8,7 @@ from typing import Set, Iterable, Optional
 
 from src.Constants import GENERIC_PYEXPR_TYPE
 from src.Errors import UnsupportedFeatureException
+from src.Logger import Logger
 from src.pybuiltins.PyPortFunction import PyPortFunction
 
 
@@ -20,6 +21,7 @@ class PyExpression(metaclass=ABCMeta):
 	__depends: Set[str]
 	__native_depends: Set["PyPortFunction"]
 	__parent: Optional[GENERIC_PYEXPR_TYPE]
+	__logger: Logger
 
 	@abstractmethod
 	def __init__(self, expression: AST, parent: Optional[GENERIC_PYEXPR_TYPE]):
@@ -33,6 +35,8 @@ class PyExpression(metaclass=ABCMeta):
 		self.__native_depends = set()
 		# Assign parent node
 		self.__parent = parent
+		# Create logger for this node
+		self.__logger = Logger(self)
 
 	@abstractmethod
 	def transpile(self) -> str:
@@ -89,6 +93,12 @@ class PyExpression(metaclass=ABCMeta):
 		@return: Returns the expression this instance is holding (was initialized with).
 		"""
 		return self.__expression
+
+	def get_parent(self) -> "PyExpression":
+		"""
+		@return: Returns an instance of the PyExpression object which created this object.
+		"""
+		return self.__parent
 
 	def from_ast(self, expression: AST) -> "PyExpression":
 		"""
