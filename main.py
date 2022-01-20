@@ -36,7 +36,7 @@ print("Successfully compiled!")
 
 # If there is an output file, then write there
 # Otherwise, add .cpp to the file and write there
-ioStream: IO = args.output if args.output else open(args.file + '.cpp', "w")
+ioStream = args.output if args.output else open(args.file + '.cpp', "w")
 
 # Write to the file
 print(f"Writing to output file '{ioStream.name}'...")
