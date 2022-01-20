@@ -3,7 +3,7 @@ Constant literal.
 """
 from _ast import Constant
 from json import dumps
-from typing import Any, Type, Union
+from typing import Type, Union
 
 from src.Compiler import Compiler
 from src.Errors import UnsupportedFeatureException

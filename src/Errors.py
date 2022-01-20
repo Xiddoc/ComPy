@@ -2,7 +2,6 @@
 Error classes, when needed for exceptions.
 """
 from _ast import AST
-from typing import Type
 
 
 class VariableAlreadyDefinedError(NameError):

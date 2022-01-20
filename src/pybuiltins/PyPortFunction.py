@@ -1,7 +1,7 @@
 """
 Port a native function or object to Python.
 """
-from typing import Any, Callable, Union, Set, Iterable
+from typing import Any, Callable, Union, Iterable
 
 from src.pybuiltins.PyPort import PyPort
 
