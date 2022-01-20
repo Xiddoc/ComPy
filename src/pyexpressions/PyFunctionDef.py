@@ -7,7 +7,7 @@ from inspect import getsource
 from typing import List, Callable, Any, cast, Optional
 
 from src.Compiler import Compiler
-from src.Constants import GENERIC_PYEXPR_TYPE
+from src.TypeRenames import GENERIC_PYEXPR_TYPE, AnyFunction
 from src.pyexpressions.PyArg import PyArg
 from src.pyexpressions.PyExpression import PyExpression
 from src.pyexpressions.PyName import PyName
@@ -53,7 +53,7 @@ class PyFunctionDef(PyExpression):
 		       f"{','.join([arg.transpile() for arg in self.__args])})"
 
 	@staticmethod
-	def from_single_object(obj: Callable[..., Any], parent: Optional[GENERIC_PYEXPR_TYPE]) -> "PyFunctionDef":
+	def from_single_object(obj: AnyFunction, parent: Optional[GENERIC_PYEXPR_TYPE]) -> "PyFunctionDef":
 		"""
 		Converts any singular (function, object, class, etc.) Python object to an AST node.
 

@@ -4,7 +4,7 @@ Binary operation.
 from _ast import BinOp
 from _ast import operator
 
-from src.Constants import GENERIC_PYEXPR_TYPE
+from src.TypeRenames import GENERIC_PYEXPR_TYPE
 from src.Errors import UnsupportedFeatureException
 from src.pyexpressions.PyExpression import PyExpression
 

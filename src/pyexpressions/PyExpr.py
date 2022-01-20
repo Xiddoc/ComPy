@@ -4,7 +4,7 @@ Expression statement.
 from _ast import Expr, Constant
 from typing import Optional
 
-from src.Constants import GENERIC_PYEXPR_TYPE
+from src.TypeRenames import GENERIC_PYEXPR_TYPE
 from src.pyexpressions.PyExpression import PyExpression
 
 

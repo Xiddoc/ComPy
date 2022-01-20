@@ -2,9 +2,8 @@
 Constants and other 'singleton' objects and maps/dicts.
 """
 from _ast import Constant, BinOp, operator, Add, Sub, Mult, AnnAssign, AST, Expr, Name, Call, FunctionDef, arg, Return
-from typing import Dict, Type, Union
+from typing import Dict, Type
 
-from src.pybuiltins.PyPort import PyPort
 from src.pyexpressions.PyAnnAssign import PyAnnAssign
 from src.pyexpressions.PyArg import PyArg
 from src.pyexpressions.PyBinOp import PyBinOp
@@ -33,5 +32,3 @@ AST_OP_TO_STR: Dict[Type[operator], str] = {
 	Sub: "-",
 	Mult: "*"
 }
-
-GENERIC_PYEXPR_TYPE = Union[Type[PyExpression], PyExpression, PyPort]
