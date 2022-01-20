@@ -1,4 +1,5 @@
 # ComPy
+
 An efficient and simple static Python to C++ source-to-source compiler.
 
 ## Motives
@@ -40,4 +41,3 @@ Basic usage (compiles the Python file `examples\testcode.py` and outputs the C++
 ```cmd
 python main.py -o examples\testcode.cpp examples\testcode.py
 ```
-
