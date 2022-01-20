@@ -3,6 +3,8 @@ Compiler class.
 """
 from argparse import Namespace
 from ast import AST, parse
+from functools import reduce
+from typing import Any
 
 from src.Output import Output
 from src.VarHandler import VarHandler
@@ -71,3 +73,33 @@ class Compiler:
 		Returns the compiled output as a string.
 		"""
 		return self.__output.get_output()
+
+	@staticmethod
+	def get_attr(obj: AST, attribute_path: str) -> Any:
+		"""
+		A function that recursively traverses down an "attribute path"
+		and retrieves the value at the end of the path.
+
+		This function exists since the CPython ast library uses an odd
+		system which dynamically adds attributes to the AST instances,
+		instead of statically declaring them in their respective classes.
+
+		Due to this, mypy will throw a type-checking error since it will
+		not find these attributes in the class defenition. Hence, to work
+		around this bug, we will use the getattr function to retrieve the
+		attributes directly.
+
+		@param obj: The AST object to traverse.
+		@param attribute_path: The attribute path to use (for example, if passing
+								the object 'expression', and you want to navigate
+								to the 'target' attribute, then the 'id' attribute
+								of the 'target' attribute, then for this parameter
+								you would pass the string "target.id").
+		"""
+		# Split by .
+		# For example: "expression.target.id" becomes ["expression", "target", "id"]
+		attrs = attribute_path.split(".")
+
+		# Built in functools' reduce function to cumulatively execute the getattr function
+		# On the first 2 arguments of the list
+		return reduce(getattr, attrs, obj)
