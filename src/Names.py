@@ -27,7 +27,7 @@ class Value:
 		"""
 		Returns the TRANSPILED value.
 		"""
-		return "(" + self.__value + ")"
+		return "(" + self.__value if self.__value else "null" + ")"
 
 
 @dataclass
