@@ -4,8 +4,9 @@ Used in extending for other pyexpressions.
 """
 from _ast import AST
 from abc import abstractmethod, ABCMeta
-from typing import Set, Iterable
+from typing import Set, Iterable, Optional
 
+from src.Constants import GENERIC_PYEXPR_TYPE
 from src.Errors import UnsupportedFeatureException
 from src.pybuiltins.PyPortFunction import PyPortFunction
 
@@ -18,9 +19,10 @@ class PyExpression(metaclass=ABCMeta):
 	__expression: AST
 	__depends: Set[str]
 	__native_depends: Set["PyPortFunction"]
+	__parent: Optional[GENERIC_PYEXPR_TYPE]
 
 	@abstractmethod
-	def __init__(self, expression: AST):
+	def __init__(self, expression: AST, parent: Optional[GENERIC_PYEXPR_TYPE]):
 		"""
 		Constructor for the expression.
 		"""
@@ -29,6 +31,8 @@ class PyExpression(metaclass=ABCMeta):
 		# Create depenency sets
 		self.__depends = set()
 		self.__native_depends = set()
+		# Assign parent node
+		self.__parent = parent
 
 	@abstractmethod
 	def transpile(self) -> str:
@@ -97,7 +101,7 @@ class PyExpression(metaclass=ABCMeta):
 		@return: A PyExpression object of the matching type.
 		"""
 		# Convert to PyExpression
-		obj: PyExpression = PyExpression.from_ast_statically(expression)
+		obj: PyExpression = PyExpression.from_ast_statically(expression, self)
 		# Inherit / extend dependencies to this object
 		self.add_dependencies(obj.get_dependencies())
 		self.add_native_dependencies(obj.get_native_dependencies())
@@ -105,11 +109,12 @@ class PyExpression(metaclass=ABCMeta):
 		return obj
 
 	@staticmethod
-	def from_ast_statically(expression: AST) -> "PyExpression":
+	def from_ast_statically(expression: AST, parent: Optional[GENERIC_PYEXPR_TYPE]) -> "PyExpression":
 		"""
 		Converts an AST expression to a PyExpression object.
 
 		@param expression: The expression to convert.
+		@param parent: The parent expression which uses this node.
 		@return: A PyExpression object of the matching type.
 		"""
 		# Local import to avoid circular import errors
@@ -121,7 +126,7 @@ class PyExpression(metaclass=ABCMeta):
 		# If the expression is valid
 		if expr_type in AST_EXPR_TO_PYEXPR:
 			# Convert to PyExpression and return
-			return AST_EXPR_TO_PYEXPR[expr_type](expression)
+			return AST_EXPR_TO_PYEXPR[expr_type](expression, parent)
 		# Otherwise, it is probably a feature we do not support
 		else:
 			raise UnsupportedFeatureException(expression)

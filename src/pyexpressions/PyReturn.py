@@ -4,6 +4,7 @@ Return statement.
 from _ast import Return
 
 from src.Compiler import Compiler
+from src.Constants import GENERIC_PYEXPR_TYPE
 from src.pyexpressions.PyExpression import PyExpression
 
 
@@ -14,8 +15,8 @@ class PyReturn(PyExpression):
 
 	__value: PyExpression
 
-	def __init__(self, expression: Return):
-		super().__init__(expression)
+	def __init__(self, expression: Return, parent: GENERIC_PYEXPR_TYPE):
+		super().__init__(expression, parent)
 		# Translate the value
 		self.__value = self.from_ast(Compiler.get_attr(expression, "value"))
 

@@ -4,6 +4,7 @@ Binary operation.
 from _ast import BinOp
 from _ast import operator
 
+from src.Constants import GENERIC_PYEXPR_TYPE
 from src.Errors import UnsupportedFeatureException
 from src.pyexpressions.PyExpression import PyExpression
 
@@ -17,8 +18,8 @@ class PyBinOp(PyExpression):
 	__right: PyExpression
 	__op_type: str
 
-	def __init__(self, expression: BinOp):
-		super().__init__(expression)
+	def __init__(self, expression: BinOp, parent: GENERIC_PYEXPR_TYPE):
+		super().__init__(expression, parent)
 		# Convert op to string
 		self.__op_type = self.op_to_str(expression.op)
 		# Store sides

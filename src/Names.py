@@ -2,17 +2,17 @@
 Variable class and other classes to represent values.
 """
 from dataclasses import dataclass, field
-from typing import Union
+from typing import Optional
 
 
 class Value:
 	"""
 	Dataclass for value.
 	"""
-	__value: Union[str, None]
+	__value: Optional[str]
 	__has_value: bool
 
-	def __init__(self, value: Union[str, None] = None) -> None:
+	def __init__(self, value: Optional[str] = None) -> None:
 		# If value given is null, then there is no starting value
 		self.__has_value = value is not None
 		self.__value = value
