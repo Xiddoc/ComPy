@@ -2,7 +2,6 @@
 Function argument name declaration.
 """
 from _ast import arg
-from typing import Type, Union
 
 from src.Compiler import Compiler
 from src.Constants import GENERIC_PYEXPR_TYPE

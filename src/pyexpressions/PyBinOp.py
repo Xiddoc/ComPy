@@ -3,7 +3,6 @@ Binary operation.
 """
 from _ast import BinOp
 from _ast import operator
-from typing import Type
 
 from src.Constants import GENERIC_PYEXPR_TYPE
 from src.Errors import UnsupportedFeatureException

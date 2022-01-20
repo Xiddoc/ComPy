@@ -4,11 +4,10 @@ Function defenition.
 from _ast import FunctionDef, Constant
 from ast import parse
 from inspect import getsource
-from typing import List, Union, Callable, Any, cast, Type, Optional
+from typing import List, Callable, Any, cast, Optional
 
 from src.Compiler import Compiler
 from src.Constants import GENERIC_PYEXPR_TYPE
-from src.pybuiltins.PyPort import PyPort
 from src.pyexpressions.PyArg import PyArg
 from src.pyexpressions.PyExpression import PyExpression
 from src.pyexpressions.PyName import PyName

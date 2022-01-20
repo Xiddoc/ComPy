@@ -2,7 +2,6 @@
 Return statement.
 """
 from _ast import Return
-from typing import Type
 
 from src.Compiler import Compiler
 from src.Constants import GENERIC_PYEXPR_TYPE

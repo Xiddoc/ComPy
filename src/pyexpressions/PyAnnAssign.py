@@ -2,7 +2,7 @@
 Assign (an annotation) to a variable.
 """
 from _ast import AnnAssign
-from typing import Union, Type, Optional
+from typing import Optional
 
 from src.Compiler import Compiler
 from src.Constants import GENERIC_PYEXPR_TYPE

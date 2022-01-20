@@ -2,7 +2,7 @@
 Variable class and other classes to represent values.
 """
 from dataclasses import dataclass, field
-from typing import Union, Optional
+from typing import Optional
 
 
 class Value:

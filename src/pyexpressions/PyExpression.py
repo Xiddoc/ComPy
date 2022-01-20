@@ -4,11 +4,10 @@ Used in extending for other pyexpressions.
 """
 from _ast import AST
 from abc import abstractmethod, ABCMeta
-from typing import Set, Iterable, Union, Type, Optional
+from typing import Set, Iterable, Optional
 
 from src.Constants import GENERIC_PYEXPR_TYPE
 from src.Errors import UnsupportedFeatureException
-from src.pybuiltins.PyPort import PyPort
 from src.pybuiltins.PyPortFunction import PyPortFunction
 
 

@@ -2,7 +2,7 @@
 Port a native function or object to Python.
 """
 from abc import ABCMeta, abstractmethod
-from typing import Set, Union, Optional
+from typing import Set, Optional
 
 
 class PyPort(metaclass=ABCMeta):

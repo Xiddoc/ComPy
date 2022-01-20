@@ -2,7 +2,7 @@
 Expression statement.
 """
 from _ast import Call
-from typing import List, Type
+from typing import List
 
 from src.Compiler import Compiler
 from src.Constants import GENERIC_PYEXPR_TYPE
