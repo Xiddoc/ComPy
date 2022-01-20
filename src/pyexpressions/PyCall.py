@@ -4,6 +4,7 @@ Expression statement.
 from _ast import Call
 from typing import List
 
+from src.Compiler import Compiler
 from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.pyexpressions.PyExpression import PyExpression
 from src.pyexpressions.PyName import PyName
@@ -20,7 +21,7 @@ class PyCall(PyExpression):
 	def __init__(self, expression: Call):
 		super().__init__(expression)
 		# Convert to name
-		self.__func = PyName(expression.func)
+		self.__func = PyName(Compiler.get_attr(expression, 'func'))
 
 		# For each argument
 		# Convert to argument object and store

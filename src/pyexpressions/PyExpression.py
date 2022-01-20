@@ -124,5 +124,4 @@ class PyExpression(metaclass=ABCMeta):
 			return AST_EXPR_TO_PYEXPR[expr_type](expression)
 		# Otherwise, it is probably a feature we do not support
 		else:
-			raise UnsupportedFeatureException(
-				f"Python feature '{expr_type.__name__}' is not supported by the compiler.")
+			raise UnsupportedFeatureException(expression)

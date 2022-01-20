@@ -4,6 +4,7 @@ Assign (an annotation) to a variable.
 from _ast import AnnAssign
 from typing import Union
 
+from src.Compiler import Compiler
 from src.pyexpressions.PyExpression import PyExpression
 
 
@@ -19,13 +20,13 @@ class PyAnnAssign(PyExpression):
 	def __init__(self, expression: AnnAssign):
 		super().__init__(expression)
 		# Store variable and type
-		self.__target = expression.target.id
-		self.__type = expression.annotation.id
+		self.__target = Compiler.get_attr(expression, "target.id")
+		self.__type = Compiler.get_attr(expression, "annotation.id")
 		# If a value is also being assigned
 		# (Then the value of expression.value will not be None)
 		if expression.value:
 			# Convert and store
-			self.__value = self.from_ast(expression.value)
+			self.__value = self.from_ast(Compiler.get_attr(expression, "value"))
 		else:
 			# Otherwise, leave as None
 			self.__value = None

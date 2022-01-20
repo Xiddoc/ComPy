@@ -14,7 +14,7 @@ class Output:
 
 	__output: List[PyExpression]
 
-	def __init__(self):
+	def __init__(self) -> None:
 		# Initialize output segment
 		self.__output = []
 

@@ -1,6 +1,7 @@
 """
 Error classes, when needed for exceptions.
 """
+from _ast import AST
 
 
 class VariableAlreadyDefinedError(NameError):
@@ -24,3 +25,14 @@ class UnsupportedFeatureException(SyntaxError):
 	An error to raise whenever a Python feature is used which is not implemented in the compiler.
 	Examples (currently) include classes, for example. (Boo hoo, no OOP for you)
 	"""
+
+	feature: AST
+
+	def __init__(self, feature: AST) -> None:
+		self.feature = feature
+
+	def __str__(self) -> str:
+		# Local import to avoid import error
+		from src.Compiler import Compiler
+		# Error text
+		return f"Python feature '{Compiler.get_attr(self.feature, '__class__.__name__')}' is not supported by the compiler."
