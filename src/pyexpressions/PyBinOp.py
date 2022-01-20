@@ -52,5 +52,4 @@ class PyBinOp(PyExpression):
 			return AST_OP_TO_STR[op_type]
 		# Otherwise
 		else:
-			raise UnsupportedFeatureException(
-				f"Python feature '{op.__name__}' is not supported by the compiler.")
+			raise UnsupportedFeatureException(op)
