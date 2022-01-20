@@ -67,9 +67,8 @@ class VarHandler:
 		for obj in self.__vars.values():
 			# If the object is a function
 			if type(obj) == Function:
-				# Cast it to a function
-				obj: Function
 				# Add it to the list
+				# noinspection PyTypeChecker
 				func_list.append(obj)
 		# Return the list
 		return func_list
