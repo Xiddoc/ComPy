@@ -2,7 +2,7 @@
 Assign (an annotation) to a variable.
 """
 from _ast import AnnAssign
-from typing import Union, Type
+from typing import Union, Type, Optional
 
 from src.Compiler import Compiler
 from src.Constants import GENERIC_PYEXPR_TYPE
@@ -16,7 +16,7 @@ class PyAnnAssign(PyExpression):
 
 	__target: str
 	__type: str
-	__value: Union[PyExpression, None]
+	__value: Optional[PyExpression]
 
 	def __init__(self, expression: AnnAssign, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)

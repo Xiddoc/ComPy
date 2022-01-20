@@ -4,7 +4,7 @@ Used in extending for other pyexpressions.
 """
 from _ast import AST
 from abc import abstractmethod, ABCMeta
-from typing import Set, Iterable, Union, Type
+from typing import Set, Iterable, Union, Type, Optional
 
 from src.Constants import GENERIC_PYEXPR_TYPE
 from src.Errors import UnsupportedFeatureException
@@ -20,10 +20,10 @@ class PyExpression(metaclass=ABCMeta):
 	__expression: AST
 	__depends: Set[str]
 	__native_depends: Set["PyPortFunction"]
-	__parent: Union[GENERIC_PYEXPR_TYPE, None]
+	__parent: Optional[GENERIC_PYEXPR_TYPE]
 
 	@abstractmethod
-	def __init__(self, expression: AST, parent: Union[GENERIC_PYEXPR_TYPE, None]):
+	def __init__(self, expression: AST, parent: Optional[GENERIC_PYEXPR_TYPE]):
 		"""
 		Constructor for the expression.
 		"""
@@ -110,7 +110,7 @@ class PyExpression(metaclass=ABCMeta):
 		return obj
 
 	@staticmethod
-	def from_ast_statically(expression: AST, parent: Union[GENERIC_PYEXPR_TYPE, None]) -> "PyExpression":
+	def from_ast_statically(expression: AST, parent: Optional[GENERIC_PYEXPR_TYPE]) -> "PyExpression":
 		"""
 		Converts an AST expression to a PyExpression object.
 

@@ -4,7 +4,7 @@ Function defenition.
 from _ast import FunctionDef, Constant
 from ast import parse
 from inspect import getsource
-from typing import List, Union, Callable, Any, cast, Type
+from typing import List, Union, Callable, Any, cast, Type, Optional
 
 from src.Compiler import Compiler
 from src.Constants import GENERIC_PYEXPR_TYPE
@@ -22,7 +22,7 @@ class PyFunctionDef(PyExpression):
 	__func_name: str
 	__args: List[PyArg]
 	__code: List[PyExpression]
-	__return_type: Union[PyName, None]
+	__return_type: Optional[PyName]
 
 	def __init__(self, expression: FunctionDef, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
@@ -54,7 +54,7 @@ class PyFunctionDef(PyExpression):
 		       f"{','.join([arg.transpile() for arg in self.__args])})"
 
 	@staticmethod
-	def from_single_object(obj: Callable[..., Any], parent: Union[GENERIC_PYEXPR_TYPE, None]) -> "PyFunctionDef":
+	def from_single_object(obj: Callable[..., Any], parent: Optional[GENERIC_PYEXPR_TYPE]) -> "PyFunctionDef":
 		"""
 		Converts any singular (function, object, class, etc.) Python object to an AST node.
 

@@ -2,7 +2,7 @@
 Expression statement.
 """
 from _ast import Expr, Constant
-from typing import Union, Type
+from typing import Union, Type, Optional
 
 from src.Constants import GENERIC_PYEXPR_TYPE
 from src.pyexpressions.PyExpression import PyExpression
@@ -13,7 +13,7 @@ class PyExpr(PyExpression):
 	Expression statement.
 	"""
 
-	__value: Union[PyExpression, None]
+	__value: Optional[PyExpression]
 
 	def __init__(self, expression: Expr, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
