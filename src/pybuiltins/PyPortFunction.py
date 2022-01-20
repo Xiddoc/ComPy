@@ -1,7 +1,7 @@
 """
 Port a native function or object to Python.
 """
-from typing import Any, Iterable, Callable
+from typing import Any, Iterable, Callable, Union
 
 from src.pybuiltins.PyPort import PyPort
 
@@ -17,7 +17,7 @@ class PyPortFunction(PyPort):
 	__func: Any
 	__code: str
 
-	def __init__(self, function: Callable, code: str, dependencies: Iterable[str] = None):
+	def __init__(self, function: Callable[..., Any], code: str, dependencies: Union[Iterable[str], None] = None):
 		super().__init__(dependencies)
 		# Import locally so that PyExpression can use this directly
 		from src.pyexpressions.PyFunctionDef import PyFunctionDef
