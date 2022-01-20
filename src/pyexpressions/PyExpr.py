@@ -2,8 +2,9 @@
 Expression statement.
 """
 from _ast import Expr, Constant
-from typing import Union
+from typing import Union, Type
 
+from src.Constants import GENERIC_PYEXPR_TYPE
 from src.pyexpressions.PyExpression import PyExpression
 
 
@@ -14,8 +15,8 @@ class PyExpr(PyExpression):
 
 	__value: Union[PyExpression, None]
 
-	def __init__(self, expression: Expr):
-		super().__init__(expression)
+	def __init__(self, expression: Expr, parent: GENERIC_PYEXPR_TYPE):
+		super().__init__(expression, parent)
 		# Make sure it is not a multiline Python string
 		# If the node itself is an expression
 		if type(expression.value) == Constant:
