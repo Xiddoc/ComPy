@@ -5,7 +5,7 @@ from _ast import AnnAssign
 from typing import Optional
 
 from src.Compiler import Compiler
-from src.TypeRenames import GENERIC_PYEXPR_TYPE
+from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 from src.pyexpressions.PyExpression import PyExpression
 
 
