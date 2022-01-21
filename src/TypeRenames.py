@@ -6,7 +6,14 @@ you will repeat a Union phrase often and will want to
 cut down on the times you need to copy the type hint.
 """
 
-from typing import Callable, Any, Union, Type
+from typing import Callable, Any, Union, Type, TYPE_CHECKING
+
+# Prevent cylic (recursive) imports
+if TYPE_CHECKING:
+	# noinspection PyUnresolvedReferences
+	from src.pybuiltins.PyPort import PyPort
+	# noinspection PyUnresolvedReferences
+	from src.pyexpressions.PyExpression import PyExpression
 
 # A function with any parameters, which returns any value
 AnyFunction = Callable[..., Any]
