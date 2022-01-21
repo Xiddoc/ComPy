@@ -27,19 +27,24 @@ source = ioStream.read()
 ioStream.close()
 
 # Send parser data to compiler
-print("Parsing and compiling file...")
+print("Parsing the file...")
 c: Compiler = Compiler(args)
 
 # Compile the file
-c.compile(source)
-print("Successfully compiled!")
+c.parse(source)
+print("Successfully parsed!")
 
 # If there is an output file, then write there
 # Otherwise, add .cpp to the file and write there
 ioStream = args.output if args.output else open(args.file + '.cpp', "w")
 
+# Compile the file to a string
+print("Compiling the file...")
+compiled_text: str = c.get_output()
+print("Successfully compiled!")
+
 # Write to the file
 print(f"Writing to output file '{ioStream.name}'...")
-ioStream.write(c.get_output())
+ioStream.write(compiled_text)
 # Close the stream
 ioStream.close()

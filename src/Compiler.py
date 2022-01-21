@@ -25,9 +25,11 @@ class Compiler:
 		# Use the given arguments
 		self.__args = args
 
-	def compile(self, source: str) -> None:
+	def parse(self, source: str) -> None:
 		"""
-		Entry to compilation sequence.
+		Initiates the parsing sequence.
+		This turns the code into a series of nodes, filled
+		with the proper data structures alongside other nested nodes.
 		"""
 		# Initialize an empty dictionary for variables
 		self.__var_handler = VarHandler()
