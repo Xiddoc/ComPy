@@ -20,8 +20,8 @@ class PyReturn(PyExpression):
 		# Translate the value
 		self.__value = self.from_ast(Compiler.get_attr(expression, "value"))
 
-	def transpile(self) -> str:
+	def __transpile(self) -> str:
 		"""
 		Transpiles the constant to a string.
 		"""
-		return f"return {self.__value.transpile()};"
+		return f"return {self.__value.__transpile()};"

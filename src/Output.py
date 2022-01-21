@@ -42,7 +42,7 @@ class Output:
 			# Add native dependencies to the output
 			native_depends_list.update(expression.get_native_dependencies())
 			# Transpile each segment and add it to the output
-			output_list.append(expression.transpile())
+			output_list.append(expression.__transpile())
 
 		# Inject dependencies
 		# This runs in exponential time (.insert is linear, external 'for' loop is linear)

@@ -23,8 +23,8 @@ class PyArg(PyExpression):
 		self.__arg_name = expression.arg
 		self.__arg_type = PyName(Compiler.get_attr(expression, 'annotation'), self)
 
-	def transpile(self) -> str:
+	def __transpile(self) -> str:
 		"""
 		Transpiles the constant to a string.
 		"""
-		return f"{self.__arg_type.transpile()} {self.__arg_name}"
+		return f"{self.__arg_type.__transpile()} {self.__arg_name}"

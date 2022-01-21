@@ -26,12 +26,12 @@ class PyBinOp(PyExpression):
 		self.__left = self.from_ast(expression.left)
 		self.__right = self.from_ast(expression.right)
 
-	def transpile(self) -> str:
+	def __transpile(self) -> str:
 		"""
 		Transpile the operation to a string.
 		@return:
 		"""
-		return "(" + self.__left.transpile() + self.__op_type + self.__right.transpile() + ")"
+		return "(" + self.__left.__transpile() + self.__op_type + self.__right.__transpile() + ")"
 
 	@staticmethod
 	def op_to_str(op: operator) -> str:

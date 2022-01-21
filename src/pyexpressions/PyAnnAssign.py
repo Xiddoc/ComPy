@@ -32,12 +32,12 @@ class PyAnnAssign(PyExpression):
 			# Otherwise, leave as None
 			self.__value = None
 
-	def transpile(self) -> str:
+	def __transpile(self) -> str:
 		"""
 		Transpile the operation to a string.
 		@return:
 		"""
 		return \
-			f"{self.__type} {self.__target} = {self.__value.transpile()};"\
+			f"{self.__type} {self.__target} = {self.__value.__transpile()};"\
 			if self.__value else \
 			f"{self.__type} {self.__target};"
