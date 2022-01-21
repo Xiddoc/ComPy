@@ -1,8 +1,9 @@
 """
 Port a native function or object to Python.
 """
-from typing import Any, Callable, Union, Iterable
+from typing import Any, Iterable, Optional
 
+from src.TypeRenames import AnyFunction
 from src.pybuiltins.PyPort import PyPort
 
 
@@ -17,7 +18,7 @@ class PyPortFunction(PyPort):
 	__func: Any
 	__code: str
 
-	def __init__(self, function: Callable[..., Any], code: str, dependencies: Union[Iterable[str], None] = None):
+	def __init__(self, function: AnyFunction, code: str, dependencies: Optional[Iterable[str]] = None):
 		# Create a new set if there are no dependencies passed, otherwise use the passed dependencies
 		super().__init__(set() if dependencies is None else set(dependencies))
 
@@ -25,7 +26,7 @@ class PyPortFunction(PyPort):
 		from src.pyexpressions.PyFunctionDef import PyFunctionDef
 
 		# Convert the function to a PyFunctionDef that can be represented locally later (as function header)
-		self.__func: PyFunctionDef = PyFunctionDef.from_single_object(function)
+		self.__func: PyFunctionDef = PyFunctionDef.from_single_object(function, self)
 
 		# Store the native code segment
 		self.__code = code

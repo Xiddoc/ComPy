@@ -7,6 +7,7 @@ from typing import Type, Union
 
 from src.Compiler import Compiler
 from src.Errors import UnsupportedFeatureException
+from src.TypeRenames import GENERIC_PYEXPR_TYPE
 from src.pyexpressions.PyExpression import PyExpression
 
 
@@ -17,12 +18,12 @@ class PyConstant(PyExpression):
 
 	__value: str
 
-	def __init__(self, expression: Constant):
-		super().__init__(expression)
+	def __init__(self, expression: Constant, parent: GENERIC_PYEXPR_TYPE):
+		super().__init__(expression, parent)
 		# Translate the value
 		self.__value = self.translate_constant(expression)
 
-	def transpile(self) -> str:
+	def _transpile(self) -> str:
 		"""
 		Transpiles the constant to a string.
 		"""

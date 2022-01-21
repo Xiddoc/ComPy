@@ -41,12 +41,9 @@ class Compiler:
 			# Get the type of the node
 			node_type = type(node)
 
-			# Basic logger, remove later and add better UI
-			print(f"Compiling expression {node}...")
-
 			# Evaluate the expression
 			# Write it to the code segment
-			self.__output.write(PyExpression.from_ast_statically(node))
+			self.__output.write(PyExpression.from_ast_statically(node, None))
 
 		# Complete by injecting headers
 		# self.__output.header(self.__dependency_manager.format_dependencies())
@@ -103,3 +100,15 @@ class Compiler:
 		# Built in functools' reduce function to cumulatively execute the getattr function
 		# On the first 2 arguments of the list
 		return reduce(getattr, attrs, obj)
+
+	@classmethod
+	def get_name(cls, obj: AST) -> str:
+		"""
+		Retrieves the name of the AST node's class.
+		For example, instead of seeing: <ast.AnnAssign object at 0x000002CC7FE5A310>
+		You could use this method to abbreviate to: AnnAssign
+
+		@param obj: An instance of the AST expression or node to name.
+		@return: The string representation of the AST node's class name.
+		"""
+		return str(cls.get_attr(obj, "__class__.__name__"))

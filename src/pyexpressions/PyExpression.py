@@ -4,9 +4,11 @@ Used in extending for other pyexpressions.
 """
 from _ast import AST
 from abc import abstractmethod, ABCMeta
-from typing import Set, Iterable
+from ast import unparse
+from typing import Set, Iterable, Optional
 
 from src.Errors import UnsupportedFeatureException
+from src.TypeRenames import GENERIC_PYEXPR_TYPE
 from src.pybuiltins.PyPortFunction import PyPortFunction
 
 
@@ -18,9 +20,10 @@ class PyExpression(metaclass=ABCMeta):
 	__expression: AST
 	__depends: Set[str]
 	__native_depends: Set["PyPortFunction"]
+	__parent: Optional[GENERIC_PYEXPR_TYPE]
 
 	@abstractmethod
-	def __init__(self, expression: AST):
+	def __init__(self, expression: AST, parent: Optional[GENERIC_PYEXPR_TYPE]):
 		"""
 		Constructor for the expression.
 		"""
@@ -29,12 +32,48 @@ class PyExpression(metaclass=ABCMeta):
 		# Create depenency sets
 		self.__depends = set()
 		self.__native_depends = set()
+		# Assign parent node
+		self.__parent = parent
+		# Create logger for this node
+		# Import dependencies locally to avoid import errors
+		from src.Logger import Logger
+		from src.Compiler import Compiler
+		self.__logger = Logger(self)
+		# Print logging statement for creation of node
+		self.__logger.log_tree_up(
+			f"Creating expression <{Compiler.get_name(expression)}>: " +
+			unparse(expression).replace('\n', '\\n').replace('\r', '\\r')
+		)
 
 	@abstractmethod
+	def _transpile(self) -> str:
+		"""
+		Transpiles this expression to a C++ string.
+
+		This is the *wrapped* method. We (the devs) will use this method
+		to *IMPLEMENT* the transpilation process. To actually transpile
+		the code, use the self.transpile method, which wraps this method.
+		"""
+
 	def transpile(self) -> str:
 		"""
 		Transpiles this expression to a C++ string.
+
+		This is the *wrapper* method. We (the devs) will use this
+		method to *EXECUTE* the transpilation process. To actually
+		implement the transpilation process, implement the
+		self._transpile method, which is wrapped by this method.
 		"""
+		# Execute the transpilation process by executing
+		# the *IMPLEMENTATION* of the transpiler function
+		transpiled_code: str = self._transpile()
+		# Currently, the only wrapping that we will do is logging.
+		# However, this still allows for future useful extensions
+		# such as beautifying the code, for example.
+		from src.Compiler import Compiler
+		self.__logger.log_tree_down(f"Compiled <{Compiler.get_name(self.get_expression())}> expression to: {transpiled_code}")
+		# Return the transpiled code
+		return transpiled_code
 
 	def add_dependencies(self, dependencies: Iterable[str]) -> None:
 		"""
@@ -86,6 +125,12 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		return self.__expression
 
+	def get_parent(self) -> Optional[GENERIC_PYEXPR_TYPE]:
+		"""
+		@return: Returns an instance of the PyExpression object which created this object.
+		"""
+		return self.__parent
+
 	def from_ast(self, expression: AST) -> "PyExpression":
 		"""
 		Converts an AST expression to a PyExpression object.
@@ -97,7 +142,7 @@ class PyExpression(metaclass=ABCMeta):
 		@return: A PyExpression object of the matching type.
 		"""
 		# Convert to PyExpression
-		obj: PyExpression = PyExpression.from_ast_statically(expression)
+		obj: PyExpression = PyExpression.from_ast_statically(expression, self)
 		# Inherit / extend dependencies to this object
 		self.add_dependencies(obj.get_dependencies())
 		self.add_native_dependencies(obj.get_native_dependencies())
@@ -105,11 +150,12 @@ class PyExpression(metaclass=ABCMeta):
 		return obj
 
 	@staticmethod
-	def from_ast_statically(expression: AST) -> "PyExpression":
+	def from_ast_statically(expression: AST, parent: Optional[GENERIC_PYEXPR_TYPE]) -> "PyExpression":
 		"""
 		Converts an AST expression to a PyExpression object.
 
 		@param expression: The expression to convert.
+		@param parent: The parent expression which uses this node.
 		@return: A PyExpression object of the matching type.
 		"""
 		# Local import to avoid circular import errors
@@ -121,7 +167,7 @@ class PyExpression(metaclass=ABCMeta):
 		# If the expression is valid
 		if expr_type in AST_EXPR_TO_PYEXPR:
 			# Convert to PyExpression and return
-			return AST_EXPR_TO_PYEXPR[expr_type](expression)
+			return AST_EXPR_TO_PYEXPR[expr_type](expression, parent)
 		# Otherwise, it is probably a feature we do not support
 		else:
 			raise UnsupportedFeatureException(expression)
