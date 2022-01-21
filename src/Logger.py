@@ -41,5 +41,24 @@ class Logger:
 
 		@param message: The message to log.
 		"""
-		print(("├── " if self.__indentation == 1 else
-		       ("│" + "\t" * (self.__indentation - 1) + "└── " if self.__indentation > 1 else "\n")) + f"{message}")
+		# Print the tree branches
+		# Print the actual message
+		print(self.__get_log_prepend(self.__indentation) + message)
+
+	def __get_log_prepend(self, indentation: int) -> str:
+		"""
+		Creates the tree indentation string.
+
+		@param indentation: The amount to indent into the tree.
+		@return: A string of unicode symbols, spaces, and newlines which forms one line of the tree.
+		"""
+		# If first layer of tree, then use T symbol
+		if self.__indentation == 1:
+			return "├── "
+		# If the indentation is any more than 1, then place root branch on first line
+		# Then, branch off of the previous node (hence, indentation - 1)
+		elif self.__indentation > 1:
+			return "│" + "\t" * (self.__indentation - 1) + "└── "
+		# Otherwise, if this is the root branch (layer zero)
+		# Make a newline to seperate from previous node tree.
+		return "\n"
