@@ -4,11 +4,11 @@ Used in extending for other pyexpressions.
 """
 from _ast import AST
 from abc import abstractmethod, ABCMeta
+from ast import unparse
 from typing import Set, Iterable, Optional
 
-from src.Constants import GENERIC_PYEXPR_TYPE
+from src.TypeRenames import GENERIC_PYEXPR_TYPE
 from src.Errors import UnsupportedFeatureException
-from src.Logger import Logger
 from src.pybuiltins.PyPortFunction import PyPortFunction
 
 
@@ -21,7 +21,6 @@ class PyExpression(metaclass=ABCMeta):
 	__depends: Set[str]
 	__native_depends: Set["PyPortFunction"]
 	__parent: Optional[GENERIC_PYEXPR_TYPE]
-	__logger: Logger
 
 	@abstractmethod
 	def __init__(self, expression: AST, parent: Optional[GENERIC_PYEXPR_TYPE]):
@@ -36,7 +35,15 @@ class PyExpression(metaclass=ABCMeta):
 		# Assign parent node
 		self.__parent = parent
 		# Create logger for this node
+		# Import dependencies locally to avoid import errors
+		from src.Logger import Logger
+		from src.Compiler import Compiler
 		self.__logger = Logger(self)
+		# Print logging statement for creation of node
+		self.__logger.log(
+			f"Creating expression <{Compiler.get_attr(expression, '__class__.__name__')}>: " +
+			unparse(expression).replace('\n', '\\n').replace('\r', '\\r')
+		)
 
 	@abstractmethod
 	def transpile(self) -> str:

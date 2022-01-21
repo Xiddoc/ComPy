@@ -41,9 +41,6 @@ class Compiler:
 			# Get the type of the node
 			node_type = type(node)
 
-			# Basic logger, remove later and add better UI
-			print(f"Compiling expression {node}...")
-
 			# Evaluate the expression
 			# Write it to the code segment
 			self.__output.write(PyExpression.from_ast_statically(node, None))
