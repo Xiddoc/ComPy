@@ -1,6 +1,8 @@
 """
 Logging utilities and functions.
 """
+from typing import cast
+
 from src.pyexpressions.PyExpression import PyExpression
 
 
@@ -14,22 +16,23 @@ class Logger:
 
 	__indentation: int
 
-	def __init__(self, py_expr: "PyExpression") -> None:
+	def __init__(self, py_expr: PyExpression) -> None:
 		# Figure out indentation level
 		# We do this by figuring out how many parents there are to this node.
-		temp_expr: "PyExpression" = py_expr
+		temp_expr: PyExpression = py_expr
 		indentation: int = 0
 
+		# Keep iterating down the "parent node chain"
 		# PyPortFunction will throw an error as get_parent does not exist
-		try:
-			# Keep iterating down the "parent node chain"
-			while temp_expr.get_parent() is not None:
-				# Increment the count
-				indentation += 1
-				# Iterate to next parent
-				temp_expr = temp_expr.get_parent()
-		except AttributeError:
-			pass
+		# So make sure that the instance is a PyExpression
+		while isinstance(temp_expr.get_parent(), PyExpression) and temp_expr.get_parent() is not None:
+			# Cast parent to a PyExpression, since
+			# we have the guarantee that it is one
+			temp_parent: PyExpression = cast(PyExpression, temp_expr.get_parent())
+			# Increment the count
+			indentation += 1
+			# Iterate to next parent
+			temp_expr = temp_parent
 
 		# Set to field
 		self.__indentation = indentation
