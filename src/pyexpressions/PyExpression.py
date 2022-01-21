@@ -7,8 +7,8 @@ from abc import abstractmethod, ABCMeta
 from ast import unparse
 from typing import Set, Iterable, Optional
 
-from src.TypeRenames import GENERIC_PYEXPR_TYPE
 from src.Errors import UnsupportedFeatureException
+from src.TypeRenames import GENERIC_PYEXPR_TYPE
 from src.pybuiltins.PyPortFunction import PyPortFunction
 
 

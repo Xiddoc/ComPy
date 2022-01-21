@@ -4,7 +4,7 @@ Function defenition.
 from _ast import FunctionDef, Constant
 from ast import parse
 from inspect import getsource
-from typing import List, Callable, Any, cast, Optional
+from typing import List, cast, Optional
 
 from src.Compiler import Compiler
 from src.TypeRenames import GENERIC_PYEXPR_TYPE, AnyFunction

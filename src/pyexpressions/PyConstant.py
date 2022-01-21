@@ -6,8 +6,8 @@ from json import dumps
 from typing import Type, Union
 
 from src.Compiler import Compiler
-from src.TypeRenames import GENERIC_PYEXPR_TYPE
 from src.Errors import UnsupportedFeatureException
+from src.TypeRenames import GENERIC_PYEXPR_TYPE
 from src.pyexpressions.PyExpression import PyExpression
 
 
