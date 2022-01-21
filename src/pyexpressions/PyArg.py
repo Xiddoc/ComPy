@@ -27,4 +27,4 @@ class PyArg(PyExpression):
 		"""
 		Transpiles the constant to a string.
 		"""
-		return f"{self.__arg_type.__transpile()} {self.__arg_name}"
+		return f"{self.__arg_type.transpile()} {self.__arg_name}"

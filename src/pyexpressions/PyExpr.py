@@ -30,4 +30,4 @@ class PyExpr(PyExpression):
 		"""
 		Transpiles the constant to a string.
 		"""
-		return self.__value.__transpile() if self.__value else ""
+		return self.__value.transpile() if self.__value else ""

@@ -50,4 +50,4 @@ class PyCall(PyExpression):
 		# For each argument, transpile
 		# Join the arguments together with commas
 		# FUNC_NAME ( ARG1 , ARG2 , ... )
-		return f"{self.__func.__transpile()}({','.join([arg.__transpile() for arg in self.__args])});"
+		return f"{self.__func.transpile()}({','.join([arg.transpile() for arg in self.__args])});"

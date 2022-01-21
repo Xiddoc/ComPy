@@ -38,6 +38,6 @@ class PyAnnAssign(PyExpression):
 		@return:
 		"""
 		return \
-			f"{self.__type} {self.__target} = {self.__value.__transpile()};"\
+			f"{self.__type} {self.__target} = {self.__value.transpile()};"\
 			if self.__value else \
 			f"{self.__type} {self.__target};"

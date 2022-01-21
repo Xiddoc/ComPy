@@ -24,4 +24,4 @@ class PyReturn(PyExpression):
 		"""
 		Transpiles the constant to a string.
 		"""
-		return f"return {self.__value.__transpile()};"
+		return f"return {self.__value.transpile()};"

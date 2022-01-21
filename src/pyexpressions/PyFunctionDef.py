@@ -42,15 +42,15 @@ class PyFunctionDef(PyExpression):
 		"""
 		Transpiles the constant to a native string.
 		"""
-		return f"{self.transpile_header()}{{{''.join([expr.__transpile() for expr in self.__code])}}}"
+		return f"{self.transpile_header()}{{{''.join([expr.transpile() for expr in self.__code])}}}"
 
 	def transpile_header(self) -> str:
 		"""
 		Transpiles the header of the function to a native string.
 		"""
-		return f"{self.__return_type.__transpile() if self.__return_type else 'void'}" \
+		return f"{self.__return_type.transpile() if self.__return_type else 'void'}" \
 		       f" {self.__func_name}(" \
-		       f"{','.join([arg.__transpile() for arg in self.__args])})"
+		       f"{','.join([arg.transpile() for arg in self.__args])})"
 
 	@staticmethod
 	def from_single_object(obj: AnyFunction, parent: Optional[GENERIC_PYEXPR_TYPE]) -> "PyFunctionDef":
