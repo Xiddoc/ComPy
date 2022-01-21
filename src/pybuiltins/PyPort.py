@@ -2,7 +2,7 @@
 Port a native function or object to Python.
 """
 from abc import ABCMeta, abstractmethod
-from typing import Set
+from typing import Set, Optional
 
 
 class PyPort(metaclass=ABCMeta):
@@ -22,7 +22,7 @@ class PyPort(metaclass=ABCMeta):
 	__depends: Set[str]
 
 	@abstractmethod
-	def __init__(self, dependencies=None):
+	def __init__(self, dependencies: Optional[Set[str]] = None) -> None:
 		"""
 		@param dependencies: A list of dependencies to require.
 		"""

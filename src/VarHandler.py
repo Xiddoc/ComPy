@@ -12,7 +12,7 @@ class VarHandler:
 
 	__vars: dict[str, Name]
 
-	def __init__(self):
+	def __init__(self) -> None:
 		# Initialize the handler with builtin_names
 		self.__vars = {}
 

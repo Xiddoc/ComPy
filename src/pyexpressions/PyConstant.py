@@ -3,8 +3,11 @@ Constant literal.
 """
 from _ast import Constant
 from json import dumps
+from typing import Type, Union
 
+from src.Compiler import Compiler
 from src.Errors import UnsupportedFeatureException
+from src.TypeRenames import GENERIC_PYEXPR_TYPE
 from src.pyexpressions.PyExpression import PyExpression
 
 
@@ -15,12 +18,12 @@ class PyConstant(PyExpression):
 
 	__value: str
 
-	def __init__(self, expression: Constant):
-		super().__init__(expression)
+	def __init__(self, expression: Constant, parent: GENERIC_PYEXPR_TYPE):
+		super().__init__(expression, parent)
 		# Translate the value
 		self.__value = self.translate_constant(expression)
 
-	def transpile(self) -> str:
+	def _transpile(self) -> str:
 		"""
 		Transpiles the constant to a string.
 		"""
@@ -32,18 +35,22 @@ class PyConstant(PyExpression):
 		Transpiles a constant to it's string representation.
 		:param constant: The Constant object to transpile.
 		"""
+		# Get the constant's value
+		val: Union[int, str, bool] = Compiler.get_attr(constant, 'value')
+
 		# Get the contant's value type
-		value_type = type(constant.value)
+		value_type: Type[Union[int, str, bool]] = type(val)
+
 		# If the type is an integer or a boolean
 		if value_type == int or value_type == bool:
 			# Return the value
-			return str(constant.value)
+			return str(val)
 
 		elif value_type == str:
 			# Encompass in quotes
-			return dumps(constant.value)
+			return dumps(val)
 
 		else:
 			# What type is that?
 			# We can't use that
-			raise UnsupportedFeatureException(f"Python type '{value_type}' is not supported by the compiler.")
+			raise UnsupportedFeatureException(constant)

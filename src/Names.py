@@ -2,19 +2,19 @@
 Variable class and other classes to represent values.
 """
 from dataclasses import dataclass, field
-from typing import Union
+from typing import Optional
 
 
 class Value:
 	"""
 	Dataclass for value.
 	"""
-	__value: Union[str, None]
+	__value: Optional[str]
 	__has_value: bool
 
-	def __init__(self, value: str = None):
+	def __init__(self, value: Optional[str] = None) -> None:
 		# If value given is null, then there is no starting value
-		self.__has_value = not not value
+		self.__has_value = value is not None
 		self.__value = value
 
 	def has_value(self) -> bool:
@@ -27,7 +27,7 @@ class Value:
 		"""
 		Returns the TRANSPILED value.
 		"""
-		return "(" + self.__value if self.__value else "null" + ")"
+		return "(" + "null" if self.__value is None else self.__value + ")"
 
 
 @dataclass

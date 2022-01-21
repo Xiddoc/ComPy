@@ -5,6 +5,7 @@ from _ast import BinOp
 from _ast import operator
 
 from src.Errors import UnsupportedFeatureException
+from src.TypeRenames import GENERIC_PYEXPR_TYPE
 from src.pyexpressions.PyExpression import PyExpression
 
 
@@ -17,15 +18,15 @@ class PyBinOp(PyExpression):
 	__right: PyExpression
 	__op_type: str
 
-	def __init__(self, expression: BinOp):
-		super().__init__(expression)
+	def __init__(self, expression: BinOp, parent: GENERIC_PYEXPR_TYPE):
+		super().__init__(expression, parent)
 		# Convert op to string
 		self.__op_type = self.op_to_str(expression.op)
 		# Store sides
 		self.__left = self.from_ast(expression.left)
 		self.__right = self.from_ast(expression.right)
 
-	def transpile(self) -> str:
+	def _transpile(self) -> str:
 		"""
 		Transpile the operation to a string.
 		@return:
@@ -52,5 +53,4 @@ class PyBinOp(PyExpression):
 			return AST_OP_TO_STR[op_type]
 		# Otherwise
 		else:
-			raise UnsupportedFeatureException(
-				f"Python feature '{op.__name__}' is not supported by the compiler.")
+			raise UnsupportedFeatureException(op)

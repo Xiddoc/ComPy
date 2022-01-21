@@ -4,6 +4,8 @@ Expression statement.
 from _ast import Call
 from typing import List
 
+from src.Compiler import Compiler
+from src.TypeRenames import GENERIC_PYEXPR_TYPE
 from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.pyexpressions.PyExpression import PyExpression
 from src.pyexpressions.PyName import PyName
@@ -17,10 +19,10 @@ class PyCall(PyExpression):
 	__args: List[PyExpression]
 	__func: PyName
 
-	def __init__(self, expression: Call):
-		super().__init__(expression)
+	def __init__(self, expression: Call, parent: GENERIC_PYEXPR_TYPE):
+		super().__init__(expression, parent)
 		# Convert to name
-		self.__func = PyName(expression.func)
+		self.__func = PyName(Compiler.get_attr(expression, 'func'), self)
 
 		# For each argument
 		# Convert to argument object and store
@@ -38,7 +40,7 @@ class PyCall(PyExpression):
 			# Add as dependency
 			self.add_native_dependency(native_func)
 
-	def transpile(self) -> str:
+	def _transpile(self) -> str:
 		"""
 		Transpiles the constant to a string.
 		"""
