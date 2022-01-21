@@ -4,8 +4,8 @@ Return statement.
 from _ast import Return
 
 from src.Compiler import Compiler
-from src.TypeRenames import GENERIC_PYEXPR_TYPE
 from src.pyexpressions.PyExpression import PyExpression
+from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
 class PyReturn(PyExpression):

@@ -3,6 +3,7 @@ Logging utilities and functions.
 """
 from typing import cast
 
+from src.Args import Args
 from src.pyexpressions.PyExpression import PyExpression
 
 
@@ -43,7 +44,7 @@ class Logger:
 		Automatically formats the string with a tree
 		that points upwards (branches head down).
 
-		@param message: The message to log.
+		:param message: The message to log.
 		"""
 		# Merge the tree branches with the message
 		# Log it
@@ -60,7 +61,7 @@ class Logger:
 		Automatically formats the string with a tree
 		that points downwards (branches head up).
 
-		@param message: The message to log.
+		:param message: The message to log.
 		"""
 		# Merge the tree branches with the message
 		# Log it
@@ -76,21 +77,19 @@ class Logger:
 		"""
 		Logs a string to standard output.
 
-		@param message: The message to log.
+		:param message: The message to log.
 		"""
-		# Print the message
-		# While this seems like a redundant method, the
-		# objective is to make a wrapped logger. This is useful
-		# in case we want to add useful tools like coloring to
-		# the console, or more.
-		print(message)
+		# Check if logging is enabled
+		if Args().get_args().verbose:
+			# If it is, then print the message
+			print(message)
 
 	def __get_log_prepend(self, indentation: int, point_upwards: bool) -> str:
 		"""
 		Creates the tree indentation string.
 
-		@param indentation: The amount to indent into the tree.
-		@return: A string of unicode symbols, spaces, and newlines which forms one line of the tree.
+		:param indentation: The amount to indent into the tree.
+		:return: A string of unicode symbols, spaces, and newlines which forms one line of the tree.
 		"""
 		# If first layer of tree, then use T symbol
 		if self.__indentation == 1:

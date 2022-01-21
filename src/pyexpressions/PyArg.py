@@ -4,9 +4,9 @@ Function argument name declaration.
 from _ast import arg
 
 from src.Compiler import Compiler
-from src.TypeRenames import GENERIC_PYEXPR_TYPE
 from src.pyexpressions.PyExpression import PyExpression
 from src.pyexpressions.PyName import PyName
+from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
 class PyArg(PyExpression):

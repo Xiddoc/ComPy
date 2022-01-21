@@ -22,11 +22,11 @@ class Output:
 		"""
 		Append the expression to the output.
 
-		@param expression: The expression to append.
+		:param expression: The expression to append.
 		"""
 		self.__output.append(expression)
 
-	def get_output_as_list(self) -> List[str]:
+	def compile_as_list(self) -> List[str]:
 		"""
 		Returns the compiled output as a list of strings.
 		"""
@@ -61,8 +61,8 @@ class Output:
 		# Return the output
 		return output_list
 
-	def get_output(self) -> str:
+	def compile_to_string(self) -> str:
 		"""
 		Returns the compiled output as a string.
 		"""
-		return "\n".join(self.get_output_as_list())
+		return "\n".join(self.compile_as_list())

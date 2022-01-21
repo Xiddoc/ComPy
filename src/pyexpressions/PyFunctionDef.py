@@ -7,10 +7,10 @@ from inspect import getsource
 from typing import List, cast, Optional
 
 from src.Compiler import Compiler
-from src.TypeRenames import GENERIC_PYEXPR_TYPE, AnyFunction
 from src.pyexpressions.PyArg import PyArg
 from src.pyexpressions.PyExpression import PyExpression
 from src.pyexpressions.PyName import PyName
+from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE, AnyFunction
 
 
 class PyFunctionDef(PyExpression):
@@ -57,9 +57,9 @@ class PyFunctionDef(PyExpression):
 		"""
 		Converts any singular (function, object, class, etc.) Python object to an AST node.
 
-		@param obj: The object to convert.
-		@param parent: The parent expression which uses this node.
-		@return: The parsed AST node.
+		:param obj: The object to convert.
+		:param parent: The parent expression which uses this node.
+		:return: The parsed AST node.
 		"""
 		# Get the source code of the object
 		# Parse it to an AST tree
