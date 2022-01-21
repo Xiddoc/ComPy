@@ -46,10 +46,32 @@ class PyExpression(metaclass=ABCMeta):
 		)
 
 	@abstractmethod
+	def __transpile(self) -> str:
+		"""
+		Transpiles this expression to a C++ string.
+
+		This is the *wrapped* method. We (the devs) will use this method
+		to *IMPLEMENT* the transpilation process. To actually transpile
+		the code, use the self.transpile method, which wraps this method.
+		"""
+
 	def transpile(self) -> str:
 		"""
 		Transpiles this expression to a C++ string.
+
+		This is the *wrapper* method. We (the devs) will use this
+		method to *EXECUTE* the transpilation process. To actually
+		implement the transpilation process, implement the
+		self.__transpile method, which is wrapped by this method.
 		"""
+		# Execute the transpilation process
+		transpiled_code: str = self.__transpile()
+		# Currently, the only wrapping that we will do is logging.
+		# However, this still allows for future useful extensions
+		# such as beautifying the code, for example.
+		self.__logger.log(transpiled_code)
+		# Return the transpiled code
+		return transpiled_code
 
 	def add_dependencies(self, dependencies: Iterable[str]) -> None:
 		"""
