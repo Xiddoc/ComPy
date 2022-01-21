@@ -3,6 +3,7 @@ Logging utilities and functions.
 """
 from typing import cast
 
+from src.Args import Args
 from src.pyexpressions.PyExpression import PyExpression
 
 
@@ -78,12 +79,10 @@ class Logger:
 
 		:param message: The message to log.
 		"""
-		# Print the message
-		# While this seems like a redundant method, the
-		# objective is to make a wrapped logger. This is useful
-		# in case we want to add useful tools like coloring to
-		# the console, or more.
-		print(message)
+		# Check if logging is enabled
+		if Args().get_args().verbose:
+			# If it is, then print the message
+			print(message)
 
 	def __get_log_prepend(self, indentation: int, point_upwards: bool) -> str:
 		"""
