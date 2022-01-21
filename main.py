@@ -40,7 +40,7 @@ ioStream = args.output if args.output else open(args.file + '.cpp', "w")
 
 # Compile the file to a string
 print("Compiling the file...")
-compiled_text: str = c.get_output()
+compiled_text: str = c.compile()
 print("Successfully compiled!")
 
 # Write to the file

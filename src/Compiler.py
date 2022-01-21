@@ -67,11 +67,11 @@ class Compiler:
 			return Value(f"{expression.func.id}({','.join(self.eval_expr(arg).get_value() for arg in expression.args)})")
 		"""
 
-	def get_output(self) -> str:
+	def compile(self) -> str:
 		"""
 		Returns the compiled output as a string.
 		"""
-		return self.__output.get_output()
+		return self.__output.compile_to_string()
 
 	@staticmethod
 	def get_attr(obj: AST, attribute_path: str) -> Any:
