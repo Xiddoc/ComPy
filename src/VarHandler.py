@@ -44,8 +44,7 @@ class VarHandler:
 			return var
 		else:
 			# Otherwise, raise an exception (all variables have immutable types)
-			raise VariableAlreadyDefinedError(
-				f"You cannot redefine variable '{var_name}' as it is already initialized.")
+			raise VariableAlreadyDefinedError(var_name)
 
 	def get_var(self, var_name: str) -> Name:
 		"""
@@ -55,7 +54,7 @@ class VarHandler:
 		if self.is_var_exists(var_name):
 			return self.__vars[var_name]
 		else:
-			raise VariableNotDefinedError(f"Variable '{var_name}' was not initialized yet.")
+			raise VariableNotDefinedError(var_name)
 
 	def get_funcs(self) -> list[Function]:
 		"""
