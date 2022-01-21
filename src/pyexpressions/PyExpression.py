@@ -64,8 +64,9 @@ class PyExpression(metaclass=ABCMeta):
 		implement the transpilation process, implement the
 		self._transpile method, which is wrapped by this method.
 		"""
-		# Execute the transpilation process
-		transpiled_code: str = self.transpile()
+		# Execute the transpilation process by executing
+		# the *IMPLEMENTATION* of the transpiler function
+		transpiled_code: str = self._transpile()
 		# Currently, the only wrapping that we will do is logging.
 		# However, this still allows for future useful extensions
 		# such as beautifying the code, for example.
