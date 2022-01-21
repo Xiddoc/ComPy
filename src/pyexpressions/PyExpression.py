@@ -40,7 +40,7 @@ class PyExpression(metaclass=ABCMeta):
 		from src.Compiler import Compiler
 		self.__logger = Logger(self)
 		# Print logging statement for creation of node
-		self.__logger.log(
+		self.__logger.log_tree_up(
 			f"Creating expression <{Compiler.get_name(expression)}>: " +
 			unparse(expression).replace('\n', '\\n').replace('\r', '\\r')
 		)
@@ -71,7 +71,7 @@ class PyExpression(metaclass=ABCMeta):
 		# However, this still allows for future useful extensions
 		# such as beautifying the code, for example.
 		from src.Compiler import Compiler
-		self.__logger.log(f"Compiled <{Compiler.get_name(self.get_expression())}> expression to: {transpiled_code}")
+		self.__logger.log_tree_down(f"Compiled <{Compiler.get_name(self.get_expression())}> expression to: {transpiled_code}")
 		# Return the transpiled code
 		return transpiled_code
 
