@@ -30,7 +30,7 @@ ioStream.close()
 
 # Send parser data to compiler
 print("Parsing the file...")
-c: Compiler = Compiler(Args().get_args())
+c: Compiler = Compiler()
 
 # Compile the file
 c.parse(source)

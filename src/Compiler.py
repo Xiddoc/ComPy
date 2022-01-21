@@ -1,11 +1,11 @@
 """
 Compiler class.
 """
-from argparse import Namespace
 from ast import AST, parse
 from functools import reduce
 from typing import Any
 
+from src.Args import Args
 from src.Output import Output
 from src.VarHandler import VarHandler
 from src.pyexpressions.PyExpression import PyExpression
@@ -17,13 +17,8 @@ class Compiler:
 	"""
 
 	__node: AST
-	__args: Namespace
 	__output: Output
 	__var_handler: VarHandler
-
-	def __init__(self, args: Namespace):
-		# Use the given arguments
-		self.__args = args
 
 	def parse(self, source: str) -> None:
 		"""
@@ -36,7 +31,7 @@ class Compiler:
 		# Init output handler
 		self.__output = Output()
 		# Parse the node into an abstract tree
-		self.__node = parse(source, self.__args.file.name)
+		self.__node = parse(source, Args().get_args().file.name)
 
 		# Walk down the node
 		for node in self.__node.body:
