@@ -3,8 +3,8 @@ Name statement (usage of an object).
 """
 from _ast import Name
 
-from src.TypeRenames import GENERIC_PYEXPR_TYPE
 from src.pyexpressions.PyExpression import PyExpression
+from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
 class PyName(PyExpression):

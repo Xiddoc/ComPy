@@ -1,11 +1,11 @@
 """
 Compiler class.
 """
-from argparse import Namespace
 from ast import AST, parse
 from functools import reduce
 from typing import Any
 
+from src.Args import Args
 from src.Output import Output
 from src.VarHandler import VarHandler
 from src.pyexpressions.PyExpression import PyExpression
@@ -17,24 +17,21 @@ class Compiler:
 	"""
 
 	__node: AST
-	__args: Namespace
 	__output: Output
 	__var_handler: VarHandler
 
-	def __init__(self, args: Namespace):
-		# Use the given arguments
-		self.__args = args
-
-	def compile(self, source: str) -> None:
+	def parse(self, source: str) -> None:
 		"""
-		Entry to compilation sequence.
+		Initiates the parsing sequence.
+		This turns the code into a series of nodes, filled
+		with the proper data structures alongside other nested nodes.
 		"""
 		# Initialize an empty dictionary for variables
 		self.__var_handler = VarHandler()
 		# Init output handler
 		self.__output = Output()
 		# Parse the node into an abstract tree
-		self.__node = parse(source, self.__args.file.name)
+		self.__node = parse(source, Args().get_args().file.name)
 
 		# Walk down the node
 		for node in self.__node.body:
@@ -65,11 +62,11 @@ class Compiler:
 			return Value(f"{expression.func.id}({','.join(self.eval_expr(arg).get_value() for arg in expression.args)})")
 		"""
 
-	def get_output(self) -> str:
+	def compile(self) -> str:
 		"""
 		Returns the compiled output as a string.
 		"""
-		return self.__output.get_output()
+		return self.__output.compile_to_string()
 
 	@staticmethod
 	def get_attr(obj: AST, attribute_path: str) -> Any:
@@ -86,8 +83,8 @@ class Compiler:
 		around this bug, we will use the getattr function to retrieve the
 		attributes directly.
 
-		@param obj: The AST object to traverse.
-		@param attribute_path: The attribute path to use (for example, if passing
+		:param obj: The AST object to traverse.
+		:param attribute_path: The attribute path to use (for example, if passing
 								the object 'expression', and you want to navigate
 								to the 'target' attribute, then the 'id' attribute
 								of the 'target' attribute, then for this parameter
@@ -108,7 +105,7 @@ class Compiler:
 		For example, instead of seeing: <ast.AnnAssign object at 0x000002CC7FE5A310>
 		You could use this method to abbreviate to: AnnAssign
 
-		@param obj: An instance of the AST expression or node to name.
-		@return: The string representation of the AST node's class name.
+		:param obj: An instance of the AST expression or node to name.
+		:return: The string representation of the AST node's class name.
 		"""
 		return str(cls.get_attr(obj, "__class__.__name__"))

@@ -24,7 +24,7 @@ class PyPort(metaclass=ABCMeta):
 	@abstractmethod
 	def __init__(self, dependencies: Optional[Set[str]] = None) -> None:
 		"""
-		@param dependencies: A list of dependencies to require.
+		:param dependencies: A list of dependencies to require.
 		"""
 		# If default value
 		if dependencies is None:

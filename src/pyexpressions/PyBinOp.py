@@ -4,9 +4,9 @@ Binary operation.
 from _ast import BinOp
 from _ast import operator
 
-from src.Errors import UnsupportedFeatureException
-from src.TypeRenames import GENERIC_PYEXPR_TYPE
 from src.pyexpressions.PyExpression import PyExpression
+from src.structures.Errors import UnsupportedFeatureException
+from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
 class PyBinOp(PyExpression):
@@ -29,7 +29,6 @@ class PyBinOp(PyExpression):
 	def _transpile(self) -> str:
 		"""
 		Transpile the operation to a string.
-		@return:
 		"""
 		return "(" + self.__left.transpile() + self.__op_type + self.__right.transpile() + ")"
 
@@ -38,8 +37,8 @@ class PyBinOp(PyExpression):
 		"""
 		Transpiles an operator to a string.
 
-		@param op: The operator to translate
-		@return: The operator as a C++ string.
+		:param op: The operator to translate
+		:return: The operator as a C++ string.
 		"""
 		# Local import to avoid circular import errors
 		from src.Constants import AST_OP_TO_STR
