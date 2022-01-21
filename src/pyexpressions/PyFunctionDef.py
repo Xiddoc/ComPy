@@ -38,7 +38,7 @@ class PyFunctionDef(PyExpression):
 		returns = Compiler.get_attr(expression, 'returns')
 		self.__return_type = None if type(returns) == Constant else PyName(returns, self)
 
-	def __transpile(self) -> str:
+	def _transpile(self) -> str:
 		"""
 		Transpiles the constant to a native string.
 		"""

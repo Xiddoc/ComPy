@@ -46,7 +46,7 @@ class PyExpression(metaclass=ABCMeta):
 		)
 
 	@abstractmethod
-	def __transpile(self) -> str:
+	def _transpile(self) -> str:
 		"""
 		Transpiles this expression to a C++ string.
 
@@ -62,7 +62,7 @@ class PyExpression(metaclass=ABCMeta):
 		This is the *wrapper* method. We (the devs) will use this
 		method to *EXECUTE* the transpilation process. To actually
 		implement the transpilation process, implement the
-		self.__transpile method, which is wrapped by this method.
+		self._transpile method, which is wrapped by this method.
 		"""
 		# Execute the transpilation process
 		transpiled_code: str = self.transpile()

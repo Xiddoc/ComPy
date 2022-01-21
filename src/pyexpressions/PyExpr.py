@@ -26,7 +26,7 @@ class PyExpr(PyExpression):
 			# Otherwise, translate the value
 			self.__value = self.from_ast(expression.value)
 
-	def __transpile(self) -> str:
+	def _transpile(self) -> str:
 		"""
 		Transpiles the constant to a string.
 		"""

@@ -32,7 +32,7 @@ class PyAnnAssign(PyExpression):
 			# Otherwise, leave as None
 			self.__value = None
 
-	def __transpile(self) -> str:
+	def _transpile(self) -> str:
 		"""
 		Transpile the operation to a string.
 		@return:
