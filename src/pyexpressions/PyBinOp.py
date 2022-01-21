@@ -26,7 +26,7 @@ class PyBinOp(PyExpression):
 		self.__left = self.from_ast(expression.left)
 		self.__right = self.from_ast(expression.right)
 
-	def transpile(self) -> str:
+	def _transpile(self) -> str:
 		"""
 		Transpile the operation to a string.
 		@return:

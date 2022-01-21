@@ -100,3 +100,15 @@ class Compiler:
 		# Built in functools' reduce function to cumulatively execute the getattr function
 		# On the first 2 arguments of the list
 		return reduce(getattr, attrs, obj)
+
+	@classmethod
+	def get_name(cls, obj: AST) -> str:
+		"""
+		Retrieves the name of the AST node's class.
+		For example, instead of seeing: <ast.AnnAssign object at 0x000002CC7FE5A310>
+		You could use this method to abbreviate to: AnnAssign
+
+		@param obj: An instance of the AST expression or node to name.
+		@return: The string representation of the AST node's class name.
+		"""
+		return cls.get_attr(obj, "__class__.__name__")

@@ -25,7 +25,7 @@ class PyName(PyExpression):
 		"""
 		return self.__target
 
-	def transpile(self) -> str:
+	def _transpile(self) -> str:
 		"""
 		Transpiles the constant to a string.
 		"""

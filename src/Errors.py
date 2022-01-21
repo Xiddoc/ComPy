@@ -35,4 +35,4 @@ class UnsupportedFeatureException(SyntaxError):
 		# Local import to avoid import error
 		from src.Compiler import Compiler
 		# Error text
-		return f"Python feature '{Compiler.get_attr(self.feature, '__class__.__name__')}' is not supported by the compiler."
+		return f"Python feature '{Compiler.get_name(self.feature)}' is not supported by the compiler."

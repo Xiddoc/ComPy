@@ -41,15 +41,39 @@ class PyExpression(metaclass=ABCMeta):
 		self.__logger = Logger(self)
 		# Print logging statement for creation of node
 		self.__logger.log(
-			f"Creating expression <{Compiler.get_attr(expression, '__class__.__name__')}>: " +
+			f"Creating expression <{Compiler.get_name(expression)}>: " +
 			unparse(expression).replace('\n', '\\n').replace('\r', '\\r')
 		)
 
 	@abstractmethod
+	def _transpile(self) -> str:
+		"""
+		Transpiles this expression to a C++ string.
+
+		This is the *wrapped* method. We (the devs) will use this method
+		to *IMPLEMENT* the transpilation process. To actually transpile
+		the code, use the self.transpile method, which wraps this method.
+		"""
+
 	def transpile(self) -> str:
 		"""
 		Transpiles this expression to a C++ string.
+
+		This is the *wrapper* method. We (the devs) will use this
+		method to *EXECUTE* the transpilation process. To actually
+		implement the transpilation process, implement the
+		self._transpile method, which is wrapped by this method.
 		"""
+		# Execute the transpilation process by executing
+		# the *IMPLEMENTATION* of the transpiler function
+		transpiled_code: str = self._transpile()
+		# Currently, the only wrapping that we will do is logging.
+		# However, this still allows for future useful extensions
+		# such as beautifying the code, for example.
+		from src.Compiler import Compiler
+		self.__logger.log(f"Compiled <{Compiler.get_name(self.get_expression())}> expression to: {transpiled_code}")
+		# Return the transpiled code
+		return transpiled_code
 
 	def add_dependencies(self, dependencies: Iterable[str]) -> None:
 		"""

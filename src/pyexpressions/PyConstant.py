@@ -23,7 +23,7 @@ class PyConstant(PyExpression):
 		# Translate the value
 		self.__value = self.translate_constant(expression)
 
-	def transpile(self) -> str:
+	def _transpile(self) -> str:
 		"""
 		Transpiles the constant to a string.
 		"""

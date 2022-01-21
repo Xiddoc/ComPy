@@ -40,7 +40,7 @@ class PyCall(PyExpression):
 			# Add as dependency
 			self.add_native_dependency(native_func)
 
-	def transpile(self) -> str:
+	def _transpile(self) -> str:
 		"""
 		Transpiles the constant to a string.
 		"""
