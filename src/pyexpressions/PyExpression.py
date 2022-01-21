@@ -125,7 +125,7 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		return self.__expression
 
-	def get_parent(self) -> "PyExpression":
+	def get_parent(self) -> Optional[GENERIC_PYEXPR_TYPE]:
 		"""
 		@return: Returns an instance of the PyExpression object which created this object.
 		"""

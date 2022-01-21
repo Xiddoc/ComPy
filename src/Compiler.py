@@ -111,4 +111,4 @@ class Compiler:
 		@param obj: An instance of the AST expression or node to name.
 		@return: The string representation of the AST node's class name.
 		"""
-		return cls.get_attr(obj, "__class__.__name__")
+		return str(cls.get_attr(obj, "__class__.__name__"))
