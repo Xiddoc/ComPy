@@ -35,7 +35,6 @@ class PyAnnAssign(PyExpression):
 	def _transpile(self) -> str:
 		"""
 		Transpile the operation to a string.
-		@return:
 		"""
 		return \
 			f"{self.__type} {self.__target} = {self.__value.transpile()};"\

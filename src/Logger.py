@@ -43,7 +43,7 @@ class Logger:
 		Automatically formats the string with a tree
 		that points upwards (branches head down).
 
-		@param message: The message to log.
+		:param message: The message to log.
 		"""
 		# Merge the tree branches with the message
 		# Log it
@@ -60,7 +60,7 @@ class Logger:
 		Automatically formats the string with a tree
 		that points downwards (branches head up).
 
-		@param message: The message to log.
+		:param message: The message to log.
 		"""
 		# Merge the tree branches with the message
 		# Log it
@@ -76,7 +76,7 @@ class Logger:
 		"""
 		Logs a string to standard output.
 
-		@param message: The message to log.
+		:param message: The message to log.
 		"""
 		# Print the message
 		# While this seems like a redundant method, the
@@ -89,8 +89,8 @@ class Logger:
 		"""
 		Creates the tree indentation string.
 
-		@param indentation: The amount to indent into the tree.
-		@return: A string of unicode symbols, spaces, and newlines which forms one line of the tree.
+		:param indentation: The amount to indent into the tree.
+		:return: A string of unicode symbols, spaces, and newlines which forms one line of the tree.
 		"""
 		# If first layer of tree, then use T symbol
 		if self.__indentation == 1:

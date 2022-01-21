@@ -57,9 +57,9 @@ class PyFunctionDef(PyExpression):
 		"""
 		Converts any singular (function, object, class, etc.) Python object to an AST node.
 
-		@param obj: The object to convert.
-		@param parent: The parent expression which uses this node.
-		@return: The parsed AST node.
+		:param obj: The object to convert.
+		:param parent: The parent expression which uses this node.
+		:return: The parsed AST node.
 		"""
 		# Get the source code of the object
 		# Parse it to an AST tree

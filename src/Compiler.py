@@ -83,8 +83,8 @@ class Compiler:
 		around this bug, we will use the getattr function to retrieve the
 		attributes directly.
 
-		@param obj: The AST object to traverse.
-		@param attribute_path: The attribute path to use (for example, if passing
+		:param obj: The AST object to traverse.
+		:param attribute_path: The attribute path to use (for example, if passing
 								the object 'expression', and you want to navigate
 								to the 'target' attribute, then the 'id' attribute
 								of the 'target' attribute, then for this parameter
@@ -105,7 +105,7 @@ class Compiler:
 		For example, instead of seeing: <ast.AnnAssign object at 0x000002CC7FE5A310>
 		You could use this method to abbreviate to: AnnAssign
 
-		@param obj: An instance of the AST expression or node to name.
-		@return: The string representation of the AST node's class name.
+		:param obj: An instance of the AST expression or node to name.
+		:return: The string representation of the AST node's class name.
 		"""
 		return str(cls.get_attr(obj, "__class__.__name__"))

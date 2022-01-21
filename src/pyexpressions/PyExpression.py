@@ -79,7 +79,7 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		Adds multiple dependencies to the dependency list.
 
-		@param dependencies: A list of native dependencies that this object relies on.
+		:param dependencies: A list of native dependencies that this object relies on.
 		"""
 		self.__depends.update(dependencies)
 
@@ -87,7 +87,7 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		Adds a single dependency to the list.
 
-		@param dependency: The dependency to add.
+		:param dependency: The dependency to add.
 		"""
 		self.__depends.add(dependency)
 
@@ -101,7 +101,7 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		Adds multiple native dependencies to the dependency list.
 
-		@param native_dependencies: A list of native dependencies that this object relies on.
+		:param native_dependencies: A list of native dependencies that this object relies on.
 		"""
 		self.__native_depends.update(native_dependencies)
 
@@ -109,7 +109,7 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		Adds a single native dependency to the list.
 
-		@param native_dependency: The native dependency to add.
+		:param native_dependency: The native dependency to add.
 		"""
 		self.__native_depends.add(native_dependency)
 
@@ -121,13 +121,13 @@ class PyExpression(metaclass=ABCMeta):
 
 	def get_expression(self) -> AST:
 		"""
-		@return: Returns the expression this instance is holding (was initialized with).
+		:return: Returns the expression this instance is holding (was initialized with).
 		"""
 		return self.__expression
 
 	def get_parent(self) -> Optional[GENERIC_PYEXPR_TYPE]:
 		"""
-		@return: Returns an instance of the PyExpression object which created this object.
+		:return: Returns an instance of the PyExpression object which created this object.
 		"""
 		return self.__parent
 
@@ -138,8 +138,8 @@ class PyExpression(metaclass=ABCMeta):
 		As opposed to the static from_ast method, this one
 		inherits dependencies directly to the current object.
 
-		@param expression: The expression to convert.
-		@return: A PyExpression object of the matching type.
+		:param expression: The expression to convert.
+		:return: A PyExpression object of the matching type.
 		"""
 		# Convert to PyExpression
 		obj: PyExpression = PyExpression.from_ast_statically(expression, self)
@@ -154,9 +154,9 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		Converts an AST expression to a PyExpression object.
 
-		@param expression: The expression to convert.
-		@param parent: The parent expression which uses this node.
-		@return: A PyExpression object of the matching type.
+		:param expression: The expression to convert.
+		:param parent: The parent expression which uses this node.
+		:return: A PyExpression object of the matching type.
 		"""
 		# Local import to avoid circular import errors
 		from src.Constants import AST_EXPR_TO_PYEXPR

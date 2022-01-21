@@ -22,7 +22,7 @@ class Output:
 		"""
 		Append the expression to the output.
 
-		@param expression: The expression to append.
+		:param expression: The expression to append.
 		"""
 		self.__output.append(expression)
 

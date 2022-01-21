@@ -10,7 +10,7 @@ from src.pybuiltins.PyPortFunction import PyPortFunction
 def print(print_string: str) -> None:
 	"""
 	Prints a string to standard output.
-	@param print_string: The string to print.
+	:param print_string: The string to print.
 	"""
 
 
@@ -18,8 +18,8 @@ def inc(my_integer: int) -> int:
 	"""
 	Increments an integer.
 
-	@param my_integer: The integer to increment.
-	@return: The incremented value.
+	:param my_integer: The integer to increment.
+	:return: The incremented value.
 	"""
 
 
@@ -28,9 +28,9 @@ def pow(value: int, exponent: int) -> int:
 	"""
 	Calculates a number to the power of the given exponent.
 
-	@param value: The base value.
-	@param exponent: The exponent's value.
-	@return: The power of the base to the exponent.
+	:param value: The base value.
+	:param exponent: The exponent's value.
+	:return: The power of the base to the exponent.
 	"""
 
 
