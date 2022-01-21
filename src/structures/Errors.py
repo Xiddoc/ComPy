@@ -4,6 +4,7 @@ Error classes, when needed for exceptions.
 from _ast import AST
 
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass
@@ -50,3 +51,20 @@ class UnsupportedFeatureException(SyntaxError):
 		from src.Compiler import Compiler
 		# Error text
 		return f"Python feature '{Compiler.get_name(self.feature)}' is not supported by the compiler."
+
+
+class InvalidArgumentError(ValueError):
+	"""
+	An error to throw when the user inputted an invalid argument.
+	Specifically, to be used for command line arguments. Not for
+	syntax arguments / code that is currently being compiled.
+	"""
+
+	argument: Optional[str]
+
+	def __str__(self) -> str:
+		# Error text
+		return \
+			f"Argument '{self.argument}' is not valid." \
+			if self.argument is not None else \
+			"Internal argument handling error encountered."
