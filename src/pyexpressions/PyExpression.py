@@ -41,7 +41,7 @@ class PyExpression(metaclass=ABCMeta):
 		self.__logger = Logger(self)
 		# Print logging statement for creation of node
 		self.__logger.log(
-			f"Creating expression <{Compiler.get_attr(expression, '__class__.__name__')}>: " +
+			f"Creating expression <{Compiler.get_name(expression)}>: " +
 			unparse(expression).replace('\n', '\\n').replace('\r', '\\r')
 		)
 
@@ -70,7 +70,8 @@ class PyExpression(metaclass=ABCMeta):
 		# Currently, the only wrapping that we will do is logging.
 		# However, this still allows for future useful extensions
 		# such as beautifying the code, for example.
-		self.__logger.log(transpiled_code)
+		from src.Compiler import Compiler
+		self.__logger.log(f"Compiled <{Compiler.get_name(self.get_expression())}> expression to: {transpiled_code}")
 		# Return the transpiled code
 		return transpiled_code
 
