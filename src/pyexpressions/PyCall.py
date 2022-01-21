@@ -5,10 +5,10 @@ from _ast import Call
 from typing import List
 
 from src.Compiler import Compiler
-from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.pyexpressions.PyExpression import PyExpression
 from src.pyexpressions.PyName import PyName
+from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
 class PyCall(PyExpression):

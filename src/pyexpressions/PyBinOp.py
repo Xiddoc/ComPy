@@ -4,9 +4,9 @@ Binary operation.
 from _ast import BinOp
 from _ast import operator
 
+from src.pyexpressions.PyExpression import PyExpression
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
-from src.pyexpressions.PyExpression import PyExpression
 
 
 class PyBinOp(PyExpression):

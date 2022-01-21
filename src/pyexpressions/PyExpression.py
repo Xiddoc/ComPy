@@ -7,9 +7,9 @@ from abc import abstractmethod, ABCMeta
 from ast import unparse
 from typing import Set, Iterable, Optional
 
+from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
-from src.pybuiltins.PyPortFunction import PyPortFunction
 
 
 class PyExpression(metaclass=ABCMeta):

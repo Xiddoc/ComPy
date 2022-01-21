@@ -4,8 +4,8 @@ Expression statement.
 from _ast import Expr, Constant
 from typing import Optional
 
-from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 from src.pyexpressions.PyExpression import PyExpression
+from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
 class PyExpr(PyExpression):

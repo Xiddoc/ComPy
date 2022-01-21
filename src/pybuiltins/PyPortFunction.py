@@ -3,8 +3,8 @@ Port a native function or object to Python.
 """
 from typing import Any, Iterable, Optional
 
-from src.structures.TypeRenames import AnyFunction
 from src.pybuiltins.PyPort import PyPort
+from src.structures.TypeRenames import AnyFunction
 
 
 class PyPortFunction(PyPort):

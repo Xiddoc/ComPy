@@ -7,10 +7,10 @@ from inspect import getsource
 from typing import List, cast, Optional
 
 from src.Compiler import Compiler
-from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE, AnyFunction
 from src.pyexpressions.PyArg import PyArg
 from src.pyexpressions.PyExpression import PyExpression
 from src.pyexpressions.PyName import PyName
+from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE, AnyFunction
 
 
 class PyFunctionDef(PyExpression):

@@ -1,8 +1,8 @@
 """
 Compiler class for managing variables and their types between scopes.
 """
-from src.structures.Errors import VariableAlreadyDefinedError, VariableNotDefinedError
 from src.Names import Value, Variable, Name, Function
+from src.structures.Errors import VariableAlreadyDefinedError, VariableNotDefinedError
 
 
 class VarHandler:
