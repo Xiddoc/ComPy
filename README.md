@@ -23,7 +23,7 @@ In future versions, we will hopefully have a `setup.py` file to automatically in
 Help menu:
 
 ```text
-main.py [-h] [-v] [-c] [-o OUTPUT] file
+compy.py [-h] [-v] [-c] [-o OUTPUT] file
 
 positional arguments:
   file                  file to compile
@@ -39,5 +39,5 @@ optional arguments:
 Basic usage (compiles the Python file `examples\testcode.py` and outputs the C++ code to the file `examples\testcode.cpp`):
 
 ```cmd
-python main.py -o examples\testcode.cpp examples\testcode.py
+python compy.py -o examples\testcode.cpp examples\testcode.py
 ```

@@ -1,5 +1,8 @@
 """
-Main script for ASManifest
+Main script for ComPy.
+
+Takes command line arguments, parses them, and
+performs the logic related to it.
 """
 from argparse import ArgumentParser, FileType
 from typing import IO
@@ -7,7 +10,11 @@ from typing import IO
 from src.Args import Args
 from src.Compiler import Compiler
 
-print("\n[ ASManifest Compiler ]\n")
+print(f"""
+╔═╗ ┌─┐ ┌┬┐ ╔═╗ ┬ ┬
+║   │ │ │││ ╠═╝ └┬┘
+╚═╝ └─┘ ┴ ┴ ╩    ┴ 
+""")
 
 # Get arguments with argument parser class
 parser = ArgumentParser()
