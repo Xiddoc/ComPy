@@ -71,8 +71,11 @@ class PyExpression(metaclass=ABCMeta):
 		# such as beautifying the code, for example.
 		from src.Compiler import Compiler
 		self.__logger.log_tree_down(f"Compiled <{Compiler.get_name(self.get_expression())}> expression to: {transpiled_code}")
-		# Return the transpiled code
-		return transpiled_code
+		# Return the transpiled code (with a comment, if it is enabled)
+		return \
+			f"/* {Compiler.unparse_escaped(self.get_expression())} */ {transpiled_code}" \
+			if Args().get_args().comment else \
+			transpiled_code
 
 	def add_dependencies(self, dependencies: Iterable[str]) -> None:
 		"""
