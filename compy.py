@@ -7,8 +7,10 @@ performs the logic related to it.
 from argparse import ArgumentParser, FileType
 from typing import IO
 
+from mypy.api import run as type_check
 from src.Args import Args
 from src.Compiler import Compiler
+from src.structures.Errors import InvalidTypeError
 
 print(f"""
 ╔═╗ ┌─┐ ┌┬┐ ╔═╗ ┬ ┬
@@ -34,6 +36,15 @@ print("Reading source file...")
 source = ioStream.read()
 # Close the file
 ioStream.close()
+
+# Type check the file
+print("Type checking file...")
+check_results = type_check([Args().get_args().file.name])
+# Print log messages
+print(check_results[0] + check_results[1])
+# If type checking was not valid (error code is 0 (False) for success, 1 (True) for error)
+if check_results[2]:
+	raise InvalidTypeError()
 
 # Send parser data to compiler
 print("Parsing the file...")
