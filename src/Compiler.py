@@ -6,7 +6,6 @@ from functools import reduce
 from typing import Any
 
 from src.Args import Args
-from src.Constants import PY_SPECIAL_CHARS
 from src.Output import Output
 from src.VarHandler import VarHandler
 from src.pyexpressions.PyExpression import PyExpression
@@ -134,11 +133,15 @@ class Compiler:
 		:param expression: The AST node to unparse.
 		:return: The *string-escaped* Python representation of the node.
 		"""
+		# Import locally to avoid cylic import error
+		from src.Constants import PY_SPECIAL_CHARS
 		# First, unparse the expression
 		unparsed_code: str = cls.unparse(expression)
+
 		# For each special character
-		for special_char, escaped_char in PY_SPECIAL_CHARS:
+		for special_char, escaped_char in PY_SPECIAL_CHARS.items():
 			# Replace with the escaped version
 			unparsed_code.replace(special_char, escaped_char)
+
 		# Return the escaped string
 		return unparsed_code
