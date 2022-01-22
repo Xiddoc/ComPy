@@ -24,6 +24,9 @@ c: int = b
 print("The answer is... ")
 print(c)
 
+# Variables can be changed
+c = 10
+
 
 # Function declaration
 def mul(x: int, y: int) -> int:
