@@ -4,9 +4,9 @@ Used in extending for other pyexpressions.
 """
 from _ast import AST
 from abc import abstractmethod, ABCMeta
-from ast import unparse
 from typing import Set, Iterable, Optional
 
+from src.Args import Args
 from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
@@ -41,8 +41,7 @@ class PyExpression(metaclass=ABCMeta):
 		self.__logger = Logger(self)
 		# Print logging statement for creation of node
 		self.__logger.log_tree_up(
-			f"Creating expression <{Compiler.get_name(expression)}>: " +
-			unparse(expression).replace('\n', '\\n').replace('\r', '\\r')
+			f"Creating expression <{Compiler.get_name(expression)}>: {Compiler.unparse_escaped(expression)}"
 		)
 
 	@abstractmethod
