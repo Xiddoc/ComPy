@@ -1,5 +1,5 @@
 """
-Assign (an annotation) to a variable.
+Assign an annotation (and possibly a value) to a variable.
 """
 from _ast import AnnAssign
 from typing import Optional
