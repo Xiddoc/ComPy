@@ -1,11 +1,12 @@
 """
 Compiler class.
 """
-from ast import AST, parse
+from ast import AST, parse, unparse
 from functools import reduce
 from typing import Any
 
 from src.Args import Args
+from src.Constants import PY_SPECIAL_CHARS
 from src.Output import Output
 from src.VarHandler import VarHandler
 from src.pyexpressions.PyExpression import PyExpression
@@ -109,3 +110,35 @@ class Compiler:
 		:return: The string representation of the AST node's class name.
 		"""
 		return str(cls.get_attr(obj, "__class__.__name__"))
+
+	@staticmethod
+	def unparse(expression: AST) -> str:
+		"""
+		Takes an AST expression or node and unparses it back
+		to Python code (or a Python expression, that is).
+
+		:param expression: The AST node to unparse.
+		:return: The Python representation of the node.
+		"""
+		return unparse(expression)
+
+	@classmethod
+	def unparse_escaped(cls, expression: AST) -> str:
+		"""
+		Takes an AST expression or node and unparses it back
+		to Python code (or a Python expression, that is).
+		Following that, it escapes all special characters
+		so that it is now a printable literal where
+		the special characters are not interpreted.
+
+		:param expression: The AST node to unparse.
+		:return: The *string-escaped* Python representation of the node.
+		"""
+		# First, unparse the expression
+		unparsed_code: str = cls.unparse(expression)
+		# For each special character
+		for special_char, escaped_char in PY_SPECIAL_CHARS:
+			# Replace with the escaped version
+			unparsed_code.replace(special_char, escaped_char)
+		# Return the escaped string
+		return unparsed_code

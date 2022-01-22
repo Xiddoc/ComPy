@@ -32,3 +32,13 @@ AST_OP_TO_STR: Dict[Type[operator], str] = {
 	Sub: "-",
 	Mult: "*"
 }
+
+PY_SPECIAL_CHARS: Dict[str, str] = {
+	"'": "\\'",
+	'"': '\\"',
+	"\\": "\\\\",
+	"\r": "\\r",
+	"\n": "\\n",
+	"\t": "\\t",
+	"\b": "\\b"
+}
