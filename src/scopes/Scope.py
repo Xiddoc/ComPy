@@ -1,7 +1,9 @@
 """
 Compiler class for managing variables and their types between scopes.
 """
-from src.scopes.Names import Value, Variable, Name, Function
+from typing import Set
+
+from src.scopes.Object import Object
 from src.structures.Errors import VariableAlreadyDefinedError, VariableNotDefinedError
 
 
@@ -10,66 +12,57 @@ class Scope:
 	Handler for variables.
 	"""
 
-	__vars: dict[str, Name]
+	__objects: Set[Object]
 
 	def __init__(self) -> None:
-		# Initialize the handler with builtin_names
-		self.__vars = {}
+		# TODO Initialize the handler with builtin_names
+		self.__objects = set()
 
-	def does_var_exist(self, var_name: str) -> bool:
+	def does_object_exist(self, object_name: str) -> bool:
 		"""
-		Returns boolean for if the specified variable name exists already.
+		Returns True if the specified object name already exists.
 
-		:param var_name: The name of the variable to check.
+		:param object_name: The name of the object to check.
 		"""
-		return any(iter_var_name == var_name for iter_var_name in self.__vars)
+		return any(iter_var.name == object_name for iter_var in self.__objects)
 
-	def declare_var(self, var_name: str, var_type: str, initial_value: Value) -> Variable:
-		"""
-		Initialize a variable and add it to the handler registry.
+	# def declare_var(self, var_name: str, var_type: str) -> Variable:
+	# 	"""
+	# 	Initialize a variable and add it to the handler registry.
+	#
+	# 	:param var_name: The name of the variable.
+	# 	:param var_type: The type of the variable.
+	# 	:param initial_value: The value that the variable starts with.
+	# 	"""
+	# 	# If variable does not exist
+	# 	if not self.does_object_exist(var_name):
+	# 		# Make a new Variable
+	# 		var = Variable(
+	# 			var_name=var_name,
+	# 			var_type=var_type,
+	# 			initial_value=initial_value
+	# 		)
+	# 		# Append it to the variable list
+	# 		self.__objects[var_name] = var
+	# 		# Return it
+	# 		return var
+	# 	else:
+	# 		# Otherwise, raise an exception (all variables have immutable types)
+	# 		raise VariableAlreadyDefinedError(var_name)
 
-		:param var_name: The name of the variable.
-		:param var_type: The type of the variable.
-		:param initial_value: The value that the variable starts with.
+	def get_object(self, object_name: str) -> Object:
 		"""
-		# If variable does not exist
-		if not self.does_var_exist(var_name):
-			# Make a new Variable
-			var = Variable(
-				var_name=var_name,
-				var_type=var_type,
-				initial_value=initial_value
-			)
-			# Append it to the variable list
-			self.__vars[var_name] = var
-			# Return it
-			return var
+		Retreives the object from the manager.
+		Throws an error if it doesn't exist.
+
+		:param object_name: The name of the object to retrieve.
+		"""
+		# For each object
+		for obj in self.__objects:
+			# If the variable has this name
+			if obj.name == object_name:
+				# Return this variable
+				return obj
 		else:
-			# Otherwise, raise an exception (all variables have immutable types)
-			raise VariableAlreadyDefinedError(var_name)
-
-	def get_var(self, var_name: str) -> Name:
-		"""
-		Retreives the variable from the manager.
-		:param var_name: The name of the variable.
-		"""
-		if self.does_var_exist(var_name):
-			return self.__vars[var_name]
-		else:
-			raise VariableNotDefinedError(var_name)
-
-	def get_funcs(self) -> list[Function]:
-		"""
-		Returns a list of all the functions loaded to the handler.
-		"""
-		# Init list
-		func_list: list[Function] = []
-		# For each name / object
-		for obj in self.__vars.values():
-			# If the object is a function
-			if type(obj) == Function:
-				# Add it to the list
-				# noinspection PyTypeChecker
-				func_list.append(obj)
-		# Return the list
-		return func_list
+			# Otherwise, if no variables were found
+			raise VariableNotDefinedError(object_name)
