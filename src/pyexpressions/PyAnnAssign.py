@@ -23,6 +23,7 @@ class PyAnnAssign(PyExpression):
 		# Store variable and type
 		self.__target = Compiler.get_attr(expression, "target.id")
 		self.__type = Compiler.get_attr(expression, "annotation.id")
+
 		# If a value is also being assigned
 		# (Then the value of expression.value will not be None)
 		if expression.value:

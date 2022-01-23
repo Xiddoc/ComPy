@@ -129,7 +129,7 @@ class Compiler:
 		:param expression: The AST node to unparse.
 		:return: The *string-escaped* Python representation of the node.
 		"""
-		# Import locally to avoid cylic import error
+		# Import locally to avoid cyclic import error
 		from src.compiler.Constants import PY_SPECIAL_CHARS
 		# First, unparse the expression
 		unparsed_code: str = cls.unparse(expression)
