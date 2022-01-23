@@ -35,4 +35,4 @@ class Variable(Object):
 		if not isinstance(other, Variable):
 			raise TypeError()
 		# Otherwise, compare the names
-		return self.type == other.type
+		return self.name == other.name
