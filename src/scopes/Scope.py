@@ -1,11 +1,12 @@
 """
 Compiler class for managing variables and their types between scopes.
 """
-from typing import Set
+from typing import Set, Optional
 
 from src.scopes.Object import Object
 from src.scopes.Variable import Variable
 from src.structures.Errors import VariableAlreadyDefinedError, VariableNotDefinedError
+from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
 class Scope:
@@ -15,9 +16,17 @@ class Scope:
 
 	__objects: Set[Object]
 
-	def __init__(self) -> None:
-		# TODO Initialize the handler with builtin_names
-		self.__objects = set()
+	def __init__(self, parent: Optional[GENERIC_PYEXPR_TYPE] = None) -> None:
+		# Import locally to avoid import error
+		from src.pyexpressions.PyExpression import PyExpression
+		# If a parent was passed
+		# and the parent is a PyExpression
+		if parent is not None and isinstance(parent, PyExpression):
+			# Set the scope to the parent's scope
+			self.__objects = parent.get_scope().get_objects()
+		else:
+			# TODO Initialize the handler with builtin_names
+			self.__objects = set()
 
 	def does_object_exist(self, object_name: str) -> bool:
 		"""
@@ -47,7 +56,7 @@ class Scope:
 
 	def get_object(self, object_name: str) -> Object:
 		"""
-		Retreives the object from the manager.
+		Retrieves the object from the manager.
 		Throws an error if it doesn't exist.
 
 		:param object_name: The name of the object to retrieve.
@@ -61,3 +70,12 @@ class Scope:
 		else:
 			# Otherwise, if no variables were found
 			raise VariableNotDefinedError(object_name)
+
+	def get_objects(self) -> Set[Object]:
+		"""
+		Retrieves the full list of objects in the scope,
+		and returns it.
+		"""
+		# Copy the set to a new set (use Python builtin methods for speed).
+		# Basically a copy-by-value, so the external scope can't be altered.
+		return set(list(self.__objects))
