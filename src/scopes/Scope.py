@@ -4,6 +4,7 @@ Compiler class for managing variables and their types between scopes.
 from typing import Set
 
 from src.scopes.Object import Object
+from src.scopes.Variable import Variable
 from src.structures.Errors import VariableAlreadyDefinedError, VariableNotDefinedError
 
 
@@ -26,29 +27,23 @@ class Scope:
 		"""
 		return any(iter_var.name == object_name for iter_var in self.__objects)
 
-	# def declare_var(self, var_name: str, var_type: str) -> Variable:
-	# 	"""
-	# 	Initialize a variable and add it to the handler registry.
-	#
-	# 	:param var_name: The name of the variable.
-	# 	:param var_type: The type of the variable.
-	# 	:param initial_value: The value that the variable starts with.
-	# 	"""
-	# 	# If variable does not exist
-	# 	if not self.does_object_exist(var_name):
-	# 		# Make a new Variable
-	# 		var = Variable(
-	# 			var_name=var_name,
-	# 			var_type=var_type,
-	# 			initial_value=initial_value
-	# 		)
-	# 		# Append it to the variable list
-	# 		self.__objects[var_name] = var
-	# 		# Return it
-	# 		return var
-	# 	else:
-	# 		# Otherwise, raise an exception (all variables have immutable types)
-	# 		raise VariableAlreadyDefinedError(var_name)
+	def declare_var(self, var_name: str, var_type: str) -> None:
+		"""
+		Initialize a variable and add it to the handler's registry.
+
+		:param var_name: The name of the variable.
+		:param var_type: The type of the variable.
+		"""
+		# If variable does not exist
+		if not self.does_object_exist(var_name):
+			# Make a new Variable
+			# Add it to the object set
+			self.__objects.add(Variable(name=var_name, type=var_type))
+		else:
+			# Otherwise, raise an exception.
+			# All variables have immutable types, and
+			# currently we do not support freeing objects.
+			raise VariableAlreadyDefinedError(var_name)
 
 	def get_object(self, object_name: str) -> Object:
 		"""
