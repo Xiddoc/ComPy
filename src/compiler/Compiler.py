@@ -7,7 +7,6 @@ from typing import Any
 
 from src.compiler.Args import Args
 from src.compiler.Output import Output
-from src.scopes.Scope import Scope
 from src.pyexpressions.PyExpression import PyExpression
 
 
@@ -18,7 +17,6 @@ class Compiler:
 
 	__node: AST
 	__output: Output
-	__var_handler: Scope
 
 	def parse(self, source: str) -> None:
 		"""
@@ -26,8 +24,6 @@ class Compiler:
 		This turns the code into a series of nodes, filled
 		with the proper data structures alongside other nested nodes.
 		"""
-		# Initialize an empty dictionary for variables
-		self.__var_handler = Scope()
 		# Init output handler
 		self.__output = Output()
 		# Parse the node into an abstract tree
