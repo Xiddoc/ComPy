@@ -1,7 +1,7 @@
 """
 Compiler class for managing variables and their types between scopes.
 """
-from src.Names import Value, Variable, Name, Function
+from src.scopes.Names import Value, Variable, Name, Function
 from src.structures.Errors import VariableAlreadyDefinedError, VariableNotDefinedError
 
 

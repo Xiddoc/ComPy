@@ -7,7 +7,7 @@ from typing import Any
 
 from src.Args import Args
 from src.Output import Output
-from src.Scope import Scope
+from src.scopes.Scope import Scope
 from src.pyexpressions.PyExpression import PyExpression
 
 
