@@ -8,6 +8,7 @@ from typing import Set, Iterable, Optional
 
 from src.compiler.Args import Args
 from src.pybuiltins.PyPortFunction import PyPortFunction
+from src.scopes.Scope import Scope
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
@@ -21,6 +22,7 @@ class PyExpression(metaclass=ABCMeta):
 	__depends: Set[str]
 	__native_depends: Set["PyPortFunction"]
 	__parent: Optional[GENERIC_PYEXPR_TYPE]
+	__scope: Scope
 
 	@abstractmethod
 	def __init__(self, expression: AST, parent: Optional[GENERIC_PYEXPR_TYPE]):
@@ -34,6 +36,9 @@ class PyExpression(metaclass=ABCMeta):
 		self.__native_depends = set()
 		# Assign parent node
 		self.__parent = parent
+		# Create object scope (even if this is not a standalone scope,
+		# such as a module or function; this allows for easy recursion)
+		self.__scope = Scope(parent)
 		# Create logger for this node
 		# Import dependencies locally to avoid import errors
 		from src.compiler.Logger import Logger
@@ -76,6 +81,12 @@ class PyExpression(metaclass=ABCMeta):
 			f"/* {Compiler.unparse_escaped(self.get_expression())} */ {transpiled_code}" \
 			if Args().get_args().comment else \
 			transpiled_code
+
+	def get_scope(self) -> Scope:
+		"""
+		Returns the Scope instance of this class.
+		"""
+		return self.__scope
 
 	def add_dependencies(self, dependencies: Iterable[str]) -> None:
 		"""
