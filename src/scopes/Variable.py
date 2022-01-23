@@ -31,7 +31,7 @@ class Variable(Object):
 
 		:param other: Another variable to check equality against.
 		"""
-		# Type check
+		# Type check (otherwise, this would violate the Liskov Substitution Principle)
 		if not isinstance(other, Variable):
 			raise TypeError()
 		# Otherwise, compare the names

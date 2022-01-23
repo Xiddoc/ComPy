@@ -2,32 +2,6 @@
 Variable class and other classes to represent values.
 """
 from dataclasses import dataclass, field
-from typing import Optional
-
-
-class Value:
-	"""
-	Dataclass for value.
-	"""
-	__value: Optional[str]
-	__has_value: bool
-
-	def __init__(self, value: Optional[str] = None) -> None:
-		# If value given is null, then there is no starting value
-		self.__has_value = value is not None
-		self.__value = value
-
-	def has_value(self) -> bool:
-		"""
-		Returns whether or not there is a value.
-		"""
-		return self.__has_value
-
-	def get_value(self) -> str:
-		"""
-		Returns the TRANSPILED value.
-		"""
-		return "(" + "null" if self.__value is None else self.__value + ")"
 
 
 @dataclass
@@ -37,22 +11,6 @@ class Name:
 	"""
 	var_name: str
 	var_type: str
-
-
-@dataclass
-class Variable(Name):
-	"""
-	Dataclass for a variable.
-	"""
-	initial_value: Value
-
-	def get_init(self) -> str:
-		"""
-		Transpiles the code for the initialization of the variable.
-		"""
-		return f"{self.var_type} {self.var_name} = {self.initial_value.get_value()};" \
-			if self.initial_value.has_value() else \
-			f"{self.var_type} {self.var_name};"
 
 
 @dataclass
