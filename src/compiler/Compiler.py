@@ -5,8 +5,8 @@ from ast import AST, parse, unparse
 from functools import reduce
 from typing import Any
 
-from src.Args import Args
-from src.Output import Output
+from src.compiler.Args import Args
+from src.compiler.Output import Output
 from src.scopes.Scope import Scope
 from src.pyexpressions.PyExpression import PyExpression
 
@@ -134,7 +134,7 @@ class Compiler:
 		:return: The *string-escaped* Python representation of the node.
 		"""
 		# Import locally to avoid cylic import error
-		from src.Constants import PY_SPECIAL_CHARS
+		from src.compiler.Constants import PY_SPECIAL_CHARS
 		# First, unparse the expression
 		unparsed_code: str = cls.unparse(expression)
 

@@ -48,7 +48,7 @@ class UnsupportedFeatureException(SyntaxError):
 
 	def __str__(self) -> str:
 		# Local import to avoid import error
-		from src.Compiler import Compiler
+		from src.compiler.Compiler import Compiler
 		# Error text
 		return f"Python feature '{Compiler.get_name(self.feature)}' is not supported by the compiler."
 

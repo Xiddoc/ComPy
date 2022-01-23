@@ -8,8 +8,8 @@ from argparse import ArgumentParser, FileType
 from typing import IO
 
 from mypy.api import run as type_check
-from src.Args import Args
-from src.Compiler import Compiler
+from src.compiler.Args import Args
+from src.compiler.Compiler import Compiler
 from src.structures.Errors import InvalidTypeError
 
 print(f"""
