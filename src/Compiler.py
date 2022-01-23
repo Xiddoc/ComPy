@@ -7,7 +7,7 @@ from typing import Any
 
 from src.Args import Args
 from src.Output import Output
-from src.VarHandler import VarHandler
+from src.Scope import Scope
 from src.pyexpressions.PyExpression import PyExpression
 
 
@@ -18,7 +18,7 @@ class Compiler:
 
 	__node: AST
 	__output: Output
-	__var_handler: VarHandler
+	__var_handler: Scope
 
 	def parse(self, source: str) -> None:
 		"""
@@ -27,7 +27,7 @@ class Compiler:
 		with the proper data structures alongside other nested nodes.
 		"""
 		# Initialize an empty dictionary for variables
-		self.__var_handler = VarHandler()
+		self.__var_handler = Scope()
 		# Init output handler
 		self.__output = Output()
 		# Parse the node into an abstract tree
@@ -49,7 +49,7 @@ class Compiler:
 		elif node_type == Name:
 			# Verify that name has been initialized
 			# If it is not
-			if not self.__var_handler.is_var_exists(node.id):
+			if not self.__var_handler.does_var_exist(node.id):
 				# Raise an error
 				raise VariableNotDefinedError(f"Variable '{node.id}' has was not initialized before usage.")
 		

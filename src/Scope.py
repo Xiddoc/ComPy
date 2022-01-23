@@ -5,7 +5,7 @@ from src.Names import Value, Variable, Name, Function
 from src.structures.Errors import VariableAlreadyDefinedError, VariableNotDefinedError
 
 
-class VarHandler:
+class Scope:
 	"""
 	Handler for variables.
 	"""
@@ -16,22 +16,24 @@ class VarHandler:
 		# Initialize the handler with builtin_names
 		self.__vars = {}
 
-	def is_var_exists(self, var_name: str) -> bool:
+	def does_var_exist(self, var_name: str) -> bool:
 		"""
 		Returns boolean for if the specified variable name exists already.
+
 		:param var_name: The name of the variable to check.
 		"""
 		return any(iter_var_name == var_name for iter_var_name in self.__vars)
 
-	def init_var(self, var_name: str, var_type: str, initial_value: Value) -> Variable:
+	def declare_var(self, var_name: str, var_type: str, initial_value: Value) -> Variable:
 		"""
 		Initialize a variable and add it to the handler registry.
+
 		:param var_name: The name of the variable.
 		:param var_type: The type of the variable.
 		:param initial_value: The value that the variable starts with.
 		"""
 		# If variable does not exist
-		if not self.is_var_exists(var_name):
+		if not self.does_var_exist(var_name):
 			# Make a new Variable
 			var = Variable(
 				var_name=var_name,
@@ -51,7 +53,7 @@ class VarHandler:
 		Retreives the variable from the manager.
 		:param var_name: The name of the variable.
 		"""
-		if self.is_var_exists(var_name):
+		if self.does_var_exist(var_name):
 			return self.__vars[var_name]
 		else:
 			raise VariableNotDefinedError(var_name)
