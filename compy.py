@@ -25,6 +25,8 @@ parser.add_argument('file', type=FileType(), help='file to compile')
 parser.add_argument('-v', '--verbose', action='store_true', help='print verbose compilation steps')
 parser.add_argument('-c', '--comment', action='store_true', help='adds verbose comments to the output file')
 parser.add_argument('-o', '--output', type=FileType('w'), help='the file to output the ASM code to')
+parser.add_argument('-d', '--debug', action='store_true',
+                    help='enables debug mode for the compiler (disables mypy type checking, etc.)')
 # Parse args, then create
 # a singleton from arguments
 Args(parser.parse_args())
@@ -37,14 +39,19 @@ source = ioStream.read()
 # Close the file
 ioStream.close()
 
-# Type check the file
-print("Type checking file...")
-check_results = type_check([Args().get_args().file.name])
-# Print log messages
-print(check_results[0] + check_results[1])
-# If type checking was not valid (error code is 0 (False) for success, 1 (True) for error)
-if check_results[2]:
-	raise InvalidTypeError()
+# If debug mode is not enabled...
+if not Args().get_args().debug:
+    # Type check the file
+    print("Type checking file...")
+    check_results = type_check([Args().get_args().file.name])
+    # Print log messages
+    print(check_results[0] + check_results[1])
+    # If type checking was not valid (error code is 0 (False) for success, 1 (True) for error)
+    if check_results[2]:
+        raise InvalidTypeError()
+else:
+    # Explain explicitly that debug mode is enabled
+    print("Debug mode enabled, skipping type checking...")
 
 # Send parser data to compiler
 print("Parsing the file...")
