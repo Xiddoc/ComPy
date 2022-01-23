@@ -2,6 +2,7 @@
 Variable class for scope handler.
 """
 from dataclasses import dataclass
+from typing import Any
 
 from src.scopes.Object import Object
 
@@ -20,7 +21,7 @@ class Variable(Object):
 
 	type: str
 
-	def __eq__(self, other: "Variable") -> bool:
+	def __eq__(self, other: Any) -> bool:
 		"""
 		Equality between variables is based on name.
 		This has absolutely nothing to do with pass-by-value/pass-by-reference.
@@ -30,4 +31,8 @@ class Variable(Object):
 
 		:param other: Another variable to check equality against.
 		"""
+		# Type check
+		if not isinstance(other, Variable):
+			raise TypeError()
+		# Otherwise, compare the names
 		return self.type == other.type
