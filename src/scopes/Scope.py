@@ -6,7 +6,6 @@ from typing import Set, Optional
 from src.scopes.Object import Object
 from src.scopes.Variable import Variable
 from src.structures.Errors import VariableAlreadyDefinedError, VariableNotDefinedError
-from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
 class Scope:
@@ -16,14 +15,10 @@ class Scope:
 
 	__objects: Set[Object]
 
-	def __init__(self, parent: Optional[GENERIC_PYEXPR_TYPE] = None) -> None:
-		# Import locally to avoid import error
-		from src.pyexpressions.PyExpression import PyExpression
-		# If a parent was passed
-		# and the parent is a PyExpression
-		if parent is not None and isinstance(parent, PyExpression):
-			# Set the scope to the parent's scope
-			self.__objects = parent.get_scope().get_objects()
+	def __init__(self, external_scope: Optional["Scope"] = None) -> None:
+		if external_scope is not None:
+			# Initiate the scope with the parent scope's objects
+			self.__objects = external_scope.get_objects()
 		else:
 			# TODO Initialize the handler with builtin_names
 			self.__objects = set()
