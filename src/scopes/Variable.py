@@ -33,7 +33,10 @@ class Variable(Object):
 		"""
 		# Type check (otherwise, this would violate the Liskov Substitution Principle)
 		# Then, compare the names
-		return isinstance(other, Variable) and hash(self) == hash(other)
+		# If they are both variables, then check their names
+		# If the other is a string, then compare our name with the string
+		return isinstance(other, Variable) and self.name == other.name \
+			or isinstance(other, str) and self.name == other
 
 	def __hash__(self) -> int:
 		return hash(self.name)

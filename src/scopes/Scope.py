@@ -34,7 +34,7 @@ class Scope:
 
 		:param object_name: The name of the object to check.
 		"""
-		return any(iter_var.name == object_name for iter_var in self.__objects)
+		return any(iter_var == object_name for iter_var in self.__objects)
 
 	def declare_var(self, var_name: str, var_type: str) -> None:
 		"""
@@ -64,7 +64,7 @@ class Scope:
 		# For each object
 		for obj in self.__objects:
 			# If the variable has this name
-			if obj.name == object_name:
+			if obj == object_name:
 				# Return this variable
 				return obj
 		else:
