@@ -32,7 +32,8 @@ class Variable(Object):
 		:param other: Another variable to check equality against.
 		"""
 		# Type check (otherwise, this would violate the Liskov Substitution Principle)
-		if not isinstance(other, Variable):
-			raise TypeError()
-		# Otherwise, compare the names
-		return self.name == other.name
+		# Then, compare the names
+		return isinstance(other, Variable) and hash(self) == hash(other)
+
+	def __hash__(self) -> int:
+		return hash(self.name)
