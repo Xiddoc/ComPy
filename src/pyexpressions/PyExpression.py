@@ -22,7 +22,6 @@ class PyExpression(metaclass=ABCMeta):
 	__depends: Set[str]
 	__native_depends: Set["PyPortFunction"]
 	__parent: Optional[GENERIC_PYEXPR_TYPE]
-	__scope: Scope
 
 	@abstractmethod
 	def __init__(self, expression: AST, parent: Optional[GENERIC_PYEXPR_TYPE]):
@@ -36,9 +35,6 @@ class PyExpression(metaclass=ABCMeta):
 		self.__native_depends = set()
 		# Assign parent node
 		self.__parent = parent
-		# Create object scope (even if this is not a standalone scope,
-		# such as a module or function; this allows for easy recursion)
-		self.__scope = Scope(parent)
 		# Create logger for this node
 		# Import dependencies locally to avoid import errors
 		from src.compiler.Logger import Logger
@@ -82,11 +78,31 @@ class PyExpression(metaclass=ABCMeta):
 			if Args().get_args().comment else \
 			transpiled_code
 
-	def get_scope(self) -> Scope:
+	def get_nearest_scope(self) -> Scope:
 		"""
-		Returns the Scope instance of this class.
+		Returns the nearest Scope instance to this instance.
 		"""
-		return self.__scope
+		# Import locally to avoid cyclical import error
+		from src.pyexpressions.PyFunctionDef import PyFunctionDef
+
+		# Assign our parent to a temporary variable for iterating
+		temp_parent = self.get_parent()
+
+		# Traverse upwards
+		while True:
+			# TODO: Change this to 'or' statement after Compiler scope implemented
+			# If we hit a function scope
+			if isinstance(temp_parent, PyFunctionDef):
+				# Declare the variable
+				return temp_parent.get_scope()
+			# If we hit the head scope (Compiler scope / module layer)
+			elif temp_parent is None:
+				# break
+				return Scope()
+			# Otherwise,
+			else:
+				# Traverse to next parent
+				temp_parent = temp_parent.get_parent()
 
 	def add_dependencies(self, dependencies: Iterable[str]) -> None:
 		"""
