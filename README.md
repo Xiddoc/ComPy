@@ -23,7 +23,7 @@ In future versions, we will hopefully have a `setup.py` file to automatically in
 Help menu:
 
 ```text
-compy.py [-h] [-v] [-c] [-o OUTPUT] file
+compy.py [-h] [-v] [-c] [-o OUTPUT] [-d] file
 
 positional arguments:
   file                  file to compile
@@ -34,6 +34,7 @@ optional arguments:
   -c, --comment         adds verbose comments to the output file
   -o OUTPUT, --output OUTPUT
                         the file to output the ASM code to
+  -d, --debug           enables debug mode for the compiler (adds mypy type checking, etc.)
 ```
 
 Basic usage (compiles the Python file `examples\testcode.py` and outputs the C++ code to the file `examples\testcode.cpp`):
