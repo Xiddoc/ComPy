@@ -120,8 +120,13 @@ class PyExpression(metaclass=ABCMeta):
 				return temp_parent.get_scope()
 			# Otherwise,
 			else:
-				# Traverse to next parent
-				temp_parent = temp_parent.get_parent()
+				# Simple type check
+				if temp_parent is not None:
+					# Traverse to next parent
+					temp_parent = temp_parent.get_parent()
+				else:
+					# This should not happen
+					raise TypeError()
 
 	def add_dependencies(self, dependencies: Iterable[str]) -> None:
 		"""
