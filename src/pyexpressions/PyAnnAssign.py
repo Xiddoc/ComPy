@@ -6,7 +6,6 @@ from typing import Optional
 
 from src.compiler.Compiler import Compiler
 from src.pyexpressions.PyExpression import PyExpression
-from src.pyexpressions.PyFunctionDef import PyFunctionDef
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
@@ -34,27 +33,15 @@ class PyAnnAssign(PyExpression):
 			# Otherwise, leave as None
 			self.__value = None
 
-		# Traverse upwards
-		temp_parent = parent
-		while True:
-			# Function scope
-			if isinstance(temp_parent, PyFunctionDef):
-				# Declare the variable
-				temp_parent.get_scope().declare_var(self.__target, self.__type)
-				break
-			# Head scope (Compiler scope / module layer)
-			elif temp_parent is None:
-				break
-			# Otherwise,
-			else:
-				# Traverse to next parent
-				temp_parent = temp_parent.get_parent()
+		# Get the nearest scope
+		# Add this variable to the scope
+		self.get_nearest_scope().declare_var(self.__target, self.__type)
 
 	def _transpile(self) -> str:
 		"""
 		Transpile the operation to a string.
 		"""
 		return \
-			f"{self.__type} {self.__target} = {self.__value.transpile()};"\
+			f"{self.__type} {self.__target} = {self.__value.transpile()};" \
 			if self.__value else \
 			f"{self.__type} {self.__target};"
