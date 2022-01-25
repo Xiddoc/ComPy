@@ -5,7 +5,7 @@ from _ast import Constant
 from json import dumps
 from typing import Type, Union
 
-from src.Compiler import Compiler
+from src.compiler.Compiler import Compiler
 from src.pyexpressions.PyExpression import PyExpression
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE

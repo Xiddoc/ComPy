@@ -6,8 +6,9 @@ from _ast import AST
 from abc import abstractmethod, ABCMeta
 from typing import Set, Iterable, Optional
 
-from src.Args import Args
+from src.compiler.Args import Args
 from src.pybuiltins.PyPortFunction import PyPortFunction
+from src.scopes.Scope import Scope
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
@@ -36,8 +37,8 @@ class PyExpression(metaclass=ABCMeta):
 		self.__parent = parent
 		# Create logger for this node
 		# Import dependencies locally to avoid import errors
-		from src.Logger import Logger
-		from src.Compiler import Compiler
+		from src.compiler.Logger import Logger
+		from src.compiler.Compiler import Compiler
 		self.__logger = Logger(self)
 		# Print logging statement for creation of node
 		self.__logger.log_tree_up(
@@ -69,13 +70,39 @@ class PyExpression(metaclass=ABCMeta):
 		# Currently, the only wrapping that we will do is logging.
 		# However, this still allows for future useful extensions
 		# such as beautifying the code, for example.
-		from src.Compiler import Compiler
+		from src.compiler.Compiler import Compiler
 		self.__logger.log_tree_down(f"Compiled <{Compiler.get_name(self.get_expression())}> expression to: {transpiled_code}")
 		# Return the transpiled code (with a comment, if it is enabled)
 		return \
 			f"/* {Compiler.unparse_escaped(self.get_expression())} */ {transpiled_code}" \
 			if Args().get_args().comment else \
 			transpiled_code
+
+	def get_nearest_scope(self) -> Scope:
+		"""
+		Returns the nearest Scope instance to this instance.
+		"""
+		# Import locally to avoid cyclical import error
+		from src.pyexpressions.PyFunctionDef import PyFunctionDef
+
+		# Assign our parent to a temporary variable for iterating
+		temp_parent = self.get_parent()
+
+		# Traverse upwards
+		while True:
+			# TODO: Change this to 'or' statement after Compiler scope implemented
+			# If we hit a function scope
+			if isinstance(temp_parent, PyFunctionDef):
+				# Declare the variable
+				return temp_parent.get_scope()
+			# If we hit the head scope (Compiler scope / module layer)
+			elif temp_parent is None:
+				# break
+				return Scope()
+			# Otherwise,
+			else:
+				# Traverse to next parent
+				temp_parent = temp_parent.get_parent()
 
 	def add_dependencies(self, dependencies: Iterable[str]) -> None:
 		"""
@@ -161,7 +188,7 @@ class PyExpression(metaclass=ABCMeta):
 		:return: A PyExpression object of the matching type.
 		"""
 		# Local import to avoid circular import errors
-		from src.Constants import AST_EXPR_TO_PYEXPR
+		from src.compiler.Constants import AST_EXPR_TO_PYEXPR
 
 		# Get the expression type
 		expr_type = type(expression)

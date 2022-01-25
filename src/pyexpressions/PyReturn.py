@@ -3,7 +3,7 @@ Return statement.
 """
 from _ast import Return
 
-from src.Compiler import Compiler
+from src.compiler.Compiler import Compiler
 from src.pyexpressions.PyExpression import PyExpression
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 

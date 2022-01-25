@@ -6,10 +6,11 @@ from ast import parse
 from inspect import getsource
 from typing import List, cast, Optional
 
-from src.Compiler import Compiler
+from src.compiler.Compiler import Compiler
 from src.pyexpressions.PyArg import PyArg
 from src.pyexpressions.PyExpression import PyExpression
 from src.pyexpressions.PyName import PyName
+from src.scopes.Scope import Scope
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE, AnyFunction
 
 
@@ -22,6 +23,7 @@ class PyFunctionDef(PyExpression):
 	__args: List[PyArg]
 	__code: List[PyExpression]
 	__return_type: Optional[PyName]
+	__scope: Scope
 
 	def __init__(self, expression: FunctionDef, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
@@ -32,6 +34,8 @@ class PyFunctionDef(PyExpression):
 		self.__args = [PyArg(arg, self) for arg in expression.args.args]
 		# For each line of code, convert to expression
 		self.__code = [self.from_ast(ast) for ast in expression.body]
+		# Create object scope (function body has it's own scope)
+		self.__scope = Scope(parent.get_nearest_scope())
 		# If return is a Constant, then it is None (there is no return value)
 		# In which case in the transpilation stage, set as "void"
 		# Otherwise, use a proper name (int, str, etc.)
@@ -51,6 +55,12 @@ class PyFunctionDef(PyExpression):
 		return f"{self.__return_type.transpile() if self.__return_type else 'void'}" \
 		       f" {self.__func_name}(" \
 		       f"{','.join([arg.transpile() for arg in self.__args])})"
+
+	def get_scope(self) -> Scope:
+		"""
+		Returns the Scope (instance) of this function body.
+		"""
+		return self.__scope
 
 	@staticmethod
 	def from_single_object(obj: AnyFunction, parent: Optional[GENERIC_PYEXPR_TYPE]) -> "PyFunctionDef":
