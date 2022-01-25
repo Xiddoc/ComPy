@@ -1,8 +1,8 @@
 """
 Constants and other 'singleton' objects and maps/dicts.
 """
-from _ast import Constant, BinOp, operator, Add, Sub, Mult, AnnAssign, AST, Expr, Name, Call, FunctionDef, arg, Return, \
-	Assign
+from _ast import Constant, BinOp, operator, Add, Sub, Mult, AnnAssign, AST, Expr, Name, Call, FunctionDef, arg, \
+	Return, Assign
 from typing import Dict, Type
 
 from src.pyexpressions.PyAnnAssign import PyAnnAssign
@@ -37,9 +37,6 @@ AST_OP_TO_STR: Dict[Type[operator], str] = {
 }
 
 PY_SPECIAL_CHARS: Dict[str, str] = {
-	"'": "\\'",
-	'"': '\\"',
-	"\\": "\\\\",
 	"\r": "\\r",
 	"\n": "\\n",
 	"\t": "\\t",
