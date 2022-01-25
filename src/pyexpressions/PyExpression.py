@@ -121,18 +121,29 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		return self.__depends
 
+	def add_ported_dependency(self, ported_dependency: Any) -> None:
+		"""
+		Adds a single ported (reimplemented in native language) dependency to the list.
+
+		:param ported_dependency: The ported dependency to add.
+		"""
+		from src.pybuiltins.PyPortFunction import PyPortFunction
+		# Cast to type (can't type hint parameter as it would cause a Import recursion error)
+		self.__ported_depends.add(cast(PyPortFunction, ported_dependency))
+
 	def add_ported_dependencies(self, ported_dependencies: Iterable[Any]) -> None:
 		"""
 		Adds multiple ported (reimplemented in native language) dependencies to the dependency list.
 
-		:param ported_dependencies: A list of native dependencies that this object relies on.
+		:param ported_dependencies: A list of ported dependencies that this object relies on.
 		"""
 		from src.pybuiltins.PyPortFunction import PyPortFunction
+		# Cast to type (can't type hint parameter as it would cause a Import recursion error)
 		self.__ported_depends.update(cast(Iterable[PyPortFunction], ported_dependencies))
 
 	def get_ported_dependencies(self) -> Set[Any]:
 		"""
-		Returns the list of native (ported) dependencies that this expression relies on.
+		Returns the list of ported dependencies that this expression relies on.
 		"""
 		return self.__ported_depends
 
