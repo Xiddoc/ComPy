@@ -4,7 +4,7 @@ Used in extending for other pyexpressions.
 """
 from _ast import AST
 from abc import abstractmethod, ABCMeta
-from typing import Set, Iterable, Optional, Union, TYPE_CHECKING
+from typing import Set, Iterable, Optional, Union, TYPE_CHECKING, cast
 
 from src.compiler.Args import Args
 from src.scopes.Scope import Scope
@@ -80,12 +80,23 @@ class PyExpression(metaclass=ABCMeta):
 		# such as beautifying the code, for example.
 		from src.compiler.Compiler import Compiler
 		self.__logger.log_tree_down(
-			f"Compiled <{Compiler.get_name(self.get_expression())}> expression to: {transpiled_code}")
-		# Return the transpiled code (with a comment, if it is enabled)
-		return \
-			f"/* {Compiler.unparse_escaped(self.get_expression())} */ {transpiled_code}" \
-			if Args().get_args().comment else \
-			transpiled_code
+			f"Compiled <{Compiler.get_name(self.get_expression())}> expression to: {transpiled_code}"
+		)
+		# If comments are enabled
+		if Args().get_args().comment:
+			# If the expression is an AST node
+			unparsed: str
+			if isinstance(self.get_expression(), AST):
+				# Unparse
+				unparsed = Compiler.unparse_escaped(cast(AST, self.get_expression()))
+			# Otherwise, it is a ported function
+			else:
+				unparsed = '<Native Object>'
+			# Return either way, with comments
+			return f"/* {unparsed} */ {transpiled_code}"
+		else:
+			# Otherwise, return normal transpilation
+			return transpiled_code
 
 	def get_nearest_scope(self) -> Scope:
 		"""
@@ -147,14 +158,11 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		return self.__ported_depends
 
-	def get_expression(self) -> AST:
+	def get_expression(self) -> Union[AST, "PyPortFunction"]:
 		"""
 		:return: Returns the expression this instance is holding (was initialized with).
 		"""
-		if isinstance(self.__expression, AST):
-			return self.__expression
-		else:
-			raise NotImplementedError()
+		return self.__expression
 
 	def get_parent(self) -> Optional[GENERIC_PYEXPR_TYPE]:
 		"""
