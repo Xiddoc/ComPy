@@ -29,18 +29,18 @@ c = 10
 
 
 # Function declaration
-# def mul(x: int, y: int) -> int:
-# 	"""
-# 	Test function.
-# 	"""
-# 	# Calculate
-# 	result: int = x * y
-# 	# Uncomment to show that variables
-# 	# can only be initialized once
-# 	# result: int = 123
-# 	return result
-#
-#
-# # Custom function usage
-# mul(1, 2)
-# mul(3, 4)
+def mul(x: int, y: int) -> int:
+	"""
+	Test function.
+	"""
+	# Calculate
+	result: int = x * y
+	# Uncomment to show that variables
+	# can only be initialized once
+	# result: int = 123
+	return result
+
+
+# Custom function usage
+mul(1, 2)
+mul(3, 4)

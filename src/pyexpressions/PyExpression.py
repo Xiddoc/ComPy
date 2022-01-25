@@ -79,8 +79,9 @@ class PyExpression(metaclass=ABCMeta):
 		# However, this still allows for future useful extensions
 		# such as beautifying the code, for example.
 		from src.compiler.Compiler import Compiler
+		from src.compiler.Logger import Logger
 		self.__logger.log_tree_down(
-			f"Compiled <{Compiler.get_name(self.get_expression())}> expression to: {transpiled_code}"
+			f"Compiled <{Compiler.get_name(self.get_expression())}> expression to: {Logger.escape(transpiled_code)}"
 		)
 		# If comments are enabled
 		if Args().get_args().comment:
@@ -119,8 +120,9 @@ class PyExpression(metaclass=ABCMeta):
 				return temp_parent.get_scope()
 			# Otherwise,
 			else:
-				# Traverse to next parent
-				temp_parent = temp_parent.get_parent()
+				# Type cast to bypass type checking bug
+				# (Type[MY_CLASS] means MY_CLASS.__class__ and any class that inherits MY_CLASS)
+				temp_parent = cast(PyExpression, temp_parent).get_parent()
 
 	def add_dependencies(self, dependencies: Iterable[str]) -> None:
 		"""
