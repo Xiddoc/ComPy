@@ -4,13 +4,19 @@ Used in extending for other pyexpressions.
 """
 from _ast import AST
 from abc import abstractmethod, ABCMeta
-from typing import Set, Iterable, Optional, Union
+from typing import Set, Iterable, Optional, Union, TYPE_CHECKING
 
 from src.compiler.Args import Args
-from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.scopes.Scope import Scope
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
+
+# If PyExpression is referenced in an import you
+# need for type hinting, then add the import here.
+# This will ONLY import it when performing type checking,
+# therefore no ImportError will occur.
+if TYPE_CHECKING:
+	from src.pybuiltins.PyPortFunction import PyPortFunction
 
 
 class PyExpression(metaclass=ABCMeta):
@@ -20,11 +26,11 @@ class PyExpression(metaclass=ABCMeta):
 
 	__expression: AST
 	__depends: Set[str]
-	__ported_depends: Set[PyPortFunction]
+	__ported_depends: Set["PyPortFunction"]
 	__parent: Optional[GENERIC_PYEXPR_TYPE]
 
 	@abstractmethod
-	def __init__(self, expression: Union[AST, PyPortFunction], parent: Optional[GENERIC_PYEXPR_TYPE]):
+	def __init__(self, expression: Union[AST, "PyPortFunction"], parent: Optional[GENERIC_PYEXPR_TYPE]):
 		"""
 		Constructor for the expression.
 		"""
@@ -121,7 +127,7 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		return self.__depends
 
-	def add_ported_dependency(self, ported_dependency: PyPortFunction) -> None:
+	def add_ported_dependency(self, ported_dependency: "PyPortFunction") -> None:
 		"""
 		Adds a single ported (reimplemented in native language) dependency to the list.
 
@@ -129,7 +135,7 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		self.__ported_depends.add(ported_dependency)
 
-	def add_ported_dependencies(self, ported_dependencies: Iterable[PyPortFunction]) -> None:
+	def add_ported_dependencies(self, ported_dependencies: Iterable["PyPortFunction"]) -> None:
 		"""
 		Adds multiple ported (reimplemented in native language) dependencies to the dependency list.
 
@@ -137,7 +143,7 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		self.__ported_depends.update(ported_dependencies)
 
-	def get_ported_dependencies(self) -> Set[PyPortFunction]:
+	def get_ported_dependencies(self) -> Set["PyPortFunction"]:
 		"""
 		Returns the list of ported dependencies that this expression relies on.
 		"""
