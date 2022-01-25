@@ -49,6 +49,8 @@ class PyModule(PyExpression):
 		for native_dependency in native_depends_list:
 			# Insert dependency
 			output_list.insert(0, native_dependency.transpile())
+			# Add native dependencies of PyPorts
+			depends_list.update(native_dependency.get_native_dependencies())
 
 		# For each dependency
 		for dependency in depends_list:

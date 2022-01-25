@@ -54,6 +54,12 @@ class PyPortFunction(PyExpression):
 		"""
 		self.__native_depends.update(native_dependencies)
 
+	def get_native_dependencies(self) -> Set[str]:
+		"""
+		Returns the set of native dependencies that this port relies on.
+		"""
+		return self.__native_depends
+
 	def _transpile(self) -> str:
 		"""
 		Transpile the ported function to an entirely native function.
