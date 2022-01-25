@@ -24,7 +24,7 @@ class PyExpression(metaclass=ABCMeta):
 	__parent: Optional[GENERIC_PYEXPR_TYPE]
 
 	@abstractmethod
-	def __init__(self, expression: AST, parent: Optional[GENERIC_PYEXPR_TYPE]):
+	def __init__(self, expression: Optional[AST], parent: Optional[GENERIC_PYEXPR_TYPE]):
 		"""
 		Constructor for the expression.
 		"""

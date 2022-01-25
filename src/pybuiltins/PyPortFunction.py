@@ -1,12 +1,12 @@
 """
 Port a native function or object to Python.
 """
-from typing import Any, Iterable, Optional, Set
+from typing import Iterable, Set
 
 from src.pybuiltins.PyPortFunctionSignature import PyPortFunctionSignature
 from src.pyexpressions.PyExpression import PyExpression
 from src.pyexpressions.PyFunctionDef import PyFunctionDef
-from src.structures.TypeRenames import AnyFunction, GENERIC_PYEXPR_TYPE
+from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
 class PyPortFunction(PyExpression):
@@ -26,12 +26,13 @@ class PyPortFunction(PyExpression):
 	def __init__(self, func_sig: PyPortFunctionSignature, parent: GENERIC_PYEXPR_TYPE):
 		"""
 		Initializes the ported function using a loaded signature.
-		
+
 		:param func_sig: The function signature and body.
 		:param parent: The parent node to this expression.
 		"""
-		# Create a new set if there are no dependencies passed, otherwise use the passed dependencies
-		super().__init__(None, None)
+		# There is no expression (this node does not exist in the given Python code)
+		# Pass the parent node
+		super().__init__(None, parent)
 
 		# Convert the function to a PyFunctionDef that can be represented locally later (as function header)
 		self.__func: PyFunctionDef = PyFunctionDef.from_single_object(func_sig.function, self)
