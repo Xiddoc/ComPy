@@ -93,21 +93,19 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		# Import locally to avoid cyclical import error
 		from src.pyexpressions.PyFunctionDef import PyFunctionDef
+		from src.pyexpressions.PyModule import PyModule
 
 		# Assign our parent to a temporary variable for iterating
 		temp_parent = self.get_parent()
 
-		# Traverse upwards
+		# Traverse upwards (We could put the condition here,
+		# although it causes type hinting bugs which would
+		# lead to a lot of unnecessary type casting).
 		while True:
-			# TODO: Change this to 'or' statement after Compiler scope implemented
-			# If we hit a function scope
-			if isinstance(temp_parent, PyFunctionDef):
-				# Declare the variable
+			# If we hit a function or module
+			if isinstance(temp_parent, PyFunctionDef) or isinstance(temp_parent, PyModule):
+				# Get the scope
 				return temp_parent.get_scope()
-			# If we hit the head scope (Compiler scope / module layer)
-			elif temp_parent is None:
-				# break
-				return Scope()
 			# Otherwise,
 			else:
 				# Traverse to next parent
