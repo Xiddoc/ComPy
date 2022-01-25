@@ -2,7 +2,7 @@
 Constants and other 'singleton' objects and maps/dicts.
 """
 from _ast import Constant, BinOp, operator, Add, Sub, Mult, AnnAssign, AST, Expr, Name, Call, FunctionDef, arg, \
-	Return, Assign
+	Return, Assign, Module
 from typing import Dict, Type
 
 from src.pyexpressions.PyAnnAssign import PyAnnAssign
@@ -14,6 +14,7 @@ from src.pyexpressions.PyConstant import PyConstant
 from src.pyexpressions.PyExpr import PyExpr
 from src.pyexpressions.PyExpression import PyExpression
 from src.pyexpressions.PyFunctionDef import PyFunctionDef
+from src.pyexpressions.PyModule import PyModule
 from src.pyexpressions.PyName import PyName
 from src.pyexpressions.PyReturn import PyReturn
 
@@ -26,6 +27,7 @@ AST_EXPR_TO_PYEXPR: Dict[Type[AST], Type[PyExpression]] = {
 	Constant: PyConstant,
 	Expr: PyExpr,
 	FunctionDef: PyFunctionDef,
+	Module: PyModule,
 	Name: PyName,
 	Return: PyReturn,
 }
