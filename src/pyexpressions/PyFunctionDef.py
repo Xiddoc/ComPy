@@ -4,9 +4,8 @@ Function defenition.
 from _ast import FunctionDef, Constant
 from ast import parse
 from inspect import getsource
-from typing import List, cast, Optional
+from typing import List, cast, Optional, Any
 
-from src.compiler.Compiler import Compiler
 from src.pyexpressions.PyArg import PyArg
 from src.pyexpressions.PyExpression import PyExpression
 from src.pyexpressions.PyName import PyName
@@ -29,16 +28,17 @@ class PyFunctionDef(PyExpression):
 		super().__init__(expression, parent)
 		# Convert and store
 		self.__func_name = expression.name
+		# Create object scope (function body has it's own scope)
+		self.__scope = Scope(self.get_nearest_scope())
 		# For each function argument
 		# Convert to argument
 		self.__args = [PyArg(arg, self) for arg in expression.args.args]
 		# For each line of code, convert to expression
 		self.__code = [self.from_ast(ast) for ast in expression.body]
-		# Create object scope (function body has it's own scope)
-		self.__scope = Scope(parent.get_nearest_scope())
 		# If return is a Constant, then it is None (there is no return value)
 		# In which case in the transpilation stage, set as "void"
 		# Otherwise, use a proper name (int, str, etc.)
+		from src.compiler.Compiler import Compiler
 		returns = Compiler.get_attr(expression, 'returns')
 		self.__return_type = None if type(returns) == Constant else PyName(returns, self)
 
@@ -86,3 +86,9 @@ class PyFunctionDef(PyExpression):
 
 		# Return the casted expression object
 		return py_def
+
+	def __eq__(self, other: Any) -> bool:
+		return isinstance(other, PyFunctionDef) and hash(self) == hash(other)
+
+	def __hash__(self) -> int:
+		return hash(self.__func_name)
