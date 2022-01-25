@@ -1,7 +1,7 @@
 """
 Port a native function or object to Python.
 """
-from typing import Iterable, Set
+from typing import Iterable, Set, Any
 
 from src.pybuiltins.PyPortFunctionSignature import PyPortFunctionSignature
 from src.pyexpressions.PyExpression import PyExpression
@@ -59,3 +59,9 @@ class PyPortFunction(PyExpression):
 		Transpile the ported function to an entirely native function.
 		"""
 		return f"{self.__func.transpile_header()}{{{self.__code}}}"
+
+	def __eq__(self, other: Any) -> bool:
+		return isinstance(other, PyPortFunction) and hash(self) == hash(other)
+
+	def __hash__(self) -> int:
+		return hash(self.__func)

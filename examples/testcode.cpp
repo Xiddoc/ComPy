@@ -1,5 +1,4 @@
 void print(str print_string){std::cout<<print_string<<std::endl;}
-void print(str print_string){std::cout<<print_string<<std::endl;}
 
 int a = ((1+2)*3);
 int b = (a+4);

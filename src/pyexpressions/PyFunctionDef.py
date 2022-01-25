@@ -4,7 +4,7 @@ Function defenition.
 from _ast import FunctionDef, Constant
 from ast import parse
 from inspect import getsource
-from typing import List, cast, Optional
+from typing import List, cast, Optional, Any
 
 from src.pyexpressions.PyArg import PyArg
 from src.pyexpressions.PyExpression import PyExpression
@@ -86,3 +86,9 @@ class PyFunctionDef(PyExpression):
 
 		# Return the casted expression object
 		return py_def
+
+	def __eq__(self, other: Any) -> bool:
+		return isinstance(other, PyFunctionDef) and hash(self) == hash(other)
+
+	def __hash__(self) -> int:
+		return hash(self.__func_name)
