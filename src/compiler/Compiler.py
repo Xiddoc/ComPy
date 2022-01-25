@@ -6,8 +6,6 @@ from functools import reduce
 from typing import Any, Union, cast
 
 from src.compiler.Args import Args
-from src.compiler.Output import Output
-from src.pyexpressions.PyExpression import PyExpression
 from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.pyexpressions.PyModule import PyModule
 
@@ -17,8 +15,7 @@ class Compiler:
 	Compiler class to convert operations to ASM ops.
 	"""
 
-	__node: AST
-	__output: Output
+	__node: Module
 	__pymodule: PyModule
 
 	def parse(self, source: str) -> None:
@@ -27,20 +24,18 @@ class Compiler:
 		This turns the code into a series of nodes, filled
 		with the proper data structures alongside other nested nodes.
 		"""
-		# Init output handler
-		self.__output = Output()
-
 		# Parse the node into an abstract tree
-		self.__node = parse(source, Args().get_args().file.name)
+		# Cast node to proper type
+		self.__node = cast(Module, parse(source, Args().get_args().file.name))
 
 		# Initiate module
-		self.__pymodule = PyModule(cast(Module, self.__node))
+		self.__pymodule = PyModule(self.__node)
 
 	def compile(self) -> str:
 		"""
 		Returns the compiled output as a string.
 		"""
-		return self.__output.compile_to_string()
+		return self.__pymodule.transpile()
 
 	@staticmethod
 	def get_attr(obj: Union[AST, "PyPortFunction"], attribute_path: str) -> Any:
