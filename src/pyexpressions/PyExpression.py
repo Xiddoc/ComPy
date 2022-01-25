@@ -4,7 +4,7 @@ Used in extending for other pyexpressions.
 """
 from _ast import AST
 from abc import abstractmethod, ABCMeta
-from typing import Set, Iterable, Optional
+from typing import Set, Iterable, Optional, Union
 
 from src.compiler.Args import Args
 from src.pybuiltins.PyPortFunction import PyPortFunction
@@ -18,7 +18,7 @@ class PyExpression(metaclass=ABCMeta):
 	PyExpression base class.
 	"""
 
-	__expression: AST
+	__expression: Union[AST, "PyPortFunction"]
 	__depends: Set[str]
 	__native_depends: Set["PyPortFunction"]
 	__parent: Optional[GENERIC_PYEXPR_TYPE]
@@ -28,8 +28,6 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		Constructor for the expression.
 		"""
-		# Set base expression (might be needed later for throwing errors, will be useful for getting line #)
-		self.__expression = expression
 		# Create depenency sets
 		self.__depends = set()
 		self.__native_depends = set()
@@ -40,9 +38,12 @@ class PyExpression(metaclass=ABCMeta):
 		from src.compiler.Logger import Logger
 		from src.compiler.Compiler import Compiler
 		self.__logger = Logger(self)
+		# Set base expression (might be needed later for throwing errors, will be useful for getting line #)
+		self.__expression = expression
 		# Print logging statement for creation of node
 		self.__logger.log_tree_up(
-			f"Creating expression <{Compiler.get_name(expression)}>: {Compiler.unparse_escaped(expression)}"
+			f"Creating expression <{Compiler.get_name(expression)}>: "
+			f"{Compiler.unparse_escaped(expression) if isinstance(expression, AST) else '<Native Object>'} "
 		)
 
 	@abstractmethod
@@ -152,7 +153,10 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		:return: Returns the expression this instance is holding (was initialized with).
 		"""
-		return self.__expression
+		if isinstance(self.__expression, AST):
+			return self.__expression
+		else:
+			raise NotImplementedError()
 
 	def get_parent(self) -> Optional[GENERIC_PYEXPR_TYPE]:
 		"""
