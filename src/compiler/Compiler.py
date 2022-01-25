@@ -3,7 +3,7 @@ Compiler class.
 """
 from ast import AST, parse, unparse, Module
 from functools import reduce
-from typing import Any, Union, cast
+from typing import Any, Union
 
 from src.compiler.Args import Args
 from src.compiler.Logger import Logger
