@@ -2,8 +2,9 @@
 Python module.
 """
 from _ast import Module
-from typing import List
+from typing import List, Set
 
+from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.pyexpressions.PyExpression import PyExpression
 from src.scopes.Scope import Scope
 
@@ -26,9 +27,38 @@ class PyModule(PyExpression):
 
 	def _transpile(self) -> str:
 		"""
-		Transpiles the constant to a native string.
+		Transpiles the module to a native string.
 		"""
-		return f""
+		# Make lists
+		output_list: List[str] = []
+		depends_list: Set[str] = set()
+		native_depends_list: Set[PyPortFunction] = set()
+
+		# For each section of the code
+		for pyexpr in self.__body:
+			# Add dependencies to the output
+			depends_list.update(pyexpr.get_dependencies())
+			# Add native dependencies to the output
+			native_depends_list.update(pyexpr.get_ported_dependencies())
+			# Transpile each segment and add it to the output
+			output_list.append(pyexpr.transpile())
+
+		# Inject dependencies
+		# This runs in exponential time (.insert is linear, external 'for' loop is linear)
+		# If optimizations are required later, check out "collections.deque".
+
+		# For each native dependency
+		for native_dependency in native_depends_list:
+			# Insert dependency
+			output_list.insert(0, native_dependency.transpile())
+
+		# For each dependency
+		for dependency in depends_list:
+			# Insert dependency
+			output_list.insert(0, f"#include <{dependency}>")
+
+		# Return the output as a string
+		return "\n".join(output_list)
 
 	def get_scope(self) -> Scope:
 		"""
