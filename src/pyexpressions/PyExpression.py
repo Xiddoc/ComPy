@@ -20,7 +20,7 @@ class PyExpression(metaclass=ABCMeta):
 
 	__expression: AST
 	__depends: Set[str]
-	__native_depends: Set["PyPortFunction"]
+	__ported_depends: Set["PyPortFunction"]
 	__parent: Optional[GENERIC_PYEXPR_TYPE]
 
 	@abstractmethod
@@ -32,7 +32,7 @@ class PyExpression(metaclass=ABCMeta):
 		self.__expression = expression
 		# Create depenency sets
 		self.__depends = set()
-		self.__native_depends = set()
+		self.__ported_depends = set()
 		# Assign parent node
 		self.__parent = parent
 		# Create logger for this node
@@ -126,27 +126,27 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		return self.__depends
 
-	def add_native_dependencies(self, native_dependencies: Iterable["PyPortFunction"]) -> None:
+	def add_ported_dependencies(self, ported_dependencies: Iterable["PyPortFunction"]) -> None:
 		"""
 		Adds multiple native dependencies to the dependency list.
 
-		:param native_dependencies: A list of native dependencies that this object relies on.
+		:param ported_dependencies: A list of native dependencies that this object relies on.
 		"""
-		self.__native_depends.update(native_dependencies)
+		self.__ported_depends.update(ported_dependencies)
 
-	def add_native_dependency(self, native_dependency: "PyPortFunction") -> None:
+	def add_ported_dependency(self, ported_dependency: "PyPortFunction") -> None:
 		"""
 		Adds a single native dependency to the list.
 
-		:param native_dependency: The native dependency to add.
+		:param ported_dependency: The native dependency to add.
 		"""
-		self.__native_depends.add(native_dependency)
+		self.__ported_depends.add(ported_dependency)
 
-	def get_native_dependencies(self) -> Set["PyPortFunction"]:
+	def get_ported_dependencies(self) -> Set["PyPortFunction"]:
 		"""
 		Returns the list of native (ported) dependencies that this expression relies on.
 		"""
-		return self.__native_depends
+		return self.__ported_depends
 
 	def get_expression(self) -> AST:
 		"""
@@ -174,7 +174,7 @@ class PyExpression(metaclass=ABCMeta):
 		obj: PyExpression = PyExpression.from_ast_statically(expression, self)
 		# Inherit / extend dependencies to this object
 		self.add_dependencies(obj.get_dependencies())
-		self.add_native_dependencies(obj.get_native_dependencies())
+		self.add_ported_dependencies(obj.get_ported_dependencies())
 		# Return new object
 		return obj
 
