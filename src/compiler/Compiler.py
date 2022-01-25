@@ -6,6 +6,7 @@ from functools import reduce
 from typing import Any, Union, cast
 
 from src.compiler.Args import Args
+from src.compiler.Logger import Logger
 from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.pyexpressions.PyModule import PyModule
 
@@ -102,15 +103,6 @@ class Compiler:
 		:param expression: The AST node to unparse.
 		:return: The *string-escaped* Python representation of the node.
 		"""
-		# Import locally to avoid cyclic import error
-		from src.compiler.Constants import PY_SPECIAL_CHARS
 		# First, unparse the expression
-		unparsed_code: str = cls.unparse(expression)
-
-		# For each special character
-		for special_char, escaped_char in PY_SPECIAL_CHARS.items():
-			# Replace with the escaped version
-			unparsed_code = unparsed_code.replace(special_char, escaped_char)
-
-		# Return the escaped string
-		return unparsed_code
+		# Then, escape the string
+		return Logger.escape(cls.unparse(expression))
