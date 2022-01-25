@@ -1,14 +1,15 @@
 """
 Compiler class.
 """
-from ast import AST, parse, unparse
+from ast import AST, parse, unparse, Module
 from functools import reduce
-from typing import Any, Union
+from typing import Any, Union, cast
 
 from src.compiler.Args import Args
 from src.compiler.Output import Output
 from src.pyexpressions.PyExpression import PyExpression
 from src.pybuiltins.PyPortFunction import PyPortFunction
+from src.pyexpressions.PyModule import PyModule
 
 
 class Compiler:
@@ -18,6 +19,7 @@ class Compiler:
 
 	__node: AST
 	__output: Output
+	__pymodule: PyModule
 
 	def parse(self, source: str) -> None:
 		"""
@@ -27,17 +29,12 @@ class Compiler:
 		"""
 		# Init output handler
 		self.__output = Output()
+
 		# Parse the node into an abstract tree
 		self.__node = parse(source, Args().get_args().file.name)
 
-		# Walk down the node
-		for node in self.__node.body:
-			# Get the type of the node
-			node_type = type(node)
-
-			# Evaluate the expression
-			# Write it to the code segment
-			self.__output.write(PyExpression.from_ast_statically(node, None))
+		# Initiate module
+		self.__pymodule = PyModule(cast(Module, self.__node))
 
 	def compile(self) -> str:
 		"""
