@@ -11,8 +11,6 @@ from typing import Callable, Any, Union, Type, TYPE_CHECKING
 # Prevent cyclic (recursive) imports
 if TYPE_CHECKING:
 	# noinspection PyUnresolvedReferences
-	from src.pybuiltins.PyPort import PyPort
-	# noinspection PyUnresolvedReferences
 	from src.pyexpressions.PyExpression import PyExpression
 
 # A function with any parameters, which returns any value
@@ -20,4 +18,4 @@ AnyFunction = Callable[..., Any]
 
 # A PyExpression, class that extends a PyExpression, or PyPort
 # Used for referring to PyExpressions and their likes as a whole
-GENERIC_PYEXPR_TYPE = Union[Type["PyExpression"], "PyExpression", "PyPort"]
+GENERIC_PYEXPR_TYPE = Union[Type["PyExpression"], "PyExpression"]

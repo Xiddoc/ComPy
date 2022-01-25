@@ -1,13 +1,13 @@
 """
 Compiler class.
 """
-from ast import AST, parse, unparse
+from ast import AST, parse, unparse, Module
 from functools import reduce
-from typing import Any
+from typing import Any, Union, cast
 
 from src.compiler.Args import Args
-from src.compiler.Output import Output
-from src.pyexpressions.PyExpression import PyExpression
+from src.pybuiltins.PyPortFunction import PyPortFunction
+from src.pyexpressions.PyModule import PyModule
 
 
 class Compiler:
@@ -15,8 +15,8 @@ class Compiler:
 	Compiler class to convert operations to ASM ops.
 	"""
 
-	__node: AST
-	__output: Output
+	__node: Module
+	__pymodule: PyModule
 
 	def parse(self, source: str) -> None:
 		"""
@@ -24,48 +24,21 @@ class Compiler:
 		This turns the code into a series of nodes, filled
 		with the proper data structures alongside other nested nodes.
 		"""
-		# Init output handler
-		self.__output = Output()
 		# Parse the node into an abstract tree
+		# Cast node to proper type
 		self.__node = parse(source, Args().get_args().file.name)
 
-		# Walk down the node
-		for node in self.__node.body:
-			# Get the type of the node
-			node_type = type(node)
-
-			# Evaluate the expression
-			# Write it to the code segment
-			self.__output.write(PyExpression.from_ast_statically(node, None))
-
-		# Complete by injecting headers
-		# self.__output.header(self.__dependency_manager.format_dependencies())
-		"""
-		# Name (variable) usage
-		elif node_type == Name:
-			# Verify that name has been initialized
-			# If it is not
-			if not self.__var_handler.does_var_exist(node.id):
-				# Raise an error
-				raise VariableNotDefinedError(f"Variable '{node.id}' has was not initialized before usage.")
-		
-		elif expr_type == Name:
-			# If the value is a name (variable)
-			# Then return the variable name
-			return Value(self.__var_handler.get_var(expression.id).var_name)
-		elif expr_type == Call:
-			# If value is an expression (function, literals)
-			return Value(f"{expression.func.id}({','.join(self.eval_expr(arg).get_value() for arg in expression.args)})")
-		"""
+		# Initiate module
+		self.__pymodule = PyModule(self.__node)
 
 	def compile(self) -> str:
 		"""
 		Returns the compiled output as a string.
 		"""
-		return self.__output.compile_to_string()
+		return self.__pymodule.transpile()
 
 	@staticmethod
-	def get_attr(obj: AST, attribute_path: str) -> Any:
+	def get_attr(obj: Union[AST, "PyPortFunction"], attribute_path: str) -> Any:
 		"""
 		A function that recursively traverses down an "attribute path"
 		and retrieves the value at the end of the path.
@@ -95,7 +68,7 @@ class Compiler:
 		return reduce(getattr, attrs, obj)
 
 	@classmethod
-	def get_name(cls, obj: AST) -> str:
+	def get_name(cls, obj: Union[AST, "PyPortFunction"]) -> str:
 		"""
 		Retrieves the name of the AST node's class.
 		For example, instead of seeing: <ast.AnnAssign object at 0x000002CC7FE5A310>
@@ -137,7 +110,7 @@ class Compiler:
 		# For each special character
 		for special_char, escaped_char in PY_SPECIAL_CHARS.items():
 			# Replace with the escaped version
-			unparsed_code.replace(special_char, escaped_char)
+			unparsed_code = unparsed_code.replace(special_char, escaped_char)
 
 		# Return the escaped string
 		return unparsed_code
