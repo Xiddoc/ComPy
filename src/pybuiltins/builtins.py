@@ -3,7 +3,7 @@ Native port for the Python builtin standard library.
 """
 from typing import Dict
 
-from src.pybuiltins.PyPortFunction import PyPortFunction
+from src.pybuiltins.PyPortFunctionSignature import PyPortFunctionSignature
 
 
 # noinspection PyShadowingBuiltins
@@ -34,17 +34,17 @@ def pow(value: int, exponent: int) -> int:
 	"""
 
 
-objs: Dict[str, PyPortFunction] = {
-	"print": PyPortFunction(
+objs: Dict[str, PyPortFunctionSignature] = {
+	"print": PyPortFunctionSignature(
 		function=print,
 		code="std::cout<<print_string<<std::endl;",
 		dependencies={"iostream"}
 	),
-	"inc": PyPortFunction(
+	"inc": PyPortFunctionSignature(
 		function=inc,
 		code="return ++my_integer;"
 	),
-	"pow": PyPortFunction(
+	"pow": PyPortFunctionSignature(
 		function=pow,
 		code="return pow(value, exponent);",
 		dependencies={"cmath"}
