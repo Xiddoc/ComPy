@@ -43,9 +43,7 @@ class PyModule(PyExpression):
 			# Transpile each segment and add it to the output
 			output_list.append(pyexpr.transpile())
 
-		# Inject dependencies
-		# This runs in exponential time (.insert is linear, external 'for' loop is linear)
-		# If optimizations are required later, check out "collections.deque".
+		# Inject dependencies (Check out "collections.deque" later, if necessary for optimization)
 
 		# For each native dependency
 		for native_dependency in native_depends_list:
