@@ -138,7 +138,7 @@ class Compiler:
 		# For each special character
 		for special_char, escaped_char in PY_SPECIAL_CHARS.items():
 			# Replace with the escaped version
-			unparsed_code.replace(special_char, escaped_char)
+			unparsed_code = unparsed_code.replace(special_char, escaped_char)
 
 		# Return the escaped string
 		return unparsed_code
