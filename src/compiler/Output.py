@@ -40,7 +40,7 @@ class Output:
 			# Add dependencies to the output
 			depends_list.update(expression.get_dependencies())
 			# Add native dependencies to the output
-			native_depends_list.update(expression.get_native_dependencies())
+			native_depends_list.update(expression.get_ported_dependencies())
 			# Transpile each segment and add it to the output
 			output_list.append(expression.transpile())
 
