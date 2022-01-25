@@ -7,3 +7,6 @@ int c = b;
 print("The answer is... ");
 print(c);
 c = 10;
+int mul(int x,int y){int result = (x*y);return result;}
+mul(1,2);
+mul(3,4);
