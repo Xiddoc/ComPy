@@ -4,9 +4,10 @@ Used in extending for other pyexpressions.
 """
 from _ast import AST
 from abc import abstractmethod, ABCMeta
-from typing import Set, Iterable, Optional, Any, cast
+from typing import Set, Iterable, Optional, Union
 
 from src.compiler.Args import Args
+from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.scopes.Scope import Scope
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
@@ -19,11 +20,11 @@ class PyExpression(metaclass=ABCMeta):
 
 	__expression: AST
 	__depends: Set[str]
-	__ported_depends: Set[Any]
+	__ported_depends: Set[PyPortFunction]
 	__parent: Optional[GENERIC_PYEXPR_TYPE]
 
 	@abstractmethod
-	def __init__(self, expression: Optional[AST], parent: Optional[GENERIC_PYEXPR_TYPE]):
+	def __init__(self, expression: Union[AST, PyPortFunction], parent: Optional[GENERIC_PYEXPR_TYPE]):
 		"""
 		Constructor for the expression.
 		"""
@@ -34,8 +35,7 @@ class PyExpression(metaclass=ABCMeta):
 		# Assign parent node
 		self.__parent = parent
 		# Local import to avoid error
-		from src.pybuiltins.PyPortFunction import PyPortFunction
-		self.__ported_depends = cast(Set[PyPortFunction], set())
+		self.__ported_depends = set()
 		# Create logger for this node
 		# Import dependencies locally to avoid import errors
 		from src.compiler.Logger import Logger
@@ -121,27 +121,23 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		return self.__depends
 
-	def add_ported_dependency(self, ported_dependency: Any) -> None:
+	def add_ported_dependency(self, ported_dependency: PyPortFunction) -> None:
 		"""
 		Adds a single ported (reimplemented in native language) dependency to the list.
 
 		:param ported_dependency: The ported dependency to add.
 		"""
-		from src.pybuiltins.PyPortFunction import PyPortFunction
-		# Cast to type (can't type hint parameter as it would cause a Import recursion error)
-		self.__ported_depends.add(cast(PyPortFunction, ported_dependency))
+		self.__ported_depends.add(ported_dependency)
 
-	def add_ported_dependencies(self, ported_dependencies: Iterable[Any]) -> None:
+	def add_ported_dependencies(self, ported_dependencies: Iterable[PyPortFunction]) -> None:
 		"""
 		Adds multiple ported (reimplemented in native language) dependencies to the dependency list.
 
 		:param ported_dependencies: A list of ported dependencies that this object relies on.
 		"""
-		from src.pybuiltins.PyPortFunction import PyPortFunction
-		# Cast to type (can't type hint parameter as it would cause a Import recursion error)
-		self.__ported_depends.update(cast(Iterable[PyPortFunction], ported_dependencies))
+		self.__ported_depends.update(ported_dependencies)
 
-	def get_ported_dependencies(self) -> Set[Any]:
+	def get_ported_dependencies(self) -> Set[PyPortFunction]:
 		"""
 		Returns the list of ported dependencies that this expression relies on.
 		"""

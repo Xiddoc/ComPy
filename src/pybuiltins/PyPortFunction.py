@@ -32,7 +32,7 @@ class PyPortFunction(PyExpression):
 		"""
 		# There is no expression (this node does not exist in the given Python code)
 		# Pass the parent node
-		super().__init__(None, parent)
+		super().__init__(self, parent)
 
 		# Convert the function to a PyFunctionDef that can be represented locally later (as function header)
 		self.__func: PyFunctionDef = PyFunctionDef.from_single_object(func_sig.function, self)
