@@ -39,26 +39,6 @@ class Compiler:
 			# Write it to the code segment
 			self.__output.write(PyExpression.from_ast_statically(node, None))
 
-		# Complete by injecting headers
-		# self.__output.header(self.__dependency_manager.format_dependencies())
-		"""
-		# Name (variable) usage
-		elif node_type == Name:
-			# Verify that name has been initialized
-			# If it is not
-			if not self.__var_handler.does_var_exist(node.id):
-				# Raise an error
-				raise VariableNotDefinedError(f"Variable '{node.id}' has was not initialized before usage.")
-		
-		elif expr_type == Name:
-			# If the value is a name (variable)
-			# Then return the variable name
-			return Value(self.__var_handler.get_var(expression.id).var_name)
-		elif expr_type == Call:
-			# If value is an expression (function, literals)
-			return Value(f"{expression.func.id}({','.join(self.eval_expr(arg).get_value() for arg in expression.args)})")
-		"""
-
 	def compile(self) -> str:
 		"""
 		Returns the compiled output as a string.
