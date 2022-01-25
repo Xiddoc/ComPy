@@ -4,13 +4,19 @@ Used in extending for other pyexpressions.
 """
 from _ast import AST
 from abc import abstractmethod, ABCMeta
-from typing import Set, Iterable, Optional, Union
+from typing import Set, Iterable, Optional, Union, TYPE_CHECKING
 
 from src.compiler.Args import Args
-from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.scopes.Scope import Scope
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
+
+# If PyExpression is referenced in an import you
+# need for type hinting, then add the import here.
+# This will ONLY import it when performing type checking,
+# therefore no ImportError will occur.
+if TYPE_CHECKING:
+	from src.pybuiltins.PyPortFunction import PyPortFunction
 
 
 class PyExpression(metaclass=ABCMeta):
@@ -20,19 +26,20 @@ class PyExpression(metaclass=ABCMeta):
 
 	__expression: Union[AST, "PyPortFunction"]
 	__depends: Set[str]
-	__native_depends: Set["PyPortFunction"]
+	__ported_depends: Set["PyPortFunction"]
 	__parent: Optional[GENERIC_PYEXPR_TYPE]
 
 	@abstractmethod
-	def __init__(self, expression: AST, parent: Optional[GENERIC_PYEXPR_TYPE]):
+	def __init__(self, expression: Union[AST, "PyPortFunction"], parent: Optional[GENERIC_PYEXPR_TYPE]):
 		"""
 		Constructor for the expression.
 		"""
 		# Create depenency sets
 		self.__depends = set()
-		self.__native_depends = set()
 		# Assign parent node
 		self.__parent = parent
+		# Local import to avoid error
+		self.__ported_depends = set()
 		# Create logger for this node
 		# Import dependencies locally to avoid import errors
 		from src.compiler.Logger import Logger
@@ -72,7 +79,8 @@ class PyExpression(metaclass=ABCMeta):
 		# However, this still allows for future useful extensions
 		# such as beautifying the code, for example.
 		from src.compiler.Compiler import Compiler
-		self.__logger.log_tree_down(f"Compiled <{Compiler.get_name(self.get_expression())}> expression to: {transpiled_code}")
+		self.__logger.log_tree_down(
+			f"Compiled <{Compiler.get_name(self.get_expression())}> expression to: {transpiled_code}")
 		# Return the transpiled code (with a comment, if it is enabled)
 		return \
 			f"/* {Compiler.unparse_escaped(self.get_expression())} */ {transpiled_code}" \
@@ -113,41 +121,33 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		self.__depends.update(dependencies)
 
-	def add_dependency(self, dependency: str) -> None:
-		"""
-		Adds a single dependency to the list.
-
-		:param dependency: The dependency to add.
-		"""
-		self.__depends.add(dependency)
-
 	def get_dependencies(self) -> Set[str]:
 		"""
 		Returns the list of dependencies that this expression relies on.
 		"""
 		return self.__depends
 
-	def add_native_dependencies(self, native_dependencies: Iterable["PyPortFunction"]) -> None:
+	def add_ported_dependency(self, ported_dependency: "PyPortFunction") -> None:
 		"""
-		Adds multiple native dependencies to the dependency list.
+		Adds a single ported (reimplemented in native language) dependency to the list.
 
-		:param native_dependencies: A list of native dependencies that this object relies on.
+		:param ported_dependency: The ported dependency to add.
 		"""
-		self.__native_depends.update(native_dependencies)
+		self.__ported_depends.add(ported_dependency)
 
-	def add_native_dependency(self, native_dependency: "PyPortFunction") -> None:
+	def add_ported_dependencies(self, ported_dependencies: Iterable["PyPortFunction"]) -> None:
 		"""
-		Adds a single native dependency to the list.
+		Adds multiple ported (reimplemented in native language) dependencies to the dependency list.
 
-		:param native_dependency: The native dependency to add.
+		:param ported_dependencies: A list of ported dependencies that this object relies on.
 		"""
-		self.__native_depends.add(native_dependency)
+		self.__ported_depends.update(ported_dependencies)
 
-	def get_native_dependencies(self) -> Set["PyPortFunction"]:
+	def get_ported_dependencies(self) -> Set["PyPortFunction"]:
 		"""
-		Returns the list of native (ported) dependencies that this expression relies on.
+		Returns the list of ported dependencies that this expression relies on.
 		"""
-		return self.__native_depends
+		return self.__ported_depends
 
 	def get_expression(self) -> AST:
 		"""
@@ -178,7 +178,7 @@ class PyExpression(metaclass=ABCMeta):
 		obj: PyExpression = PyExpression.from_ast_statically(expression, self)
 		# Inherit / extend dependencies to this object
 		self.add_dependencies(obj.get_dependencies())
-		self.add_native_dependencies(obj.get_native_dependencies())
+		self.add_ported_dependencies(obj.get_ported_dependencies())
 		# Return new object
 		return obj
 
