@@ -6,7 +6,6 @@ from ast import parse
 from inspect import getsource
 from typing import List, cast, Optional
 
-from src.compiler.Compiler import Compiler
 from src.pyexpressions.PyArg import PyArg
 from src.pyexpressions.PyExpression import PyExpression
 from src.pyexpressions.PyName import PyName
@@ -39,6 +38,7 @@ class PyFunctionDef(PyExpression):
 		# If return is a Constant, then it is None (there is no return value)
 		# In which case in the transpilation stage, set as "void"
 		# Otherwise, use a proper name (int, str, etc.)
+		from src.compiler.Compiler import Compiler
 		returns = Compiler.get_attr(expression, 'returns')
 		self.__return_type = None if type(returns) == Constant else PyName(returns, self)
 

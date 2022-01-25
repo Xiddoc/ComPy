@@ -4,10 +4,9 @@ Used in extending for other pyexpressions.
 """
 from _ast import AST
 from abc import abstractmethod, ABCMeta
-from typing import Set, Iterable, Optional
+from typing import Set, Iterable, Optional, Any, cast
 
 from src.compiler.Args import Args
-from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.scopes.Scope import Scope
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
@@ -20,7 +19,7 @@ class PyExpression(metaclass=ABCMeta):
 
 	__expression: AST
 	__depends: Set[str]
-	__ported_depends: Set["PyPortFunction"]
+	__ported_depends: Set[Any]
 	__parent: Optional[GENERIC_PYEXPR_TYPE]
 
 	@abstractmethod
@@ -32,9 +31,11 @@ class PyExpression(metaclass=ABCMeta):
 		self.__expression = expression
 		# Create depenency sets
 		self.__depends = set()
-		self.__ported_depends = set()
 		# Assign parent node
 		self.__parent = parent
+		# Local import to avoid error
+		from src.pybuiltins.PyPortFunction import PyPortFunction
+		self.__ported_depends = cast(Set[PyPortFunction], set())
 		# Create logger for this node
 		# Import dependencies locally to avoid import errors
 		from src.compiler.Logger import Logger
@@ -118,15 +119,16 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		return self.__depends
 
-	def add_ported_dependencies(self, ported_dependencies: Iterable["PyPortFunction"]) -> None:
+	def add_ported_dependencies(self, ported_dependencies: Iterable[Any]) -> None:
 		"""
 		Adds multiple ported (reimplemented in native language) dependencies to the dependency list.
 
 		:param ported_dependencies: A list of native dependencies that this object relies on.
 		"""
-		self.__ported_depends.update(ported_dependencies)
+		from src.pybuiltins.PyPortFunction import PyPortFunction
+		self.__ported_depends.update(cast(Iterable[PyPortFunction], ported_dependencies))
 
-	def get_ported_dependencies(self) -> Set["PyPortFunction"]:
+	def get_ported_dependencies(self) -> Set[Any]:
 		"""
 		Returns the list of native (ported) dependencies that this expression relies on.
 		"""
