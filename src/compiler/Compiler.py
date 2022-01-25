@@ -26,7 +26,7 @@ class Compiler:
 		"""
 		# Parse the node into an abstract tree
 		# Cast node to proper type
-		self.__node = cast(Module, parse(source, Args().get_args().file.name))
+		self.__node = parse(source, Args().get_args().file.name)
 
 		# Initiate module
 		self.__pymodule = PyModule(self.__node)
