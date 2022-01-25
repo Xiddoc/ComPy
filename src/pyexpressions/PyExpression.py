@@ -112,14 +112,6 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		self.__depends.update(dependencies)
 
-	def add_dependency(self, dependency: str) -> None:
-		"""
-		Adds a single dependency to the list.
-
-		:param dependency: The dependency to add.
-		"""
-		self.__depends.add(dependency)
-
 	def get_dependencies(self) -> Set[str]:
 		"""
 		Returns the list of dependencies that this expression relies on.
@@ -128,19 +120,11 @@ class PyExpression(metaclass=ABCMeta):
 
 	def add_ported_dependencies(self, ported_dependencies: Iterable["PyPortFunction"]) -> None:
 		"""
-		Adds multiple native dependencies to the dependency list.
+		Adds multiple ported (reimplemented in native language) dependencies to the dependency list.
 
 		:param ported_dependencies: A list of native dependencies that this object relies on.
 		"""
 		self.__ported_depends.update(ported_dependencies)
-
-	def add_ported_dependency(self, ported_dependency: "PyPortFunction") -> None:
-		"""
-		Adds a single native dependency to the list.
-
-		:param ported_dependency: The native dependency to add.
-		"""
-		self.__ported_depends.add(ported_dependency)
 
 	def get_ported_dependencies(self) -> Set["PyPortFunction"]:
 		"""
