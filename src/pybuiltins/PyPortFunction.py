@@ -3,8 +3,10 @@ Port a native function or object to Python.
 """
 from typing import Any, Iterable, Optional, Set
 
+from src.pybuiltins.PyPortFunctionSignature import PyPortFunctionSignature
 from src.pyexpressions.PyExpression import PyExpression
-from src.structures.TypeRenames import AnyFunction
+from src.pyexpressions.PyFunctionDef import PyFunctionDef
+from src.structures.TypeRenames import AnyFunction, GENERIC_PYEXPR_TYPE
 
 
 class PyPortFunction(PyExpression):
@@ -15,29 +17,33 @@ class PyPortFunction(PyExpression):
 	# __func has a type of PyFunctionDef, but you
 	# can't specify it here without a circular import
 	# error so we will (overwrite) type hint in the constructor instead.
-	__func: Any
+	__func: PyFunctionDef
 	# Native code as a string
 	__code: str
 	# A list of native dependencies
 	__native_depends: Set[str]
 
-	def __init__(self, function: AnyFunction, code: str, dependencies: Optional[Iterable[str]] = None):
+	def __init__(self, func_sig: PyPortFunctionSignature, parent: GENERIC_PYEXPR_TYPE):
+		"""
+		Initializes the ported function using a loaded signature.
+		
+		:param func_sig: The function signature and body.
+		:param parent: The parent node to this expression.
+		"""
 		# Create a new set if there are no dependencies passed, otherwise use the passed dependencies
 		super().__init__(None, None)
 
-		# Import locally so that PyExpression can use this directly
-		from src.pyexpressions.PyFunctionDef import PyFunctionDef
 		# Convert the function to a PyFunctionDef that can be represented locally later (as function header)
-		self.__func: PyFunctionDef = PyFunctionDef.from_single_object(function, self)
+		self.__func: PyFunctionDef = PyFunctionDef.from_single_object(func_sig.function, self)
 		# Store the native code segment
-		self.__code = code
+		self.__code = func_sig.code
 
 		# Initialize the dependency set
 		self.__native_depends = set()
 		# If there are any dependencies
-		if dependencies is not None:
+		if func_sig.dependencies is not None:
 			# Add them as an iterable
-			self.add_native_dependencies(dependencies)
+			self.add_native_dependencies(func_sig.dependencies)
 
 	def add_native_dependencies(self, native_dependencies: Iterable[str]) -> None:
 		"""
