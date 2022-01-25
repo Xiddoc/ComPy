@@ -120,13 +120,9 @@ class PyExpression(metaclass=ABCMeta):
 				return temp_parent.get_scope()
 			# Otherwise,
 			else:
-				# Simple type check
-				if temp_parent is not None:
-					# Traverse to next parent
-					temp_parent = temp_parent.get_parent()
-				else:
-					# This should not happen
-					raise TypeError()
+				# Type cast to bypass type checking bug
+				# (Type[MY_CLASS] means MY_CLASS.__class__ and any class that inherits MY_CLASS)
+				temp_parent = cast(PyExpression, temp_parent).get_parent()
 
 	def add_dependencies(self, dependencies: Iterable[str]) -> None:
 		"""
