@@ -5,9 +5,8 @@ from ast import AST, parse, unparse
 from functools import reduce
 from typing import Any
 
-from src.Args import Args
-from src.Output import Output
-from src.VarHandler import VarHandler
+from src.compiler.Args import Args
+from src.compiler.Output import Output
 from src.pyexpressions.PyExpression import PyExpression
 
 
@@ -18,7 +17,6 @@ class Compiler:
 
 	__node: AST
 	__output: Output
-	__var_handler: VarHandler
 
 	def parse(self, source: str) -> None:
 		"""
@@ -26,8 +24,6 @@ class Compiler:
 		This turns the code into a series of nodes, filled
 		with the proper data structures alongside other nested nodes.
 		"""
-		# Initialize an empty dictionary for variables
-		self.__var_handler = VarHandler()
 		# Init output handler
 		self.__output = Output()
 		# Parse the node into an abstract tree
@@ -49,7 +45,7 @@ class Compiler:
 		elif node_type == Name:
 			# Verify that name has been initialized
 			# If it is not
-			if not self.__var_handler.is_var_exists(node.id):
+			if not self.__var_handler.does_var_exist(node.id):
 				# Raise an error
 				raise VariableNotDefinedError(f"Variable '{node.id}' has was not initialized before usage.")
 		
@@ -133,8 +129,8 @@ class Compiler:
 		:param expression: The AST node to unparse.
 		:return: The *string-escaped* Python representation of the node.
 		"""
-		# Import locally to avoid cylic import error
-		from src.Constants import PY_SPECIAL_CHARS
+		# Import locally to avoid cyclic import error
+		from src.compiler.Constants import PY_SPECIAL_CHARS
 		# First, unparse the expression
 		unparsed_code: str = cls.unparse(expression)
 

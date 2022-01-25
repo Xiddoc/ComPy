@@ -1,11 +1,13 @@
 """
 Constants and other 'singleton' objects and maps/dicts.
 """
-from _ast import Constant, BinOp, operator, Add, Sub, Mult, AnnAssign, AST, Expr, Name, Call, FunctionDef, arg, Return
+from _ast import Constant, BinOp, operator, Add, Sub, Mult, AnnAssign, AST, Expr, Name, Call, FunctionDef, arg, Return, \
+	Assign
 from typing import Dict, Type
 
 from src.pyexpressions.PyAnnAssign import PyAnnAssign
 from src.pyexpressions.PyArg import PyArg
+from src.pyexpressions.PyAssign import PyAssign
 from src.pyexpressions.PyBinOp import PyBinOp
 from src.pyexpressions.PyCall import PyCall
 from src.pyexpressions.PyConstant import PyConstant
@@ -17,6 +19,7 @@ from src.pyexpressions.PyReturn import PyReturn
 
 AST_EXPR_TO_PYEXPR: Dict[Type[AST], Type[PyExpression]] = {
 	AnnAssign: PyAnnAssign,
+	Assign: PyAssign,
 	arg: PyArg,
 	BinOp: PyBinOp,
 	Call: PyCall,

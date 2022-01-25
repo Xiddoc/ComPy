@@ -8,7 +8,7 @@ cut down on the times you need to copy the type hint.
 
 from typing import Callable, Any, Union, Type, TYPE_CHECKING
 
-# Prevent cylic (recursive) imports
+# Prevent cyclic (recursive) imports
 if TYPE_CHECKING:
 	# noinspection PyUnresolvedReferences
 	from src.pybuiltins.PyPort import PyPort

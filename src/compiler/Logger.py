@@ -3,7 +3,7 @@ Logging utilities and functions.
 """
 from typing import cast
 
-from src.Args import Args
+from src.compiler.Args import Args
 from src.pyexpressions.PyExpression import PyExpression
 
 
@@ -23,7 +23,7 @@ class Logger:
 		temp_expr: PyExpression = py_expr
 		indentation: int = 0
 
-		# Keep iterating down the "parent node chain"
+		# Keep iterating up the "parent node chain"
 		# PyPortFunction will throw an error as get_parent does not exist
 		# So make sure that the instance is a PyExpression
 		while isinstance(temp_expr.get_parent(), PyExpression) and temp_expr.get_parent() is not None:

@@ -24,13 +24,21 @@ c: int = b
 print("The answer is... ")
 print(c)
 
+# Variables can be changed
+c = 10
+
 
 # Function declaration
 def mul(x: int, y: int) -> int:
 	"""
 	Test function.
 	"""
-	return x * y
+	# Calculate
+	result: int = x * y
+	# Uncomment to show that variables
+	# can only be initialized once
+	# result: int = 123
+	return result
 
 
 # Custom function usage
