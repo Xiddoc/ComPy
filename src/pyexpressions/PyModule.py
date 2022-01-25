@@ -23,7 +23,7 @@ class PyModule(PyExpression):
 		self.__scope = Scope()
 		# For each body expression
 		# Create a PyExpression from the AST node
-		self.__code = [self.from_ast(ast) for ast in expression.body]
+		self.__body = [self.from_ast(ast) for ast in expression.body]
 
 	def _transpile(self) -> str:
 		"""
