@@ -1,5 +1,5 @@
 """
-Expression statement.
+Call a function.
 """
 from _ast import Call
 from typing import List
@@ -13,7 +13,7 @@ from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 class PyCall(PyExpression):
 	"""
-	Expression statement.
+	Call a function.
 	"""
 
 	__args: List[PyExpression]
@@ -42,7 +42,7 @@ class PyCall(PyExpression):
 
 	def _transpile(self) -> str:
 		"""
-		Transpiles the constant to a string.
+		Transpile the operation to a string.
 		"""
 		# Transpile the actual function call to the matching native code...
 		# Take function name

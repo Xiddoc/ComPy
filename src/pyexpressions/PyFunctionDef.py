@@ -44,7 +44,7 @@ class PyFunctionDef(PyExpression):
 
 	def _transpile(self) -> str:
 		"""
-		Transpiles the constant to a native string.
+		Transpile the operation to a string.
 		"""
 		return f"{self.transpile_header()}{{{''.join([expr.transpile() for expr in self.__code])}}}"
 
