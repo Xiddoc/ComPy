@@ -28,6 +28,6 @@ class PyExpr(PyExpression):
 
 	def _transpile(self) -> str:
 		"""
-		Transpiles the constant to a string.
+		Transpile the operation to a string.
 		"""
 		return self.__value.transpile() if self.__value else ""
