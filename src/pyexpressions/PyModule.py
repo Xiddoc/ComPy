@@ -60,8 +60,18 @@ class PyModule(PyExpression):
 		# Return the output as a string
 		return "\n".join(output_list)
 
+	# noinspection PyUnusedFunction
 	def get_scope(self) -> Scope:
 		"""
-		Returns the Scope (instance) of this function body.
+		Returns the Scope (instance) of this module body.
+
+		Might have a warning in your IDE that labels it as "unused".
+		This is since it is not explicitly used (in PyExpression:
+		it *should* be casted to PyFunctionDef, then use obj.get_scope(),
+		but instead there is a type check, then we use get_scope.
+
+		What this means is that depending on the Python linter
+		implementation, your IDE could flag this function as useless.
+		It is not. Do **NOT** remove it.
 		"""
 		return self.__scope
