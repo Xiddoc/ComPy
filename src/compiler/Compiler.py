@@ -8,7 +8,7 @@ from typing import Any, Union
 from src.compiler.Args import Args
 from src.compiler.Logger import Logger
 from src.pybuiltins.PyPortFunction import PyPortFunction
-from src.pyexpressions.PyModule import PyModule
+from src.pyexpressions.concrete.PyModule import PyModule
 
 
 class Compiler:

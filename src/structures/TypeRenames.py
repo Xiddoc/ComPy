@@ -11,7 +11,7 @@ from typing import Callable, Any, Union, Type, TYPE_CHECKING
 # Prevent cyclic (recursive) imports
 if TYPE_CHECKING:
 	# noinspection PyUnresolvedReferences
-	from src.pyexpressions.PyExpression import PyExpression
+	from src.pyexpressions.abstract.PyExpression import PyExpression
 
 # A function with any parameters, which returns any value
 AnyFunction = Callable[..., Any]

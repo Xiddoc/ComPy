@@ -6,7 +6,7 @@ from json import dumps
 from typing import Type, Union
 
 from src.compiler.Compiler import Compiler
-from src.pyexpressions.PyExpression import PyExpression
+from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 

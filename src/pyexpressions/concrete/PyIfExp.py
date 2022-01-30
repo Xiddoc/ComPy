@@ -1,24 +1,24 @@
 """
-Binary operation.
+Conditional expression.
 """
-from _ast import BinOp
+from _ast import IfExp
 from _ast import operator
 
-from src.pyexpressions.PyExpression import PyExpression
+from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
-class PyBinOp(PyExpression):
+class PyIfExp(PyExpression):
 	"""
-	Expression for binary operation.
+	Expression for a Python conditional expression.
 	"""
 
 	__left: PyExpression
 	__right: PyExpression
 	__op_type: str
 
-	def __init__(self, expression: BinOp, parent: GENERIC_PYEXPR_TYPE):
+	def __init__(self, expression: IfExp, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
 		# Convert op to string
 		self.__op_type = self.op_to_str(expression.op)

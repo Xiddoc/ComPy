@@ -5,7 +5,7 @@ from _ast import Module
 from typing import List, Set
 
 from src.pybuiltins.PyPortFunction import PyPortFunction
-from src.pyexpressions.PyExpression import PyExpression
+from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.scopes.Scope import Scope
 
 

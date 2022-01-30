@@ -104,8 +104,8 @@ class PyExpression(metaclass=ABCMeta):
 		Returns the nearest Scope instance to this instance.
 		"""
 		# Import locally to avoid cyclical import error
-		from src.pyexpressions.PyFunctionDef import PyFunctionDef
-		from src.pyexpressions.PyModule import PyModule
+		from src.pyexpressions.concrete.PyFunctionDef import PyFunctionDef
+		from src.pyexpressions.concrete.PyModule import PyModule
 
 		# Assign our parent to a temporary variable for iterating
 		temp_parent = self.get_parent()

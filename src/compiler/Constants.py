@@ -5,19 +5,19 @@ from _ast import Constant, BinOp, operator, Add, Sub, Mult, AnnAssign, AST, Expr
 	Return, Assign, Module, IfExp
 from typing import Dict, Type
 
-from src.pyexpressions.PyAnnAssign import PyAnnAssign
-from src.pyexpressions.PyArg import PyArg
-from src.pyexpressions.PyAssign import PyAssign
-from src.pyexpressions.PyBinOp import PyBinOp
-from src.pyexpressions.PyCall import PyCall
-from src.pyexpressions.PyConstant import PyConstant
-from src.pyexpressions.PyExpr import PyExpr
-from src.pyexpressions.PyExpression import PyExpression
-from src.pyexpressions.PyFunctionDef import PyFunctionDef
-from src.pyexpressions.PyIfExp import PyIfExp
-from src.pyexpressions.PyModule import PyModule
-from src.pyexpressions.PyName import PyName
-from src.pyexpressions.PyReturn import PyReturn
+from src.pyexpressions.concrete.PyAnnAssign import PyAnnAssign
+from src.pyexpressions.concrete.PyArg import PyArg
+from src.pyexpressions.concrete.PyAssign import PyAssign
+from src.pyexpressions.concrete.PyBinOp import PyBinOp
+from src.pyexpressions.concrete.PyCall import PyCall
+from src.pyexpressions.concrete.PyConstant import PyConstant
+from src.pyexpressions.concrete.PyExpr import PyExpr
+from src.pyexpressions.abstract.PyExpression import PyExpression
+from src.pyexpressions.concrete.PyFunctionDef import PyFunctionDef
+from src.pyexpressions.concrete.PyIfExp import PyIfExp
+from src.pyexpressions.concrete.PyModule import PyModule
+from src.pyexpressions.concrete.PyName import PyName
+from src.pyexpressions.concrete.PyReturn import PyReturn
 
 AST_EXPR_TO_PYEXPR: Dict[Type[AST], Type[PyExpression]] = {
 	AnnAssign: PyAnnAssign,
