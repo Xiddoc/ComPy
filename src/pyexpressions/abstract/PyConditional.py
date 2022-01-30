@@ -26,7 +26,6 @@ class PyConditional(PyExpression):
 		# Copy each PyExpression to the body
 		self.__code = [self.from_ast(ast) for ast in expression.body]
 
-	@abstractmethod
 	def _transpile(self) -> str:
 		"""
 		Transpiles this expression to a C++ string.
@@ -35,3 +34,4 @@ class PyConditional(PyExpression):
 		to *IMPLEMENT* the transpilation process. To actually transpile
 		the code, use the self.transpile method, which wraps this method.
 		"""
+		return f"{self.__prefix} () {{{''.join([expr.transpile() for expr in self.__code])}}}"
