@@ -13,7 +13,7 @@ def loop_print(my_string: str, index: int) -> None:
 	[my_string]3
 	...
 
-	:param index:
+	:param index: The current looping index.
 	:param my_string: The string to print.
 	"""
 	print(my_string + str(index))
