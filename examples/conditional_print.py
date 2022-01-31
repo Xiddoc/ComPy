@@ -25,7 +25,10 @@ def conditional_print(index: int) -> None:
 	elif 5 < index < 8:
 		print("Larger than 5 and smaller than 8!")
 	else:
+		if index == 0:
+			print("t")
 		print("Other...")
+		print("(Did not match any other conditionals)")
 
 	conditional_print(index + 1)
 
