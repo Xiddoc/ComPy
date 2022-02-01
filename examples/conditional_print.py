@@ -20,10 +20,10 @@ def conditional_print(index: int) -> None:
 
 	if index == 0 and index != 2 or index != 3:
 		print("Equals to 0!")
-	elif index < 3:
-		print("Smaller than 3!")
-	elif 5 < index < 8:
-		print("Larger than 5 and smaller than 8!")
+	elif 1 < 2 < index < 5:
+		print("Larger than 2 and smaller than 5!")
+	elif index < 8:
+		print("Smaller than 8!")
 	else:
 		if index == 0:
 			print("t")

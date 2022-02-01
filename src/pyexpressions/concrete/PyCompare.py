@@ -2,6 +2,7 @@
 Comparison expression (condition).
 """
 from _ast import Compare, cmpop
+from typing import List
 
 from src.compiler.Compiler import Compiler
 from src.pyexpressions.abstract.PyExpression import PyExpression
@@ -14,24 +15,29 @@ class PyCompare(PyExpression):
 	Comparison expression (condition).
 	"""
 
-	__comparator: str
 	__left: PyExpression
-	__right: PyExpression
+	__right: List[PyExpression]
+	__comparators: List[str]
 
 	def __init__(self, expression: Compare, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
 		# Translate the comparator to a string
-		self.__comparator = self.comparator_to_str(Compiler.get_attr(expression, 'ops')[0])
+		self.__comparators = [self.comparator_to_str(comp) for comp in Compiler.get_attr(expression, 'ops')]
 		# Left side
 		self.__left = self.from_ast(Compiler.get_attr(expression, 'left'))
-		# Right side
-		self.__right = self.from_ast(Compiler.get_attr(expression, 'comparators')[0])
+		# Translate each expression
+		self.__right = [self.from_ast(expr) for expr in Compiler.get_attr(expression, 'comparators')]
 
 	def _transpile(self) -> str:
 		"""
 		Transpiles the comparison to a string.
 		"""
-		return f"{self.__left.transpile()}{self.__comparator}{self.__right.transpile()}"
+		# The variable naming is slightly odd due to how the AST module names it's fields, but nevertheless-
+		# The comparison should look something like this (example below):
+		# left  comparators[0]  right[0]    comparators[1]  right[1] ...
+		# 5     <               6           <               7
+
+		return f"{self.__left.transpile()}{''.join([item[0] + item[1].transpile() for item in zip(self.__comparators, self.__right)])}"
 
 	@staticmethod
 	def comparator_to_str(comparator: cmpop) -> str:
