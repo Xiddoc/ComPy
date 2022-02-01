@@ -18,7 +18,7 @@ def conditional_print(index: int) -> None:
 
 	print(index)
 
-	if index == 0:
+	if index == 0 and index != 2 or index != 3:
 		print("Equals to 0!")
 	elif index < 3:
 		print("Smaller than 3!")
