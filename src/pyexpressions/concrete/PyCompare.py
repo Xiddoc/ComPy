@@ -16,19 +16,22 @@ class PyCompare(PyExpression):
 
 	__comparator: str
 	__left: PyExpression
+	__right: PyExpression
 
 	def __init__(self, expression: Compare, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
 		# Translate the comparator to a string
 		self.__comparator = self.comparator_to_str(Compiler.get_attr(expression, 'ops')[0])
-		# Left sie
+		# Left side
 		self.__left = self.from_ast(Compiler.get_attr(expression, 'left'))
+		# Right side
+		self.__right = self.from_ast(Compiler.get_attr(expression, 'comparators')[0])
 
 	def _transpile(self) -> str:
 		"""
-		Transpiles the constant to a string.
+		Transpiles the comparison to a string.
 		"""
-		return self.__comparator
+		return f"{self.__left.transpile()}{self.__comparator}{self.__right.transpile()}"
 
 	@staticmethod
 	def comparator_to_str(comparator: cmpop) -> str:
