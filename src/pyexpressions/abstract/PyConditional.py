@@ -8,7 +8,6 @@ from typing import Union, Optional, List
 from src.compiler.Compiler import Compiler
 from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.pyexpressions.abstract.PyExpression import PyExpression
-from src.pyexpressions.concrete.PyCompare import PyCompare
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
@@ -19,7 +18,7 @@ class PyConditional(PyExpression):
 
 	__prefix: str
 	__code: List[PyExpression]
-	__condition: PyCompare
+	__condition: PyExpression
 
 	def __init__(self, expression: Union[AST, "PyPortFunction"], prefix: str, parent: Optional[GENERIC_PYEXPR_TYPE]):
 		super().__init__(expression, parent)
@@ -28,7 +27,7 @@ class PyConditional(PyExpression):
 		# Copy each PyExpression to the body
 		self.__code = [self.from_ast(ast) for ast in expression.body]
 		# Get condition
-		self.__condition = PyCompare(Compiler.get_attr(expression, 'test'), self)
+		self.__condition = self.from_ast(Compiler.get_attr(expression, 'test'))
 
 	def _transpile(self) -> str:
 		"""
