@@ -2,7 +2,7 @@
 Constants and other 'singleton' objects and maps/dicts.
 """
 from _ast import Constant, BinOp, operator, Add, Sub, Mult, AnnAssign, AST, Expr, Name, Call, FunctionDef, arg, \
-	Return, Assign, Module, IfExp, If, cmpop, Eq, Compare, Lt, Gt, BoolOp, NotEq
+	Return, Assign, Module, IfExp, If, cmpop, Eq, Compare, Lt, Gt, BoolOp, NotEq, Or, And, boolop
 from typing import Dict, Type
 
 from src.pyexpressions.concrete.PyAnnAssign import PyAnnAssign
@@ -51,6 +51,11 @@ AST_COMPARATOR_TO_STR: Dict[Type[cmpop], str] = {
 	NotEq: "!=",
 	Lt: "<",
 	Gt: ">"
+}
+
+AST_BOOLOP_TO_STR: Dict[Type[boolop], str] = {
+	Or: "||",
+	And: "&&"
 }
 
 PY_SPECIAL_CHARS: Dict[str, str] = {
