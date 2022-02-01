@@ -5,6 +5,7 @@ from _ast import Constant, BinOp, operator, Add, Sub, Mult, AnnAssign, AST, Expr
 	Return, Assign, Module, IfExp, If, cmpop, Eq, Compare, Lt, Gt, BoolOp, NotEq, Or, And, boolop
 from typing import Dict, Type
 
+from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyAnnAssign import PyAnnAssign
 from src.pyexpressions.concrete.PyArg import PyArg
 from src.pyexpressions.concrete.PyAssign import PyAssign
@@ -14,7 +15,6 @@ from src.pyexpressions.concrete.PyCall import PyCall
 from src.pyexpressions.concrete.PyCompare import PyCompare
 from src.pyexpressions.concrete.PyConstant import PyConstant
 from src.pyexpressions.concrete.PyExpr import PyExpr
-from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyFunctionDef import PyFunctionDef
 from src.pyexpressions.concrete.PyIf import PyIf
 from src.pyexpressions.concrete.PyIfExp import PyIfExp
