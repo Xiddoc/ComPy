@@ -12,7 +12,7 @@ print("Larger than 2 and smaller than 5!");
 } else {
 print("Other...");print("(Did not match any other conditionals)");
 }
-conditional_print((index+1));
+conditional_print((index + 1));
 }
 
 int main() {

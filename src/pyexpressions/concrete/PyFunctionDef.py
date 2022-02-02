@@ -54,7 +54,7 @@ class PyFunctionDef(PyExpression):
 		"""
 		return f"{self.__return_type.transpile() if self.__return_type else 'void'}" \
 		       f" {self.__func_name}(" \
-		       f"{','.join([arg.transpile() for arg in self.__args])})"
+		       f"{', '.join([arg.transpile() for arg in self.__args])})"
 
 	# noinspection PyUnusedFunction
 	def get_scope(self) -> Scope:
