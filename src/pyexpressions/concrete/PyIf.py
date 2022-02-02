@@ -41,5 +41,5 @@ class PyIf(PyConditional):
 		"""
 		return super()._transpile() + \
 			self.__elif.transpile() if self.__elif is not None else \
-			f"else {{{''.join([expr.transpile() for expr in self.__else])}}}" if self.__else is not None else \
+			f"else {{\n{''.join([expr.transpile() for expr in self.__else])}\n}}" if self.__else is not None else \
 			""
