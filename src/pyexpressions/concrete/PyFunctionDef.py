@@ -6,9 +6,9 @@ from ast import parse
 from inspect import getsource
 from typing import List, cast, Optional, Any
 
-from src.pyexpressions.PyArg import PyArg
-from src.pyexpressions.PyExpression import PyExpression
-from src.pyexpressions.PyName import PyName
+from src.pyexpressions.abstract.PyExpression import PyExpression
+from src.pyexpressions.concrete.PyArg import PyArg
+from src.pyexpressions.concrete.PyName import PyName
 from src.scopes.Scope import Scope
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE, AnyFunction
 

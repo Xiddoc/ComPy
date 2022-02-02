@@ -4,7 +4,7 @@ Logging utilities and functions.
 from typing import cast
 
 from src.compiler.Args import Args
-from src.pyexpressions.PyExpression import PyExpression
+from src.pyexpressions.abstract.PyExpression import PyExpression
 
 
 class Logger:

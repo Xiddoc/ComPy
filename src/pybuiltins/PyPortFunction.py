@@ -4,8 +4,8 @@ Port a native function or object to Python.
 from typing import Iterable, Set, Any
 
 from src.pybuiltins.PyPortFunctionSignature import PyPortFunctionSignature
-from src.pyexpressions.PyExpression import PyExpression
-from src.pyexpressions.PyFunctionDef import PyFunctionDef
+from src.pyexpressions.abstract.PyExpression import PyExpression
+from src.pyexpressions.concrete.PyFunctionDef import PyFunctionDef
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
