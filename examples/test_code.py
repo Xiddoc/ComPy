@@ -20,12 +20,13 @@ b: int = a + 4
 # Assignment of type and name
 c: int = b
 
-# Built-in function calls
+# Variables can be changed & built-in function calls
+# noinspection PyUnresolvedReferences
+c = inc(c)
+
+# More built-in function calls
 print("The answer is... ")
 print(c)
-
-# Variables can be changed
-c = 10
 
 
 # Function declaration
