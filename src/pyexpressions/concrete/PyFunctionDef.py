@@ -39,7 +39,6 @@ class PyFunctionDef(PyExpression):
 		# If return is a Constant, then it is None (there is no return value)
 		# In which case in the transpilation stage, set as "void"
 		# Otherwise, use a proper name (int, str, etc.)
-		from src.compiler.Compiler import Compiler
 		returns = Util.get_attr(expression, 'returns')
 		self.__return_type = None if type(returns) == Constant else PyName(returns, self)
 

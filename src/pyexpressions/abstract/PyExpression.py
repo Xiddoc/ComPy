@@ -80,7 +80,6 @@ class PyExpression(metaclass=ABCMeta):
 		# However, this still allows for future useful extensions
 		# such as beautifying the code, for example.
 		from src.compiler.Compiler import Compiler
-		from src.compiler.Logger import Logger
 		self.__logger.log_tree_down(
 			f"Compiled <{Util.get_name(self.get_expression())}> expression to: {Util.escape(transpiled_code)}"
 		)

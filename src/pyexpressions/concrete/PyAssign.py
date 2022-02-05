@@ -3,7 +3,6 @@ Assign a value to a variable.
 """
 from _ast import Assign
 
-from src.compiler.Compiler import Compiler
 from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE

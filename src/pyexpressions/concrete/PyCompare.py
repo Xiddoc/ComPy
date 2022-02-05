@@ -4,7 +4,6 @@ Comparison expression (condition).
 from _ast import Compare, cmpop
 from typing import List
 
-from src.compiler.Compiler import Compiler
 from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.structures.Errors import UnsupportedFeatureException

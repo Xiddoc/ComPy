@@ -4,7 +4,6 @@ Call a function.
 from _ast import Call
 from typing import List
 
-from src.compiler.Compiler import Compiler
 from src.compiler.Util import Util
 from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.pyexpressions.abstract.PyExpression import PyExpression

@@ -21,7 +21,6 @@ class PyArg(PyExpression):
 		super().__init__(expression, parent)
 		# Convert and store
 		self.__arg_name = expression.arg
-		from src.compiler.Compiler import Compiler
 		self.__arg_type = PyName(Util.get_attr(expression, 'annotation'), self)
 
 	def _transpile(self) -> str:

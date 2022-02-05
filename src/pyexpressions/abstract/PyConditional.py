@@ -5,7 +5,6 @@ Extends other conditional expressions such as if, if/else, while...
 from _ast import AST
 from typing import Union, Optional, List
 
-from src.compiler.Compiler import Compiler
 from src.compiler.Util import Util
 from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.pyexpressions.abstract.PyExpression import PyExpression
