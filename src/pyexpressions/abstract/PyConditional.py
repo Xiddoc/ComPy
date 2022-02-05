@@ -6,6 +6,7 @@ from _ast import AST
 from typing import Union, Optional, List
 
 from src.compiler.Compiler import Compiler
+from src.compiler.Util import Util
 from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
@@ -27,7 +28,7 @@ class PyConditional(PyExpression):
 		# Copy each PyExpression to the body
 		self.__code = [self.from_ast(ast) for ast in expression.body]
 		# Get condition
-		self.__condition = self.from_ast(Compiler.get_attr(expression, 'test'))
+		self.__condition = self.from_ast(Util.get_attr(expression, 'test'))
 
 	def _transpile(self) -> str:
 		"""

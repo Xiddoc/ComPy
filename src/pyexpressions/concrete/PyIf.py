@@ -5,6 +5,7 @@ from _ast import If
 from typing import Optional, List
 
 from src.compiler.Compiler import Compiler
+from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyConditional import PyConditional
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
@@ -24,7 +25,7 @@ class PyIf(PyConditional):
 		self.__elif = None
 		self.__else = None
 		# If there is an "or else"
-		orelse_list = Compiler.get_attr(expression, "orelse")
+		orelse_list = Util.get_attr(expression, "orelse")
 		if orelse_list:
 			# If this is a singular "If" expression,
 			# then this is meant to be an "elif" statement

@@ -3,6 +3,7 @@ Function argument name declaration.
 """
 from _ast import arg
 
+from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyName import PyName
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
@@ -21,7 +22,7 @@ class PyArg(PyExpression):
 		# Convert and store
 		self.__arg_name = expression.arg
 		from src.compiler.Compiler import Compiler
-		self.__arg_type = PyName(Compiler.get_attr(expression, 'annotation'), self)
+		self.__arg_type = PyName(Util.get_attr(expression, 'annotation'), self)
 
 	def _transpile(self) -> str:
 		"""

@@ -101,24 +101,3 @@ class Logger:
 		# Otherwise, if this is the root branch (layer zero)
 		# Make a newline to seperate from previous node tree.
 		return "\n"
-
-	@staticmethod
-	def escape(string: str) -> str:
-		"""
-		Escapes a Python string of newlines
-		and other formats in order to form
-		a consistent one-line string.
-
-		:param string: The string to escape.
-		:return: The escaped one-line string.
-		"""
-		# Import locally to avoid cyclic import error
-		from src.compiler.Constants import PY_SPECIAL_CHARS
-
-		# For each special character
-		for special_char, escaped_char in PY_SPECIAL_CHARS.items():
-			# Replace with the escaped version
-			string = string.replace(special_char, escaped_char)
-
-		# Return escaped version
-		return string

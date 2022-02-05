@@ -7,6 +7,7 @@ from abc import abstractmethod, ABCMeta
 from typing import Set, Iterable, Optional, Union, TYPE_CHECKING, cast
 
 from src.compiler.Args import Args
+from src.compiler.Util import Util
 from src.scopes.Scope import Scope
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
@@ -49,7 +50,7 @@ class PyExpression(metaclass=ABCMeta):
 		self.__expression = expression
 		# Print logging statement for creation of node
 		self.__logger.log_tree_up(
-			f"Creating expression <{Compiler.get_name(expression)}>: "
+			f"Creating expression <{Util.get_name(expression)}>: "
 			f"{Compiler.unparse_escaped(expression) if isinstance(expression, AST) else '<Native Object>'} "
 		)
 
@@ -81,7 +82,7 @@ class PyExpression(metaclass=ABCMeta):
 		from src.compiler.Compiler import Compiler
 		from src.compiler.Logger import Logger
 		self.__logger.log_tree_down(
-			f"Compiled <{Compiler.get_name(self.get_expression())}> expression to: {Logger.escape(transpiled_code)}"
+			f"Compiled <{Util.get_name(self.get_expression())}> expression to: {Util.escape(transpiled_code)}"
 		)
 		# If comments are enabled
 		if Args().get_args().comment:
