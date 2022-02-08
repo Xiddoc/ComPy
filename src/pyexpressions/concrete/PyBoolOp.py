@@ -4,7 +4,6 @@ Boolean operation.
 from _ast import BoolOp, boolop
 from typing import List
 
-from src.compiler.Compiler import Compiler
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
@@ -22,9 +21,9 @@ class PyBoolOp(PyExpression):
 	def __init__(self, expression: BoolOp, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
 		# Convert op to string
-		self.__op_type = self.boolop_to_str(Compiler.get_attr(expression, 'op'))
+		self.__op_type = self.boolop_to_str(expression.op)
 		# Store conditions
-		self.__conditions = [self.from_ast(condition) for condition in Compiler.get_attr(expression, 'values')]
+		self.__conditions = [self.from_ast(condition) for condition in expression.values]
 
 	def _transpile(self) -> str:
 		"""

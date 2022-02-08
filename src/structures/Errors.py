@@ -2,9 +2,10 @@
 Error classes, when needed for exceptions.
 """
 from _ast import AST
-
 from dataclasses import dataclass, field
 from typing import Optional
+
+from src.compiler.Util import Util
 
 
 @dataclass(frozen=True)
@@ -48,9 +49,8 @@ class UnsupportedFeatureException(SyntaxError):
 
 	def __str__(self) -> str:
 		# Local import to avoid import error
-		from src.compiler.Compiler import Compiler
 		# Error text
-		return f"Python feature '{Compiler.get_name(self.feature)}' is not supported by the compiler."
+		return f"Python feature '{Util.get_name(self.feature)}' is not supported by the compiler."
 
 
 @dataclass(frozen=True)

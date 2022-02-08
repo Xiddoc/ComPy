@@ -1,6 +1,7 @@
 """
 Port a native function or object to Python.
 """
+from ast import Pass
 from typing import Iterable, Set, Any
 
 from src.pybuiltins.PyPortFunctionSignature import PyPortFunctionSignature
@@ -30,12 +31,18 @@ class PyPortFunction(PyExpression):
 		:param func_sig: The function signature and body.
 		:param parent: The parent node to this expression.
 		"""
-		# There is no expression (this node does not exist in the given Python code)
-		# Pass the parent node
-		super().__init__(self, parent)
+		# Pass a "pass" Python AST expression (null operation), explanation a few lines down
+		# Pass the parent node as well (us)
+		super().__init__(Pass(), parent)
 
 		# Convert the function to a PyFunctionDef that can be represented locally later (as function header)
 		self.__func: PyFunctionDef = PyFunctionDef.from_single_object(func_sig.function, self)
+
+		# Set our expression to the FunctionDef AST expression
+		# We do this now instead of during the super since we must
+		# call super() before running the from_single_object method.
+		self.set_expression(self.__func.get_expression())
+
 		# Store the native code segment
 		self.__code = func_sig.code
 

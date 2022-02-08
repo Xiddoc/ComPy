@@ -4,9 +4,10 @@ Used in extending for other pyexpressions.
 """
 from _ast import AST
 from abc import abstractmethod, ABCMeta
-from typing import Set, Iterable, Optional, Union, TYPE_CHECKING, cast
+from typing import Set, Iterable, Optional, TYPE_CHECKING, cast
 
 from src.compiler.Args import Args
+from src.compiler.Util import Util
 from src.scopes.Scope import Scope
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
@@ -24,13 +25,13 @@ class PyExpression(metaclass=ABCMeta):
 	PyExpression base class.
 	"""
 
-	__expression: Union[AST, "PyPortFunction"]
+	__expression: AST
 	__depends: Set[str]
 	__ported_depends: Set["PyPortFunction"]
 	__parent: Optional[GENERIC_PYEXPR_TYPE]
 
 	@abstractmethod
-	def __init__(self, expression: Union[AST, "PyPortFunction"], parent: Optional[GENERIC_PYEXPR_TYPE]):
+	def __init__(self, expression: AST, parent: Optional[GENERIC_PYEXPR_TYPE]):
 		"""
 		Constructor for the expression.
 		"""
@@ -49,8 +50,7 @@ class PyExpression(metaclass=ABCMeta):
 		self.__expression = expression
 		# Print logging statement for creation of node
 		self.__logger.log_tree_up(
-			f"Creating expression <{Compiler.get_name(expression)}>: "
-			f"{Compiler.unparse_escaped(expression) if isinstance(expression, AST) else '<Native Object>'} "
+			f"Creating expression <{Util.get_name(expression)}>: {Compiler.unparse_escaped(expression)} "
 		)
 
 	@abstractmethod
@@ -79,22 +79,14 @@ class PyExpression(metaclass=ABCMeta):
 		# However, this still allows for future useful extensions
 		# such as beautifying the code, for example.
 		from src.compiler.Compiler import Compiler
-		from src.compiler.Logger import Logger
 		self.__logger.log_tree_down(
-			f"Compiled <{Compiler.get_name(self.get_expression())}> expression to: {Logger.escape(transpiled_code)}"
+			f"Compiled <{Util.get_name(self.get_expression())}> expression to: {Util.escape(transpiled_code)}"
 		)
 		# If comments are enabled
 		if Args().get_args().comment:
-			# If the expression is an AST node
-			unparsed: str
-			if isinstance(self.get_expression(), AST):
-				# Unparse
-				unparsed = Compiler.unparse_escaped(cast(AST, self.get_expression()))
-			# Otherwise, it is a ported function
-			else:
-				unparsed = '<Native Object>'
-			# Return either way, with comments
-			return f"/* {unparsed} */ {transpiled_code}"
+			# Unparse the expression
+			# Return with comments
+			return f"/* {Compiler.unparse_escaped(self.get_expression())} */ {transpiled_code}"
 		else:
 			# Otherwise, return normal transpilation
 			return transpiled_code
@@ -160,7 +152,7 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		return self.__ported_depends
 
-	def get_expression(self) -> Union[AST, "PyPortFunction"]:
+	def get_expression(self) -> AST:
 		"""
 		:return: Returns the expression this instance is holding (was initialized with).
 		"""
@@ -171,6 +163,12 @@ class PyExpression(metaclass=ABCMeta):
 		:return: Returns an instance of the PyExpression object which created this object.
 		"""
 		return self.__parent
+
+	def set_expression(self, new_expression: AST) -> None:
+		"""
+		Updates the current AST node.
+		"""
+		self.__expression = new_expression
 
 	def from_ast(self, expression: AST) -> "PyExpression":
 		"""

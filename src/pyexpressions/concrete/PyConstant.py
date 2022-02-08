@@ -5,7 +5,6 @@ from _ast import Constant
 from json import dumps
 from typing import Type, Union
 
-from src.compiler.Compiler import Compiler
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
@@ -36,7 +35,7 @@ class PyConstant(PyExpression):
 		:param constant: The Constant object to transpile.
 		"""
 		# Get the constant's value
-		val: Union[int, str, bool] = Compiler.get_attr(constant, 'value')
+		val: Union[int, str, bool] = constant.value
 
 		# Get the contant's value type
 		value_type: Type[Union[int, str, bool]] = type(val)
