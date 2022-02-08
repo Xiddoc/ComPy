@@ -17,7 +17,6 @@ from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 # therefore no ImportError will occur.
 if TYPE_CHECKING:
 	from src.pybuiltins.PyPortFunction import PyPortFunction
-	from src.compiler.Logger import Logger
 
 
 class PyExpression(metaclass=ABCMeta):
@@ -99,14 +98,6 @@ class PyExpression(metaclass=ABCMeta):
 		else:
 			# Otherwise, return normal transpilation
 			return transpiled_code
-
-	def get_logger(self) -> "Logger":
-		"""
-		Allows access to our (this instance's) Logger instance,
-		for requirements such as indentation and enhanced logging output.
-		Returns our instance of the Logger object.
-		"""
-		return self.__logger
 
 	def get_nearest_scope(self) -> Scope:
 		"""
