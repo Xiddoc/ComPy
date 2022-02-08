@@ -46,7 +46,7 @@ class PyFunctionDef(PyExpression):
 		"""
 		Transpile the operation to a string.
 		"""
-		return f"{self.transpile_header()}{{{''.join([expr.transpile() for expr in self.__code])}}}"
+		return self.transpile_header() + " {" + '\n'.join([expr.transpile() for expr in self.__code]) + "\n}"
 
 	def transpile_header(self) -> str:
 		"""
@@ -54,7 +54,7 @@ class PyFunctionDef(PyExpression):
 		"""
 		return f"{self.__return_type.transpile() if self.__return_type else 'void'}" \
 		       f" {self.__func_name}(" \
-		       f"{','.join([arg.transpile() for arg in self.__args])})"
+		       f"{', '.join([arg.transpile() for arg in self.__args])})"
 
 	# noinspection PyUnusedFunction
 	def get_scope(self) -> Scope:

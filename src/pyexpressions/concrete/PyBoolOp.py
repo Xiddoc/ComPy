@@ -29,7 +29,7 @@ class PyBoolOp(PyExpression):
 		"""
 		Transpile the operation to a string.
 		"""
-		return f"({self.__op_type.join([condition.transpile() for condition in self.__conditions])})"
+		return "(" + f" {self.__op_type} ".join([condition.transpile() for condition in self.__conditions]) + ")"
 
 	@staticmethod
 	def boolop_to_str(operator: boolop) -> str:

@@ -36,8 +36,8 @@ class PyCompare(PyExpression):
 		# left  comparators[0]  right[0]    comparators[1]  right[1] ...
 		# 5     <               6           <               7
 
-		return self.__left.transpile() + \
-			''.join([item[0] + item[1].transpile() for item in zip(self.__comparators, self.__right)])
+		return self.__left.transpile() + " " + \
+			' '.join([f"{item[0]} {item[1].transpile()}" for item in zip(self.__comparators, self.__right)])
 
 	@staticmethod
 	def comparator_to_str(comparator: cmpop) -> str:

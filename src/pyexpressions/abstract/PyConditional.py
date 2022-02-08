@@ -36,4 +36,5 @@ class PyConditional(PyExpression):
 		to *IMPLEMENT* the transpilation process. To actually transpile
 		the code, use the self.transpile method, which wraps this method.
 		"""
-		return f"{self.__prefix} ({self.__condition.transpile()}) {{{''.join([expr.transpile() for expr in self.__code])}}}"
+		return f"{self.__prefix} ({self.__condition.transpile()}) {{" \
+		       f"\n{''.join([expr.transpile() for expr in self.__code])}\n}} "
