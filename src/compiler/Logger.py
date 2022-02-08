@@ -1,6 +1,7 @@
 """
 Logging utilities and functions.
 """
+from typing import cast
 
 from src.compiler.Args import Args
 from src.pyexpressions.abstract.PyExpression import PyExpression
@@ -28,7 +29,8 @@ class Logger:
 			# Increment the count
 			indentation += 1
 			# Iterate to next parent
-			temp_expr = temp_expr.get_parent()
+			# Cast to PyExpression since the while loop condition has validated that
+			temp_expr = cast(PyExpression, temp_expr.get_parent())
 
 		# Set to field
 		self.__indentation = indentation

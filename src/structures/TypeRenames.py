@@ -16,6 +16,5 @@ if TYPE_CHECKING:
 # A function with any parameters, which returns any value
 AnyFunction = Callable[..., Any]
 
-# A PyExpression, class that extends a PyExpression, or PyPort
-# Used for referring to PyExpressions and their likes as a whole
+# A PyExpression or a class that extends it
 GENERIC_PYEXPR_TYPE = Union[Type["PyExpression"], "PyExpression"]
