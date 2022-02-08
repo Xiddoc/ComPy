@@ -50,8 +50,7 @@ class PyExpression(metaclass=ABCMeta):
 		self.__expression = expression
 		# Print logging statement for creation of node
 		self.__logger.log_tree_up(
-			f"Creating expression <{Util.get_name(expression)}>: "
-			f"{Compiler.unparse_escaped(expression) if isinstance(expression, AST) else '<Native Object>'} "
+			f"Creating expression <{Util.get_name(expression)}>: {Compiler.unparse_escaped(expression)} "
 		)
 
 	@abstractmethod
@@ -85,16 +84,9 @@ class PyExpression(metaclass=ABCMeta):
 		)
 		# If comments are enabled
 		if Args().get_args().comment:
-			# If the expression is an AST node
-			unparsed: str
-			if isinstance(self.get_expression(), AST):
-				# Unparse
-				unparsed = Compiler.unparse_escaped(cast(AST, self.get_expression()))
-			# Otherwise, it is a ported function
-			else:
-				unparsed = '<Native Object>'
-			# Return either way, with comments
-			return f"/* {unparsed} */ {transpiled_code}"
+			# Unparse the expression
+			# Return with comments
+			return f"/* {Compiler.unparse_escaped(self.get_expression())} */ {transpiled_code}"
 		else:
 			# Otherwise, return normal transpilation
 			return transpiled_code
