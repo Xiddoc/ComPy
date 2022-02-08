@@ -5,11 +5,7 @@ and clean the code base.
 """
 from _ast import AST
 from functools import reduce
-from typing import Union, Any, TYPE_CHECKING
-
-# Type hint classes without executing code
-if TYPE_CHECKING:
-	from src.pybuiltins.PyPortFunction import PyPortFunction
+from typing import Any
 
 
 class Util:
