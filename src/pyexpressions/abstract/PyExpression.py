@@ -172,11 +172,11 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		return self.__parent
 
-	def set_parent(self, new_parent: "PyExpression") -> None:
+	def set_expression(self, new_expression: AST) -> None:
 		"""
-		Updates the parent PyExpression node.
+		Updates the current AST node.
 		"""
-		self.__parent = new_parent
+		self.__expression = new_expression
 
 	def from_ast(self, expression: AST) -> "PyExpression":
 		"""
