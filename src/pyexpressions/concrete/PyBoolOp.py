@@ -4,7 +4,6 @@ Boolean operation.
 from _ast import BoolOp, boolop
 from typing import List
 
-from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE

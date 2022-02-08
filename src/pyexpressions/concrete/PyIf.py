@@ -4,7 +4,6 @@ Class for a conditional statement.
 from _ast import If
 from typing import Optional, List
 
-from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyConditional import PyConditional
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
