@@ -1,7 +1,6 @@
 """
 Logging utilities and functions.
 """
-from typing import cast
 
 from src.compiler.Args import Args
 from src.pyexpressions.abstract.PyExpression import PyExpression
@@ -23,17 +22,13 @@ class Logger:
 		temp_expr: PyExpression = py_expr
 		indentation: int = 0
 
-		# Keep iterating up the "parent node chain"
-		# PyPortFunction will throw an error as get_parent does not exist
-		# So make sure that the instance is a PyExpression
-		while isinstance(temp_expr.get_parent(), PyExpression) and temp_expr.get_parent() is not None:
-			# Cast parent to a PyExpression, since
-			# we have the guarantee that it is one
-			temp_parent: PyExpression = cast(PyExpression, temp_expr.get_parent())
+		# Keep iterating up the "parent node chain" until
+		# we hit the edge of the Module scope (outer layer)
+		while temp_expr.get_parent() is not None:
 			# Increment the count
 			indentation += 1
 			# Iterate to next parent
-			temp_expr = temp_parent
+			temp_expr = temp_expr.get_parent()
 
 		# Set to field
 		self.__indentation = indentation
