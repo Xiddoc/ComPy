@@ -3,7 +3,8 @@ Constants and other 'singleton' objects and maps/dicts.
 """
 from _ast import Constant, BinOp, operator, Add, Sub, Mult, AnnAssign, AST, Expr, Name, Call, FunctionDef, arg, \
 	Return, Assign, Module, IfExp, If, cmpop, Eq, Compare, Lt, Gt, BoolOp, NotEq, Or, And, boolop
-from typing import Dict, Type
+from json import dumps
+from typing import Dict, Type, Any, Callable
 
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyAnnAssign import PyAnnAssign
@@ -63,4 +64,11 @@ PY_SPECIAL_CHARS: Dict[str, str] = {
 	"\n": "\\n",
 	"\t": "\\t",
 	"\b": "\\b"
+}
+
+PY_CONSTANT_CONVERSION_FUNC: Dict[Any, Callable[..., str]] = {
+	int: str,
+	bool: str,
+	str: dumps,
+	None: lambda _: "null"
 }

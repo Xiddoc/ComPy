@@ -2,8 +2,7 @@
 Constant literal.
 """
 from _ast import Constant
-from json import dumps
-from typing import Type, Union
+from typing import Type, Any
 
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.structures.Errors import UnsupportedFeatureException
@@ -34,21 +33,20 @@ class PyConstant(PyExpression):
 		Transpiles a constant to it's string representation.
 		:param constant: The Constant object to transpile.
 		"""
+		from src.compiler.Constants import PY_CONSTANT_CONVERSION_FUNC
+
 		# Get the constant's value
-		val: Union[int, str, bool] = constant.value
+		constant_value: Any = constant.value
 
 		# Get the contant's value type
-		value_type: Type[Union[int, str, bool]] = type(val)
+		value_type: Type[Any] = type(constant_value)
 
-		# If the type is an integer or a boolean
-		if value_type == int or value_type == bool:
-			# Return the value
-			return str(val)
-
-		elif value_type == str:
-			# Encompass in quotes
-			return dumps(val)
-
+		# If we can convert it
+		if value_type in PY_CONSTANT_CONVERSION_FUNC:
+			# Then use the conversion function
+			# to turn it into a string format,
+			# where we can inject it into the output native code
+			return PY_CONSTANT_CONVERSION_FUNC[value_type](constant_value)
 		else:
 			# What type is that?
 			# We can't use that
