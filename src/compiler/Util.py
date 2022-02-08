@@ -18,7 +18,7 @@ class Util:
 	"""
 
 	@staticmethod
-	def get_attr(obj: Union[AST, "PyPortFunction"], attribute_path: str) -> Any:
+	def get_attr(obj: AST, attribute_path: str) -> Any:
 		"""
 		A function that recursively traverses down an "attribute path"
 		and retrieves the value at the end of the path.
@@ -48,7 +48,7 @@ class Util:
 		return reduce(getattr, attrs, obj)
 
 	@classmethod
-	def get_name(cls, obj: Union[AST, "PyPortFunction"]) -> str:
+	def get_name(cls, obj: AST) -> str:
 		"""
 		Retrieves the name of the AST node's class.
 		For example, instead of seeing: <ast.AnnAssign object at 0x000002CC7FE5A310>

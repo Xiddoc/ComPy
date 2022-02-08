@@ -25,13 +25,13 @@ class PyExpression(metaclass=ABCMeta):
 	PyExpression base class.
 	"""
 
-	__expression: Union[AST, "PyPortFunction"]
+	__expression: AST
 	__depends: Set[str]
 	__ported_depends: Set["PyPortFunction"]
 	__parent: Optional[GENERIC_PYEXPR_TYPE]
 
 	@abstractmethod
-	def __init__(self, expression: Union[AST, "PyPortFunction"], parent: Optional[GENERIC_PYEXPR_TYPE]):
+	def __init__(self, expression: AST, parent: Optional[GENERIC_PYEXPR_TYPE]):
 		"""
 		Constructor for the expression.
 		"""
@@ -160,7 +160,7 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		return self.__ported_depends
 
-	def get_expression(self) -> Union[AST, "PyPortFunction"]:
+	def get_expression(self) -> AST:
 		"""
 		:return: Returns the expression this instance is holding (was initialized with).
 		"""

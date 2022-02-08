@@ -20,7 +20,7 @@ class PyConditional(PyExpression):
 	__code: List[PyExpression]
 	__condition: PyExpression
 
-	def __init__(self, expression: Union[AST, "PyPortFunction"], prefix: str, parent: Optional[GENERIC_PYEXPR_TYPE]):
+	def __init__(self, expression: AST, prefix: str, parent: Optional[GENERIC_PYEXPR_TYPE]):
 		super().__init__(expression, parent)
 		# Set prefix to our prefix
 		self.__prefix = prefix
