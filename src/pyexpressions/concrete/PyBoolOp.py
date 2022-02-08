@@ -22,9 +22,9 @@ class PyBoolOp(PyExpression):
 	def __init__(self, expression: BoolOp, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
 		# Convert op to string
-		self.__op_type = self.boolop_to_str(Util.get_attr(expression, 'op'))
+		self.__op_type = self.boolop_to_str(expression.op)
 		# Store conditions
-		self.__conditions = [self.from_ast(condition) for condition in Util.get_attr(expression, 'values')]
+		self.__conditions = [self.from_ast(condition) for condition in expression.values]
 
 	def _transpile(self) -> str:
 		"""

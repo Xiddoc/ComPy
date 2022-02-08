@@ -22,11 +22,11 @@ class PyCompare(PyExpression):
 	def __init__(self, expression: Compare, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
 		# Translate the comparator to a string
-		self.__comparators = [self.comparator_to_str(comp) for comp in Util.get_attr(expression, 'ops')]
+		self.__comparators = [self.comparator_to_str(comp) for comp in expression.ops]
 		# Left side
-		self.__left = self.from_ast(Util.get_attr(expression, 'left'))
+		self.__left = self.from_ast(expression.left)
 		# Translate each expression
-		self.__right = [self.from_ast(expr) for expr in Util.get_attr(expression, 'comparators')]
+		self.__right = [self.from_ast(expr) for expr in expression.comparators]
 
 	def _transpile(self) -> str:
 		"""

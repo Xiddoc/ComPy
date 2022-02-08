@@ -24,7 +24,7 @@ class PyIf(PyConditional):
 		self.__elif = None
 		self.__else = None
 		# If there is an "or else"
-		orelse_list = Util.get_attr(expression, "orelse")
+		orelse_list = expression.orelse
 		if orelse_list:
 			# If this is a singular "If" expression,
 			# then this is meant to be an "elif" statement

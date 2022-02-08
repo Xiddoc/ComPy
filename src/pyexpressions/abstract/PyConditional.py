@@ -24,7 +24,7 @@ class PyConditional(PyExpression):
 		# Set prefix to our prefix
 		self.__prefix = prefix
 		# Copy each PyExpression to the body
-		self.__code = [self.from_ast(ast) for ast in expression.body]
+		self.__code = [self.from_ast(ast) for ast in Util.get_attr(expression, 'body')]
 		# Get condition
 		self.__condition = self.from_ast(Util.get_attr(expression, 'test'))
 

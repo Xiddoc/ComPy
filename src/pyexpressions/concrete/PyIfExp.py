@@ -20,11 +20,11 @@ class PyIfExp(PyExpression):
 
 	def __init__(self, expression: IfExp, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
-		# Convert op to string
-		self.__op_type = self.op_to_str(expression.op)
-		# Store sides
-		self.__left = self.from_ast(expression.left)
-		self.__right = self.from_ast(expression.right)
+		# # Convert op to string
+		# self.__op_type = self.op_to_str(expression.op)
+		# # Store sides
+		# self.__left = self.from_ast(expression.left)
+		# self.__right = self.from_ast(expression.right)
 
 	def _transpile(self) -> str:
 		"""

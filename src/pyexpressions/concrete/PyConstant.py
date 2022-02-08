@@ -36,7 +36,7 @@ class PyConstant(PyExpression):
 		:param constant: The Constant object to transpile.
 		"""
 		# Get the constant's value
-		val: Union[int, str, bool] = Util.get_attr(constant, 'value')
+		val: Union[int, str, bool] = constant.value
 
 		# Get the contant's value type
 		value_type: Type[Union[int, str, bool]] = type(val)
