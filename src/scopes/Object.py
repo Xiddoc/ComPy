@@ -9,8 +9,7 @@ from dataclasses import dataclass
 @dataclass
 class Object(metaclass=ABCMeta):
 	"""
-	Specifies basic attributes and traits (such as methods)
-	which all objects should have.
+	Specifies basic attributes which all objects should have.
 	
 	An example of this would be a name- all objects have names:
 	functions, variables, classes, etc. (Although you could argue
@@ -20,3 +19,6 @@ class Object(metaclass=ABCMeta):
 	"""
 
 	name: str
+
+	def __init__(self, name) -> None:
+		self.name = name

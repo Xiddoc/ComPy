@@ -33,21 +33,9 @@ class PyConstant(PyExpression):
 		Transpiles a constant to it's string representation.
 		:param constant: The Constant object to transpile.
 		"""
-		from src.compiler.Constants import PY_CONSTANT_CONVERSION_FUNC
-
 		# Get the constant's value
 		constant_value: Any = constant.value
 
 		# Get the contant's value type
 		value_type: Type[Any] = type(constant_value)
 
-		# If we can convert it
-		if value_type in PY_CONSTANT_CONVERSION_FUNC:
-			# Then use the conversion function
-			# to turn it into a string format,
-			# where we can inject it into the output native code
-			return PY_CONSTANT_CONVERSION_FUNC[value_type](constant_value)
-		else:
-			# What type is that?
-			# We can't use that
-			raise UnsupportedFeatureException(constant)

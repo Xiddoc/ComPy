@@ -3,7 +3,7 @@ Error classes, when needed for exceptions.
 """
 from _ast import AST
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, Union
 
 from src.compiler.Util import Util
 
@@ -45,12 +45,14 @@ class UnsupportedFeatureException(SyntaxError):
 	Examples (currently) include classes, for example. (Boo hoo, no OOP for you)
 	"""
 
-	feature: AST
+	feature: Union[AST, str]
 
 	def __str__(self) -> str:
 		# Local import to avoid import error
 		# Error text
-		return f"Python feature '{Util.get_name(self.feature)}' is not supported by the compiler."
+		return f"Python feature '" + \
+		       Util.get_name(self.feature) if isinstance(self.feature, AST) else self.feature + \
+		                                                                         "' is not supported by the compiler."
 
 
 @dataclass(frozen=True)
@@ -65,10 +67,9 @@ class InvalidArgumentError(ValueError):
 
 	def __str__(self) -> str:
 		# Error text
-		return \
-			f"Argument '{self.argument}' is not valid." \
-			if self.argument is not None else \
-			"Internal argument handling error encountered."
+		return f"Argument '{self.argument}' is not valid." \
+				if self.argument is not None else \
+				"Internal argument handling error encountered."
 
 
 @dataclass(frozen=True)
@@ -83,7 +84,6 @@ class InvalidTypeError(TypeError):
 
 	def __str__(self) -> str:
 		# Error text
-		return \
-			f"Could not use type '{self.given_type}' when type '{self.expected_type}' was expected." \
-			if self.given_type is not None else \
-			"Invalid types (or value of conflicting type) found in code."
+		return f"Could not use type '{self.given_type}' when type '{self.expected_type}' was expected." \
+				if self.given_type is not None else \
+				"Invalid types (or value of conflicting type) found in code."
