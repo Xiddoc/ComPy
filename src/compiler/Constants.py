@@ -66,9 +66,17 @@ PY_SPECIAL_CHARS: Dict[str, str] = {
 	"\b": "\\b"
 }
 
-PY_CONSTANT_CONVERSION_FUNC: Dict[Any, Callable[..., str]] = {
+PY_CONSTANT_CONVERSION_FUNC: Dict[Any, Callable[[Any], str]] = {
 	int: str,
 	bool: str,
 	str: dumps,
 	None: lambda _: "null"
+}
+
+PY_TYPES_TO_NATIVE_TYPES: Dict[str, str] = {
+	"int": "int",
+	"bool": "bool",
+	"str": "std::string",
+	"None": "null",
+	"Any": "auto"
 }
