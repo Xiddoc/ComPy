@@ -40,11 +40,11 @@ class PyFunctionDef(PyExpression):
 		# In which case in the transpilation stage, set as "void"
 		# Otherwise, use a proper name (int, str, etc.)
 		returns = Util.get_attr(expression, 'returns')
-		self.__return_type = None if type(returns) == Constant else PyName(returns, self)
+		self.__return_type = None if isinstance(returns, Constant) else PyName(returns, self)
 
 	def _transpile(self) -> str:
 		"""
-		Transpile the operation to a string.
+		Transpile the operation to a string.t
 		"""
 		return self.transpile_header() + " {" + '\n'.join([expr.transpile() for expr in self.__code]) + "\n}"
 
