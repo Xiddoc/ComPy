@@ -4,6 +4,7 @@ Variable class for scope handler.
 from dataclasses import dataclass
 
 from src.scopes.Object import Object
+from src.scopes.Type import Type
 
 
 @dataclass
@@ -18,7 +19,7 @@ class Variable(Object):
 	- The value is only relevant to runtime. Since this is a *static* compiler, we only perform static type checking.
 	"""
 
-	type: str
+	type: Type
 
 	def __hash__(self) -> int:
 		"""

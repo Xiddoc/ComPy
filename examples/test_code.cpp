@@ -1,8 +1,8 @@
 
 #include <iostream>
 
-int inc(int my_integer){return ++my_integer;}
 void print(auto print_string){std::cout<<print_string<<std::endl;}
+int inc(int my_integer){return ++my_integer;}
 
 int mul(int x, int y) {
 int result = (x * y);

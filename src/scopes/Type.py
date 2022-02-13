@@ -25,9 +25,11 @@ class Type(Object):
 	for now.
 	"""
 
-	def __init__(self, name) -> None:
+	def __init__(self, name: str) -> None:
 		super().__init__(name)
-		self.name = self.type_name_to_conversion_func(self.name)
+		# Get the conversion function
+		# Run it against the type name
+		self.name = self.type_name_to_conversion_func(self.name)(self.name)
 
 	def __hash__(self) -> int:
 		"""
@@ -53,11 +55,8 @@ class Type(Object):
 
 		# If we can convert it
 		if type_name in PY_CONSTANT_CONVERSION_FUNC:
-			# Then use the conversion function
-			# to turn it into a string format,
-			# where we can inject it into the output native code
+			# Then use the conversion table
 			return PY_CONSTANT_CONVERSION_FUNC[type_name]
 		else:
-			# What type is that?
 			# We can't use that
 			raise UnsupportedFeatureException(type_name)
