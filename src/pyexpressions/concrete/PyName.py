@@ -17,7 +17,7 @@ class PyName(PyExpression):
 	def __init__(self, expression: Name, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
 		# Store the variable name
-		self.__target = expression.id
+		self.__target = self.translate_builtin_name(expression.id)
 
 	def get_name(self) -> str:
 		"""
@@ -30,3 +30,23 @@ class PyName(PyExpression):
 		Transpiles the constant to a string.
 		"""
 		return self.__target
+
+	@staticmethod
+	def translate_builtin_name(object_name: str) -> str:
+		"""
+		Translates a builtin name to it's native name, if it exists.
+		Otherwise, returns the same name.
+
+		:param object_name: The name to translate.
+		"""
+		from src.compiler.Constants import PY_TYPES_TO_NATIVE_TYPES
+
+		# If we can convert it
+		if object_name in PY_TYPES_TO_NATIVE_TYPES:
+			# Then use the conversion function
+			# to turn it into a string format,
+			# where we can inject it into the output native code
+			return PY_TYPES_TO_NATIVE_TYPES[object_name]
+		else:
+			# Otherwise, return the name
+			return object_name
