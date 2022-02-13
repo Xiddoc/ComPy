@@ -4,6 +4,7 @@ Compiler class for managing variables and their types between scopes.
 from typing import Set, Optional
 
 from src.scopes.Object import Object
+from src.scopes.Type import Type
 from src.scopes.Variable import Variable
 from src.structures.Errors import VariableAlreadyDefinedError, VariableNotDefinedError
 
@@ -42,7 +43,7 @@ class Scope:
 		if not self.does_object_exist(var_name):
 			# Make a new Variable
 			# Add it to the object set
-			self.__objects.add(Variable(name=var_name, type=var_type))
+			self.__objects.add(Variable(name=var_name, type=Type(var_type)))
 		else:
 			# Otherwise, raise an exception.
 			# All variables have immutable types, and
