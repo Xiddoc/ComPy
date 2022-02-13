@@ -1,13 +1,13 @@
 """
 Native port for the Python builtin standard library.
 """
-from typing import Dict
+from typing import Dict, Any
 
 from src.pybuiltins.PyPortFunctionSignature import PyPortFunctionSignature
 
 
 # noinspection PyShadowingBuiltins
-def print(print_string: str) -> None:
+def print(print_string: Any) -> None:
 	"""
 	Prints a string to standard output.
 	:param print_string: The string to print.
