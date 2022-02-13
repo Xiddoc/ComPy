@@ -4,7 +4,6 @@ Compiler class for managing variables and their types between scopes.
 from typing import Set, Optional
 
 from src.scopes.Object import Object
-from src.scopes.Type import Type
 from src.scopes.Variable import Variable
 from src.structures.Errors import VariableAlreadyDefinedError, VariableNotDefinedError
 

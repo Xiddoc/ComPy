@@ -25,8 +25,6 @@ class Type(Object):
 	for now.
 	"""
 
-
-
 	def __init__(self, name) -> None:
 		super().__init__(name)
 		self.name = self.type_name_to_conversion_func(self.name)
