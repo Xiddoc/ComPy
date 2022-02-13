@@ -4,10 +4,10 @@ Call a function.
 from _ast import Call
 from typing import List
 
-from src.compiler.Compiler import Compiler
+from src.compiler.Util import Util
 from src.pybuiltins.PyPortFunction import PyPortFunction
-from src.pyexpressions.PyExpression import PyExpression
-from src.pyexpressions.PyName import PyName
+from src.pyexpressions.abstract.PyExpression import PyExpression
+from src.pyexpressions.concrete.PyName import PyName
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
@@ -22,7 +22,7 @@ class PyCall(PyExpression):
 	def __init__(self, expression: Call, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
 		# Convert to name
-		self.__func = PyName(Compiler.get_attr(expression, 'func'), self)
+		self.__func = PyName(Util.get_attr(expression, 'func'), self)
 
 		# For each argument
 		# Convert to argument object and store

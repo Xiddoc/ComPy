@@ -64,7 +64,7 @@ print("Successfully parsed!")
 
 # If there is an output file, then write there
 # Otherwise, add .cpp to the file and write there
-ioStream = Args().get_args().output if Args().get_args().output else open(Args().get_args().file + '.cpp', "w")
+ioStream = Args().get_args().output if Args().get_args().output else open(Args().get_args().file.name + '.cpp', "w")
 
 # Compile the file to a string
 print("Compiling the file...")

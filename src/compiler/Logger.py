@@ -4,7 +4,7 @@ Logging utilities and functions.
 from typing import cast
 
 from src.compiler.Args import Args
-from src.pyexpressions.PyExpression import PyExpression
+from src.pyexpressions.abstract.PyExpression import PyExpression
 
 
 class Logger:
@@ -23,17 +23,14 @@ class Logger:
 		temp_expr: PyExpression = py_expr
 		indentation: int = 0
 
-		# Keep iterating up the "parent node chain"
-		# PyPortFunction will throw an error as get_parent does not exist
-		# So make sure that the instance is a PyExpression
-		while isinstance(temp_expr.get_parent(), PyExpression) and temp_expr.get_parent() is not None:
-			# Cast parent to a PyExpression, since
-			# we have the guarantee that it is one
-			temp_parent: PyExpression = cast(PyExpression, temp_expr.get_parent())
+		# Keep iterating up the "parent node chain" until
+		# we hit the edge of the Module scope (outer layer)
+		while temp_expr.get_parent() is not None:
 			# Increment the count
 			indentation += 1
 			# Iterate to next parent
-			temp_expr = temp_parent
+			# Cast to PyExpression since the while loop condition has validated that
+			temp_expr = cast(PyExpression, temp_expr.get_parent())
 
 		# Set to field
 		self.__indentation = indentation
@@ -101,24 +98,3 @@ class Logger:
 		# Otherwise, if this is the root branch (layer zero)
 		# Make a newline to seperate from previous node tree.
 		return "\n"
-
-	@staticmethod
-	def escape(string: str) -> str:
-		"""
-		Escapes a Python string of newlines
-		and other formats in order to form
-		a consistent one-line string.
-
-		:param string: The string to escape.
-		:return: The escaped one-line string.
-		"""
-		# Import locally to avoid cyclic import error
-		from src.compiler.Constants import PY_SPECIAL_CHARS
-
-		# For each special character
-		for special_char, escaped_char in PY_SPECIAL_CHARS.items():
-			# Replace with the escaped version
-			string = string.replace(special_char, escaped_char)
-
-		# Return escaped version
-		return string

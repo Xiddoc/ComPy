@@ -2,12 +2,11 @@
 Constant literal.
 """
 from _ast import Constant
-from json import dumps
-from typing import Type, Union
+from typing import Any
 
-from src.compiler.Compiler import Compiler
-from src.pyexpressions.PyExpression import PyExpression
-from src.structures.Errors import UnsupportedFeatureException
+from src.compiler.Util import Util
+from src.pyexpressions.abstract.PyExpression import PyExpression
+from src.scopes.Type import Type
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
@@ -36,21 +35,10 @@ class PyConstant(PyExpression):
 		:param constant: The Constant object to transpile.
 		"""
 		# Get the constant's value
-		val: Union[int, str, bool] = Compiler.get_attr(constant, 'value')
+		constant_value: Any = constant.value
 
-		# Get the contant's value type
-		value_type: Type[Union[int, str, bool]] = type(val)
-
-		# If the type is an integer or a boolean
-		if value_type == int or value_type == bool:
-			# Return the value
-			return str(val)
-
-		elif value_type == str:
-			# Encompass in quotes
-			return dumps(val)
-
-		else:
-			# What type is that?
-			# We can't use that
-			raise UnsupportedFeatureException(constant)
+		# Get the contant's type
+		# Then, get the name of the type
+		# Try to look up the conversion function
+		# Then, call the function using the value itself
+		return Type.type_name_to_conversion_func(Util.get_name(constant_value))(constant_value)
