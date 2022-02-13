@@ -25,7 +25,7 @@ class Type(Object):
 	for now.
 	"""
 
-	def __init__(self, name) -> None:
+	def __init__(self, name: str) -> None:
 		super().__init__(name)
 		# Get the conversion function
 		# Run it against the type name
