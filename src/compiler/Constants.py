@@ -2,7 +2,7 @@
 Constants and other 'singleton' objects and maps/dicts.
 """
 from _ast import Constant, BinOp, operator, Add, Sub, Mult, AnnAssign, AST, Expr, Name, Call, FunctionDef, arg, \
-	Return, Assign, Module, IfExp, If, cmpop, Eq, Compare, Lt, Gt, BoolOp, NotEq, Or, And, boolop
+	Return, Assign, Module, IfExp, If, cmpop, Eq, Compare, Lt, Gt, BoolOp, NotEq, Or, And, boolop, Div, Mod, FloorDiv
 from json import dumps
 from typing import Dict, Type, Any, Callable
 
@@ -44,7 +44,10 @@ AST_EXPR_TO_PYEXPR: Dict[Type[AST], Type[PyExpression]] = {
 AST_OP_TO_STR: Dict[Type[operator], str] = {
 	Add: "+",
 	Sub: "-",
-	Mult: "*"
+	Mult: "*",
+	Div: "/",
+	FloorDiv: "//",
+	Mod: "%"
 }
 
 AST_COMPARATOR_TO_STR: Dict[Type[cmpop], str] = {
