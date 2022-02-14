@@ -10,7 +10,17 @@ from src.pybuiltins.PyPortFunctionSignature import PyPortFunctionSignature
 def print(print_string: Any) -> None:
 	"""
 	Prints a string to standard output.
+
 	:param print_string: The string to print.
+	"""
+
+
+def str_cast(obj: Any) -> str:
+	"""
+	Casts any object to a string, if possible.
+
+	:param obj: The object to cast.
+	:return: The string version of this object.
 	"""
 
 
@@ -38,6 +48,11 @@ objs: Dict[str, PyPortFunctionSignature] = {
 	"print": PyPortFunctionSignature(
 		function=print,
 		code="std::cout<<print_string<<std::endl;",
+		dependencies={"iostream"}
+	),
+	"str": PyPortFunctionSignature(
+		function=str_cast,
+		code="return std::to_string(obj);",
 		dependencies={"iostream"}
 	),
 	"inc": PyPortFunctionSignature(
