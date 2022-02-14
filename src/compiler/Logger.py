@@ -25,7 +25,7 @@ class Logger:
 
 		# Keep iterating up the "parent node chain" until
 		# we hit the edge of the Module scope (outer layer)
-		while temp_expr.get_parent() is not None:
+		while temp_expr.is_exterior_scope():
 			# Increment the count
 			indentation += 1
 			# Iterate to next parent
