@@ -36,7 +36,7 @@ to automatically install dependencies and such.
 Help menu:
 
 ```text
-compy.py [-h] [-v] [-c] [-o OUTPUT] [-g] [-d] file
+compy.py [-h] [-v] [-c] [-o OUTPUT] [-g] file
 
 positional arguments:
   file                  file to compile
@@ -48,7 +48,6 @@ optional arguments:
   -o OUTPUT, --output OUTPUT
                         the file to output the ASM code to
   -g, --compile         compiles the output to an executable
-  -d, --debug           enables debug mode for the compiler (adds mypy type checking, etc.)
 ```
 
 Basic usage (compiles the Python file `examples\testcode.py`
