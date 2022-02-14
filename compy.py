@@ -5,6 +5,8 @@ Takes command line arguments, parses them, and
 performs the logic related to it.
 """
 from argparse import ArgumentParser, FileType
+from platform import system
+from subprocess import Popen
 from typing import IO
 
 from mypy.api import run as type_check
@@ -77,3 +79,15 @@ print(f"Writing to output file '{ioStream.name}'...")
 ioStream.write(compiled_text)
 # Close the stream
 ioStream.close()
+
+# If compilation is enabled
+if Args().get_args().compile:
+    # Determine executable file name
+    exe_path: str
+    if system() == "Windows":
+        exe_path = ioStream.name + ".exe"
+    else:
+        exe_path = ioStream.name.replace(".", "_")
+    # Run G++ to compile the file
+    print(f"Compiling to file '{exe_path}'...")
+    Popen(["g++", "-o", exe_path, "-fconcepts", ioStream.name]).wait()
