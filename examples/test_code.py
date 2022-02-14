@@ -5,12 +5,6 @@ Lots of escaped characters!
 ' " ` ; / % @ { } \
 """
 
-# # Importing a local file
-# import examples.testimport
-#
-# # Incrementing variables from imported file
-# examples.testimport.n += 1
-
 # Assignment of type and value of constant or binary operation
 a: int = (1 + 2) * 3
 
@@ -25,8 +19,7 @@ c: int = b
 c = inc(c)
 
 # More built-in function calls
-print("The answer is... ")
-print(c)
+print("The answer is... " + str(c))
 
 
 # Function declaration
