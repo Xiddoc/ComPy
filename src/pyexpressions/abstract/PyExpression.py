@@ -164,6 +164,12 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		return self.__parent
 
+	def is_exterior_scope(self) -> bool:
+		"""
+		:return: Returns True if this is the outer-most scope.
+		"""
+		return self.get_parent() is None
+
 	def set_expression(self, new_expression: AST) -> None:
 		"""
 		Updates the current AST node.
