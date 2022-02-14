@@ -53,6 +53,12 @@ class PyPortFunction(PyExpression):
 			# Add them as an iterable
 			self.add_native_dependencies(func_sig.dependencies)
 
+	def get_func_name(self) -> str:
+		"""
+		:return: The native name of the ported function.
+		"""
+		return self.__func.get_func_name()
+
 	def add_native_dependencies(self, native_dependencies: Iterable[str]) -> None:
 		"""
 		Adds multiple native dependencies to the dependency list.
