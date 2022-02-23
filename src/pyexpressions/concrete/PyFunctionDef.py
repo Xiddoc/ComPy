@@ -52,7 +52,7 @@ class PyFunctionDef(PyExpression):
 		"""
 		Transpile the operation to a string.t
 		"""
-		return self.transpile_header() + " {" + '\n'.join([expr.transpile() for expr in self.__code]) + "\n}"
+		return self.transpile_header() + " {" + '\n'.join([expr.transpile() + ";" for expr in self.__code]) + "\n}"
 
 	def transpile_header(self) -> str:
 		"""
