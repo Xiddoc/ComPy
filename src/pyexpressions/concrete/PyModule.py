@@ -5,6 +5,7 @@ from _ast import Module
 from typing import List
 
 from src.pyexpressions.abstract.PyExpression import PyExpression
+from src.pyexpressions.concrete.PyExpr import PyExpr
 from src.pyexpressions.concrete.PyFunctionDef import PyFunctionDef
 from src.scopes.Scope import Scope
 
@@ -43,8 +44,10 @@ class PyModule(PyExpression):
 			if isinstance(pyexpr, PyFunctionDef):
 				# Add it to the function list
 				function_list.append(pyexpr.transpile())
-			else:
-				# Otherwise, add the code segment to the code section
+			elif not (isinstance(pyexpr, PyExpr) and pyexpr.is_empty_expression()):
+				# Otherwise, check that it's not a dead expression
+				# (Any expression which is not a PyExpr that is empty)
+				# Transpile and add to code segment
 				# https://stackoverflow.com/q/9997895/11985743
 				output_list.append(pyexpr.transpile() + ";")
 
