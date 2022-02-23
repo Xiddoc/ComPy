@@ -122,7 +122,14 @@ class PyExpression(metaclass=ABCMeta):
 
 		:param dependencies: A list of native dependencies that this object relies on.
 		"""
-		self.__depends.update(dependencies)
+		# If we are on the outer scope
+		if self.is_exterior_scope():
+			# Then add the dependencies
+			self.__depends.update(dependencies)
+		# Otherwise,
+		else:
+			# Recurse upwards (up the parent node, towards the outer scope)
+			self.get_parent().add_dependencies(dependencies)
 
 	def get_dependencies(self) -> Set[str]:
 		"""
@@ -136,7 +143,14 @@ class PyExpression(metaclass=ABCMeta):
 
 		:param ported_dependency: The ported dependency to add.
 		"""
-		self.__ported_depends.add(ported_dependency)
+		# If we are on the outer scope
+		if self.is_exterior_scope():
+			# Then add the dependencies
+			self.__ported_depends.add(ported_dependency)
+		# Otherwise,
+		else:
+			# Recurse upwards (up the parent node, towards the outer scope)
+			self.get_parent().add_ported_dependency(ported_dependency)
 
 	def add_ported_dependencies(self, ported_dependencies: Iterable["PyPortFunction"]) -> None:
 		"""
@@ -144,7 +158,14 @@ class PyExpression(metaclass=ABCMeta):
 
 		:param ported_dependencies: A list of ported dependencies that this object relies on.
 		"""
-		self.__ported_depends.update(ported_dependencies)
+		# If we are on the outer scope
+		if self.is_exterior_scope():
+			# Then add the dependencies
+			self.__ported_depends.update(ported_dependencies)
+		# Otherwise,
+		else:
+			# Recurse upwards (up the parent node, towards the outer scope)
+			self.get_parent().add_ported_dependencies(ported_dependencies)
 
 	def get_ported_dependencies(self) -> Set["PyPortFunction"]:
 		"""
@@ -164,6 +185,12 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		return self.__parent
 
+	def is_exterior_scope(self) -> bool:
+		"""
+		:return: Returns True if this is the outer-most scope.
+		"""
+		return self.get_parent() is None
+
 	def set_expression(self, new_expression: AST) -> None:
 		"""
 		Updates the current AST node.
@@ -182,9 +209,6 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		# Convert to PyExpression
 		obj: PyExpression = PyExpression.from_ast_statically(expression, self)
-		# Inherit / extend dependencies to this object
-		self.add_dependencies(obj.get_dependencies())
-		self.add_ported_dependencies(obj.get_ported_dependencies())
 		# Return new object
 		return obj
 

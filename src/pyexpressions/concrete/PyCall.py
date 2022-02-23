@@ -5,7 +5,6 @@ from _ast import Call
 from typing import List
 
 from src.compiler.Util import Util
-from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyName import PyName
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
@@ -27,18 +26,6 @@ class PyCall(PyExpression):
 		# For each argument
 		# Convert to argument object and store
 		self.__args = [self.from_ast(arg) for arg in expression.args]
-
-		# Import locally to avoid import error
-		from src.pybuiltins.builtins import objs
-
-		# Check if called function is a builtin module
-		if self.__func.get_name() in objs:
-			# Get function
-			native_func: PyPortFunction = PyPortFunction(objs[self.__func.get_name()], self)
-			# Inherit dependencies
-			self.add_dependencies(native_func.get_dependencies())
-			# Add as dependency
-			self.add_ported_dependency(native_func)
 
 	def _transpile(self) -> str:
 		"""

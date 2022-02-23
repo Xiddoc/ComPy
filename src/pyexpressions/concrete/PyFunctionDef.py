@@ -42,6 +42,12 @@ class PyFunctionDef(PyExpression):
 		returns = Util.get_attr(expression, 'returns')
 		self.__return_type = None if isinstance(returns, Constant) else PyName(returns, self)
 
+	def get_func_name(self) -> str:
+		"""
+		:return: The name of the referenced function.
+		"""
+		return self.__func_name
+
 	def _transpile(self) -> str:
 		"""
 		Transpile the operation to a string.t

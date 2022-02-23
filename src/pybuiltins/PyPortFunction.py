@@ -2,7 +2,7 @@
 Port a native function or object to Python.
 """
 from ast import Pass
-from typing import Iterable, Set, Any
+from typing import Any
 
 from src.pybuiltins.PyPortFunctionSignature import PyPortFunctionSignature
 from src.pyexpressions.abstract.PyExpression import PyExpression
@@ -21,8 +21,6 @@ class PyPortFunction(PyExpression):
 	__func: PyFunctionDef
 	# Native code as a string
 	__code: str
-	# A list of native dependencies
-	__native_depends: Set[str]
 
 	def __init__(self, func_sig: PyPortFunctionSignature, parent: GENERIC_PYEXPR_TYPE):
 		"""
@@ -51,21 +49,16 @@ class PyPortFunction(PyExpression):
 		# If there are any dependencies
 		if func_sig.dependencies is not None:
 			# Add them as an iterable
-			self.add_native_dependencies(func_sig.dependencies)
+			self.add_dependencies(func_sig.dependencies)
 
-	def add_native_dependencies(self, native_dependencies: Iterable[str]) -> None:
-		"""
-		Adds multiple native dependencies to the dependency list.
+		# Finally, add ourselves as a native dependency
+		self.add_ported_dependency(self)
 
-		:param native_dependencies: A list of native dependencies that this object relies on.
+	def get_func_name(self) -> str:
 		"""
-		self.__native_depends.update(native_dependencies)
-
-	def get_native_dependencies(self) -> Set[str]:
+		:return: The native name of the ported function.
 		"""
-		Returns the set of native dependencies that this port relies on.
-		"""
-		return self.__native_depends
+		return self.__func.get_func_name()
 
 	def _transpile(self) -> str:
 		"""
