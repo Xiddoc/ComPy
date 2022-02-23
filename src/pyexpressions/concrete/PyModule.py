@@ -45,7 +45,8 @@ class PyModule(PyExpression):
 				function_list.append(pyexpr.transpile())
 			else:
 				# Otherwise, add the code segment to the code section
-				output_list.append(pyexpr.transpile())
+				# https://stackoverflow.com/q/9997895/11985743
+				output_list.append(pyexpr.transpile() + ";")
 
 		# Format each part of the output,
 		# then format each segment into the template string,
