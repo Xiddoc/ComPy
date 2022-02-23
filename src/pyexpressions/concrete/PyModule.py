@@ -29,6 +29,8 @@ class PyModule(PyExpression):
 		"""
 		Transpiles the module to a native string.
 		"""
+		from src.compiler.Constants import OUTPUT_CODE_TEMPLATE
+
 		# Make lists
 		output_list: List[str] = []
 		function_list: List[str] = []
@@ -55,26 +57,20 @@ class PyModule(PyExpression):
 		transpiled_code: str = "\n".join(output_list)
 
 		# Inject native dependencies (transpile each one)
-		native_object_code: str = "\n".join([
+		ported_code: str = "\n".join([
 			native_dependency.transpile() for native_dependency in self.get_ported_dependencies()
 		])
 
 		# For each dependency, insert the dependency as a string
-		native_dependency_code: str = "\n".join([f"#include <{dependency}>" for dependency in self.get_dependencies()])
+		dependency_code: str = "\n".join([f"#include <{dependency}>" for dependency in self.get_dependencies()])
 
 		# Merge the output, then return as a string
-		return f"""
-{native_dependency_code}
-
-{native_object_code}
-
-{transpiled_funcs}
-
-int main() {{
-	/* Transpiled with ComPy */
-	{transpiled_code}
-	return 0;
-}}"""
+		return OUTPUT_CODE_TEMPLATE.format(
+			dependency_code=dependency_code,
+			ported_code=ported_code,
+			transpiled_funcs=transpiled_funcs,
+			transpiled_code=transpiled_code
+		)
 
 	# noinspection PyUnusedFunction
 	def get_scope(self) -> Scope:

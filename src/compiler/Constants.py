@@ -83,3 +83,17 @@ PY_TYPES_TO_NATIVE_TYPES: Dict[str, str] = {
 	"None": "null",
 	"Any": "auto"
 }
+
+OUTPUT_CODE_TEMPLATE: str = """
+{dependency_code}
+
+{ported_code}
+
+{transpiled_funcs}
+
+int main() {{
+	/* Transpiled with ComPy */
+	{transpiled_code}
+	return 0;
+}}
+"""
