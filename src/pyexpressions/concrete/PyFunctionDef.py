@@ -9,6 +9,7 @@ from typing import List, cast, Optional, Any
 from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyArg import PyArg
+from src.pyexpressions.concrete.PyExpr import PyExpr
 from src.pyexpressions.concrete.PyName import PyName
 from src.scopes.Scope import Scope
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE, AnyFunction
@@ -52,7 +53,10 @@ class PyFunctionDef(PyExpression):
 		"""
 		Transpile the operation to a string.t
 		"""
-		return self.transpile_header() + " {" + '\n'.join([expr.transpile() + ";" for expr in self.__code]) + "\n}"
+		return self.transpile_header() + " {\n" + '\n'.join([
+			expr.transpile() + ";" for expr in self.__code \
+			if not (isinstance(expr, PyExpr) and expr.is_empty_expression())
+		]) + "\n}"
 
 	def transpile_header(self) -> str:
 		"""

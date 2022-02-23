@@ -1,11 +1,11 @@
 
 #include <iostream>
 
-int inc(int my_integer){return ++my_integer;}
 void print(auto print_string){std::cout<<print_string<<std::endl;}
+int inc(int my_integer){return ++my_integer;}
 std::string str_cast(auto obj){return std::to_string(obj);}
 
-int mul(int x, int y) {"\n\tTest function.\n\t";
+int mul(int x, int y) {
 int result = (x * y);
 return result;
 }
