@@ -4,7 +4,6 @@ Python module.
 from _ast import Module
 from typing import List, Set
 
-from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyFunctionDef import PyFunctionDef
 from src.scopes.Scope import Scope
@@ -34,16 +33,14 @@ class PyModule(PyExpression):
 		output_list: List[str] = []
 		function_list: List[str] = []
 		depends_list: Set[str] = set()
-		native_depends_list: Set[PyPortFunction] = set()
 
-		# For each section of the code
+		# For each expression, we will compile them
+		# However, we will separate this into "is a function"
+		# or "is not", so that we can put all the function
+		# definitions at the top of the output code.
 		for pyexpr in self.__body:
-			# Add dependencies to the output
-			depends_list.update(pyexpr.get_dependencies())
-			# Add native dependencies to the output
-			native_depends_list.update(pyexpr.get_ported_dependencies())
 			# Transpile each segment and add it to the output
-			# If the segment is a function defenition
+			# If the segment is a function definition
 			if isinstance(pyexpr, PyFunctionDef):
 				# Add it to the function list
 				function_list.append(pyexpr.transpile())
@@ -58,14 +55,13 @@ class PyModule(PyExpression):
 		# Join the transpiled code
 		transpiled_code: str = "\n".join(output_list)
 
-		# Inject native depdencies (transpile each one)
-		native_object_code: str = "\n".join([native_dependency.transpile() for native_dependency in native_depends_list])
+		# Inject native dependencies (transpile each one)
+		native_object_code: str = "\n".join([
+			native_dependency.transpile() for native_dependency in self.get_ported_dependencies()
+		])
 
-		# Get a UNIQUE SET of the dependcies (imports) to add to the output code
-		# For each native dependency
-		for native_dependency in native_depends_list:
-			# Add native dependencies of PyPorts
-			depends_list.update(native_dependency.get_native_dependencies())
+		# Get a unique set of dependencies (imports) to add to the output code
+		depends_list.update(self.get_dependencies())
 
 		# For each dependency, insert the dependency as a string
 		native_dependency_code: str = "\n".join([f"#include <{dependency}>" for dependency in depends_list])
