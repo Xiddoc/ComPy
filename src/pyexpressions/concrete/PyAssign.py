@@ -28,4 +28,4 @@ class PyAssign(PyExpression):
 		"""
 		Transpile the operation to a string.
 		"""
-		return f"{self.__target} = {self.__value.transpile()};"
+		return f"{self.__target} = {self.__value.transpile()}"
