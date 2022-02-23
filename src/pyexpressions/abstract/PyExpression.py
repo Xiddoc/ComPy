@@ -207,10 +207,8 @@ class PyExpression(metaclass=ABCMeta):
 		:param expression: The expression to convert.
 		:return: A PyExpression object of the matching type.
 		"""
-		# Convert to PyExpression
-		obj: PyExpression = PyExpression.from_ast_statically(expression, self)
-		# Return new object
-		return obj
+		# Convert to PyExpression and return
+		return PyExpression.from_ast_statically(expression, self)
 
 	@staticmethod
 	def from_ast_statically(expression: AST, parent: Optional[GENERIC_PYEXPR_TYPE]) -> "PyExpression":
