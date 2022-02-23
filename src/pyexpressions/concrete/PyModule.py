@@ -31,14 +31,12 @@ class PyModule(PyExpression):
 		"""
 		from src.compiler.Constants import OUTPUT_CODE_TEMPLATE
 
-		# Make lists
-		output_list: List[str] = []
-		function_list: List[str] = []
-
 		# For each expression, we will compile them
 		# However, we will separate this into "is a function"
 		# or "is not", so that we can put all the function
 		# definitions at the top of the output code.
+		output_list: List[str] = []
+		function_list: List[str] = []
 		for pyexpr in self.__body:
 			# Transpile each segment and add it to the output
 			# If the segment is a function definition
@@ -49,27 +47,23 @@ class PyModule(PyExpression):
 				# Otherwise, add the code segment to the code section
 				output_list.append(pyexpr.transpile())
 
-		# Flatten the current code
-		# Start by transpiling the functions
-		transpiled_funcs: str = "\n".join(function_list)
-
-		# Join the transpiled code
-		transpiled_code: str = "\n".join(output_list)
-
-		# Inject native dependencies (transpile each one)
-		ported_code: str = "\n".join([
-			native_dependency.transpile() for native_dependency in self.get_ported_dependencies()
-		])
-
-		# For each dependency, insert the dependency as a string
-		dependency_code: str = "\n".join([f"#include <{dependency}>" for dependency in self.get_dependencies()])
-
-		# Merge the output, then return as a string
+		# Format each part of the output,
+		# then format each segment into the template string,
+		# then return it all as a string.
 		return OUTPUT_CODE_TEMPLATE.format(
-			dependency_code=dependency_code,
-			ported_code=ported_code,
-			transpiled_funcs=transpiled_funcs,
-			transpiled_code=transpiled_code
+			# For each dependency, insert the dependency as a string
+			dependency_code="\n".join([f"#include <{dependency}>" for dependency in self.get_dependencies()]),
+
+			# Inject native dependencies (transpile each one)
+			ported_code="\n".join([
+				native_dependency.transpile() for native_dependency in self.get_ported_dependencies()
+			]),
+
+			# Flatten the current code
+			transpiled_funcs="\n".join(function_list),
+
+			# Join the transpiled code
+			transpiled_code="\n".join(output_list)
 		)
 
 	# noinspection PyUnusedFunction
