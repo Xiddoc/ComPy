@@ -2,7 +2,7 @@
 Python module.
 """
 from _ast import Module
-from typing import List, Set
+from typing import List
 
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyFunctionDef import PyFunctionDef
@@ -32,7 +32,6 @@ class PyModule(PyExpression):
 		# Make lists
 		output_list: List[str] = []
 		function_list: List[str] = []
-		depends_list: Set[str] = set()
 
 		# For each expression, we will compile them
 		# However, we will separate this into "is a function"
@@ -60,11 +59,8 @@ class PyModule(PyExpression):
 			native_dependency.transpile() for native_dependency in self.get_ported_dependencies()
 		])
 
-		# Get a unique set of dependencies (imports) to add to the output code
-		depends_list.update(self.get_dependencies())
-
 		# For each dependency, insert the dependency as a string
-		native_dependency_code: str = "\n".join([f"#include <{dependency}>" for dependency in depends_list])
+		native_dependency_code: str = "\n".join([f"#include <{dependency}>" for dependency in self.get_dependencies()])
 
 		# Merge the output, then return as a string
 		return f"""
