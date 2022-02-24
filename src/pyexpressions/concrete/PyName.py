@@ -31,7 +31,7 @@ class PyName(PyExpression):
 			if PyPortManager().is_loaded(expression.id):
 				# Then retrieve it from the manager
 				# Update target name (we will use the native function name)
-				self.__target = PyPortManager().call_port(expression.id, self).get_func_name()
+				self.__target = PyPortManager().call_port(expression.id, self).get_function_name()
 			else:
 				# Otherwise, use the function name directly.
 				# This line should be equivalent to using expression.id

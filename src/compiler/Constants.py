@@ -87,6 +87,8 @@ PY_TYPES_TO_NATIVE_TYPES: Dict[str, str] = {
 OUTPUT_CODE_TEMPLATE: str = """
 {dependency_code}
 
+{ported_headers}
+
 {ported_code}
 
 {transpiled_funcs}
