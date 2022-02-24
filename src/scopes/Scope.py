@@ -6,7 +6,7 @@ from typing import Set, Optional
 from src.scopes.Object import Object
 from src.scopes.Type import Type
 from src.scopes.Variable import Variable
-from src.structures.Errors import VariableAlreadyDefinedError, VariableNotDefinedError
+from src.structures.Errors import ObjectAlreadyDefinedError, ObjectNotDefinedError
 
 
 class Scope:
@@ -48,7 +48,7 @@ class Scope:
 			# Otherwise, raise an exception.
 			# All variables have immutable types, and
 			# currently we do not support freeing objects.
-			raise VariableAlreadyDefinedError(var_name)
+			raise ObjectAlreadyDefinedError(var_name)
 
 	def get_object(self, object_name: str) -> Object:
 		"""
@@ -65,7 +65,7 @@ class Scope:
 				return obj
 		else:
 			# Otherwise, if no variables were found
-			raise VariableNotDefinedError(object_name)
+			raise ObjectNotDefinedError(object_name)
 
 	def get_objects(self) -> Set[Object]:
 		"""

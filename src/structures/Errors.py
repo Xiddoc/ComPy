@@ -9,33 +9,33 @@ from src.compiler.Util import Util
 
 
 @dataclass(frozen=True)
-class VariableAlreadyDefinedError(NameError):
+class ObjectAlreadyDefinedError(NameError):
 	"""
-	For our compilation scheme, variables can only be defined once and must be given a type hint.
-	If you try to type hint the same variable 2 times, this should raise an error.
-	From this, you should also realize that variable types are immutable and cannot be freed.
+	For our compilation scheme, objects can only be defined once and must be given a type hint.
+	If you try to type hint the same object 2 times, this should raise an error.
+	From this, you should also realize that object types are immutable and cannot be freed.
 	"""
 
-	variable_name: str
+	object_name: str
 
 	def __str__(self) -> str:
 		# Error text
-		return f"You cannot redefine variable '{self.variable_name}' as it is already initialized."
+		return f"You cannot redefine object '{self.object_name}' as it is already initialized."
 
 
 @dataclass(frozen=True)
-class VariableNotDefinedError(NameError):
+class ObjectNotDefinedError(NameError):
 	"""
-	As stated in VariableAlreadyDefinedError, a variable must have an explicit type hint the first time it is used.
+	As stated in ObjectAlreadyDefinedError, a object must have an explicit type hint the first time it is used.
 	This is referred to as "defining" or "initializing".
-	If a variable is referenced without being defined, then the compiler should throw this error.
+	If a object is referenced without being defined, then the compiler should throw this error.
 	"""
 
-	variable_name: str
+	object_name: str
 
 	def __str__(self) -> str:
 		# Error text
-		return f"Variable '{self.variable_name}' was not initialized yet."
+		return f"Object '{self.object_name}' was not initialized yet."
 
 
 @dataclass(frozen=True)

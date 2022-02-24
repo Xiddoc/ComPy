@@ -9,7 +9,7 @@ from src.compiler.Args import Args
 from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.pybuiltins.PyPortFunctionSignature import PyPortFunctionSignature
 from src.pybuiltins.builtins_port import ported_objs
-from src.structures.Errors import InvalidArgumentError, VariableNotDefinedError
+from src.structures.Errors import InvalidArgumentError, ObjectNotDefinedError
 from src.structures.Singleton import Singleton
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
@@ -52,7 +52,7 @@ class PyPortManager(metaclass=Singleton):
 
 		else:
 			# Otherwise, throw an error
-			raise VariableNotDefinedError(ported_name)
+			raise ObjectNotDefinedError(ported_name)
 
 	def __load_linked_libraries(self) -> None:
 		"""
