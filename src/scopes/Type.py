@@ -25,12 +25,6 @@ class Type(Object):
 	for now.
 	"""
 
-	def __init__(self, name: str) -> None:
-		super().__init__(name)
-		# Get the conversion function
-		# Run it against the type name
-		self.name = self.type_name_to_conversion_func(self.name)(self.name)
-
 	def __hash__(self) -> int:
 		"""
 		Equality between objects is based on name.
@@ -40,23 +34,3 @@ class Type(Object):
 		then when we == them, they will still show that they are the same object.
 		"""
 		return hash(self.name)
-
-	@staticmethod
-	def type_name_to_conversion_func(type_name: str) -> Callable[[Any], str]:
-		"""
-		Leverages the constant map to take a native type
-		name and turn it into it's conversion function.
-		The conversion function takes
-
-		:param type_name: The name of the type to look up.
-		:return: Returns the appropriate conversion function.
-		"""
-		from src.compiler.Constants import PY_CONSTANT_CONVERSION_FUNC
-
-		# If we can convert it
-		if type_name in PY_CONSTANT_CONVERSION_FUNC:
-			# Then use the conversion table
-			return PY_CONSTANT_CONVERSION_FUNC[type_name]
-		else:
-			# We can't use that
-			raise UnsupportedFeatureException(type_name)
