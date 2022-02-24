@@ -22,6 +22,10 @@ c = add(c, b)
 # Built-in function calls
 print("The answer is... " + str(c))
 
+user_input: str = input("Give me input: ")
+
+print("Testing input: " + user_input)
+
 
 # Function declaration
 def mul(x: int, y: int) -> int:
