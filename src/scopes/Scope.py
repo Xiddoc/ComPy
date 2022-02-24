@@ -40,16 +40,8 @@ class Scope:
 		:param var_name: The name of the variable.
 		:param var_type: The type of the variable.
 		"""
-		# If variable does not exist
-		if not self.does_object_exist(var_name):
-			# Make a new Variable
-			# Add it to the object set
-			self.__objects.add(Variable(name=var_name, type=Type(var_type)))
-		else:
-			# Otherwise, raise an exception.
-			# All variables have immutable types, and
-			# currently we do not support freeing objects.
-			raise ObjectAlreadyDefinedError(var_name)
+		# Create the Object instance and declare it
+		self.__declare_object(Variable(name=var_name, type=Type(var_type)))
 
 	def declare_function(self, func_name: str, func_return_type: str) -> None:
 		"""
@@ -58,15 +50,24 @@ class Scope:
 		:param func_name: The name of the function.
 		:param func_return_type: The return type of the function.
 		"""
+		# Create the Object instance and declare it
+		self.__declare_object(Function(name=func_name, return_type=Type(func_return_type)))
+
+	def __declare_object(self, obj_instance: Object) -> None:
+		"""
+		Declare an object by adding it to the handler.
+
+		:param obj_instance: The Object instance to add to the handler.
+		"""
 		# If the object does not exist
-		if not self.does_object_exist(func_name):
+		if not self.does_object_exist(obj_instance.name):
 			# Make a new Object instance, then add it to the object set
-			self.__objects.add(Function(name=func_name, return_type=Type(func_return_type)))
+			self.__objects.add(obj_instance)
 		else:
 			# Otherwise, raise an exception.
 			# All objects have immutable types, and
 			# currently we do not support freeing objects.
-			raise ObjectAlreadyDefinedError(func_name)
+			raise ObjectAlreadyDefinedError(obj_instance.name)
 
 	def get_object(self, object_name: str) -> Object:
 		"""
