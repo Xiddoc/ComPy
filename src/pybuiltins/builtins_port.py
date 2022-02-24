@@ -45,16 +45,6 @@ def int_cast(obj: str) -> str:
 	"""
 
 
-# noinspection PyUnusedLocal
-def inc(my_integer: int) -> int:
-	"""
-	Increments an integer.
-
-	:param my_integer: The integer to increment.
-	:return: The incremented value.
-	"""
-
-
 # noinspection PyShadowingBuiltins,PyUnusedLocal
 def pow(value: int, exponent: int) -> int:
 	"""
@@ -86,10 +76,6 @@ ported_objs: Dict[str, PyPortFunctionSignature] = {
 		function=int_cast,
 		code="return std::stoi(obj);",
 		dependencies={"iostream"}
-	),
-	"inc": PyPortFunctionSignature(
-		function=inc,
-		code="return ++my_integer;"
 	),
 	"pow": PyPortFunctionSignature(
 		function=pow,
