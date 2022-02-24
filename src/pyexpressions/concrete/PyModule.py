@@ -2,10 +2,10 @@
 Python module.
 """
 from _ast import Module
-from typing import List, Set
+from typing import List
 
-from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.pyexpressions.abstract.PyExpression import PyExpression
+from src.pyexpressions.concrete.PyExpr import PyExpr
 from src.pyexpressions.concrete.PyFunctionDef import PyFunctionDef
 from src.scopes.Scope import Scope
 
@@ -30,59 +30,50 @@ class PyModule(PyExpression):
 		"""
 		Transpiles the module to a native string.
 		"""
-		# Make lists
+		from src.compiler.Constants import OUTPUT_CODE_TEMPLATE
+
+		# For each expression, we will compile them
+		# However, we will separate this into "is a function"
+		# or "is not", so that we can put all the function
+		# definitions at the top of the output code.
 		output_list: List[str] = []
 		function_list: List[str] = []
-		depends_list: Set[str] = set()
-		native_depends_list: Set[PyPortFunction] = set()
-
-		# For each section of the code
 		for pyexpr in self.__body:
-			# Add dependencies to the output
-			depends_list.update(pyexpr.get_dependencies())
-			# Add native dependencies to the output
-			native_depends_list.update(pyexpr.get_ported_dependencies())
 			# Transpile each segment and add it to the output
-			# If the segment is a function defenition
+			# If the segment is a function definition
 			if isinstance(pyexpr, PyFunctionDef):
 				# Add it to the function list
 				function_list.append(pyexpr.transpile())
-			else:
-				# Otherwise, add the code segment to the code section
-				output_list.append(pyexpr.transpile())
+			elif not (isinstance(pyexpr, PyExpr) and pyexpr.is_empty_expression()):
+				# Otherwise, check that it's not a dead expression
+				# (Any expression which is not a PyExpr that is empty)
+				# Transpile and add to code segment
+				# https://stackoverflow.com/q/9997895/11985743
+				output_list.append(pyexpr.transpile() + ";")
 
-		# Flatten the current code
-		# Start by transpiling the functions
-		transpiled_funcs: str = "\n".join(function_list)
+		# Format each part of the output,
+		# then format each segment into the template string,
+		# then return it all as a string.
+		return OUTPUT_CODE_TEMPLATE.format(
+			# For each dependency, insert the dependency as a string
+			dependency_code="\n".join([f"#include <{dependency}>" for dependency in self.get_dependencies()]),
 
-		# Join the transpiled code
-		transpiled_code: str = "\n".join(output_list)
+			# Inject native dependency headers
+			ported_headers="\n".join([
+				port.get_interface_function().transpile_header() + ";" for port in self.get_ported_dependencies()
+			]),
 
-		# Inject native depdencies (transpile each one)
-		native_object_code: str = "\n".join([native_dependency.transpile() for native_dependency in native_depends_list])
+			# Inject native dependency bodies
+			ported_code="\n".join([
+				port.transpile() for port in self.get_ported_dependencies()
+			]),
 
-		# Get a UNIQUE SET of the dependcies (imports) to add to the output code
-		# For each native dependency
-		for native_dependency in native_depends_list:
-			# Add native dependencies of PyPorts
-			depends_list.update(native_dependency.get_native_dependencies())
+			# Flatten the current code
+			transpiled_funcs="\n".join(function_list),
 
-		# For each dependency, insert the dependency as a string
-		native_dependency_code: str = "\n".join([f"#include <{dependency}>" for dependency in depends_list])
-
-		# Merge the output, then return as a string
-		return f"""
-{native_dependency_code}
-
-{native_object_code}
-
-{transpiled_funcs}
-
-int main() {{
-	/* Transpiled with ComPy */
-	{transpiled_code}
-	return 0;
-}}"""
+			# Join the transpiled code
+			transpiled_code="\n".join(output_list)
+		)
 
 	# noinspection PyUnusedFunction
 	def get_scope(self) -> Scope:

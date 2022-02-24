@@ -31,15 +31,15 @@ python -m pip install -r requirements.txt
 In future versions, we will hopefully have a `setup.py` file
 to automatically install dependencies and such.
 
-## Usage
+## Basic Usage
 
-Help menu:
+Help menu, describes all command-line arguments:
 
 ```text
-compy.py [-h] [-v] [-c] [-o OUTPUT] [-d] file
+usage: compy.py [-h] [-v] [-c] [-o OUTPUT] [-g] [-l LINKS] file
 
 positional arguments:
-  file                  file to compile
+  file                  the file to compile
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -47,19 +47,33 @@ optional arguments:
   -c, --comment         adds verbose comments to the output file
   -o OUTPUT, --output OUTPUT
                         the file to output the ASM code to
-  -d, --debug           enables debug mode for the compiler (adds mypy type checking, etc.)
+  -g, --compile         compiles the output to an executable
+  -l LINKS, --links LINKS
+                        links ported libraries to the executable (seperate with the ; character)
 ```
 
-Basic usage (compiles the Python file `examples\testcode.py`
-and outputs the C++ code to the file `examples\testcode.cpp`):
+Basic compilation (transpilation) of Python code:
 
 ```cmd
-python compy.py -o examples\testcode.cpp examples\testcode.py
+python compy.py examples\test_code.py
+```
+
+Compile the Python code in `examples\test_code.py` and output
+the C++ code to the file `examples\test_code.cpp`:
+
+```cmd
+python compy.py -o examples\test_code.cpp examples\test_code.py
+```
+
+Compile the Python code to a native executable (requires you to have `g++` installed!):
+
+```cmd
+python compy.py -g examples\test_code.py
 ```
 
 ## Advanced Usage
 
-In this section, I will primarily explain how "ported objects"
+This section will primarily explain how "ported objects"
 work, and how you can implement your own. Let's start with the
 defenition- in ComPy, a "ported object" (or _"port"_, as it
 might be called) is a snippet of code in the native langauge
@@ -76,56 +90,54 @@ simply allows for the transpiler to link these objects together
 again when it's time to transpile back to native code).
 
 That's a lot of explanation- let's see some examples. If you
-view `src/pybuiltins/builtins.py`, you'll see the built-in
-objects that ComPy has set up for the Python environment.
-One of these objects is an example increment function called
-`inc`.
+view `examples/example_port.py`, you'll see an example ported
+library. One of the objects in that library is an example
+"addition" operator function called `add`:
 
 ```python
-def inc(my_integer: int) -> int:
+def add(number_one: int, number_two: int) -> int:
 	"""
-	Increments an integer.
-
-	:param my_integer: The integer to increment.
-	:return: The incremented value.
+	Adds two numbers.
 	"""
 ```
 
-A few lines down, I then add it to the object storage like so:
+A few lines down, we then add it to the object storage like so:
 
 ```python
-objs = {
-    ...
+ported_objs: Dict[str, PyPortFunctionSignature] = {
 
-    "inc": PyPortFunctionSignature(
-        function=inc,
-        code="return ++my_integer;"
-    )
+	"add": PyPortFunctionSignature(
+		function=add,
+		code="return number_one + number_two;"
+	)
 
-    ...
 }
 ```
 
-In the above snippet, I assign a Python object with a name
-of `inc` to a ported function. This ported function has a
+In the above snippet, we assigned a Python function with the
+name `add` to a ported function. This ported function has a
 reference to the function we defined earlier, also named
-`inc` (in the argument `function`). Now, ComPy knows the
+`add` (in the `function` parameter). Now, ComPy knows the
 function's signature (arguments and return type). Finally,
 the last thing we need to specify is what the ported
 function does in native code. We specify this in the `code`
 parameter, by writing the code that the function will run.
 
-Finally, in the test script `examples\test_code.py`, I call
+Finally, in the test script `examples\test_code.py`, we call
 the function (the line above it is so that PyCharm ignores it,
-as I am technically calling a function that does not exist):
+as we am technically calling a function that does not exist):
 
 ```python
 # noinspection PyUnresolvedReferences
-c = inc(c)
+c = add(c, b)
 ```
 
 Now, when this code segment is compiled, ComPy spits out the
 following snippet to the output (the valid C++ code equivalent):
 ```cpp
-c = inc(c);
+int add(int number_one, int number_two){return number_one + number_two;}
+
+...
+
+c = add(c,b);
 ```

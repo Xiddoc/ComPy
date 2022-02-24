@@ -16,14 +16,31 @@ class PyName(PyExpression):
 
 	def __init__(self, expression: Name, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
-		# Store the variable name
-		self.__target = self.translate_builtin_name(expression.id)
+		# Import locally to avoid import error
+		from src.pyexpressions.concrete.PyCall import PyCall
+		from src.pybuiltins.PyPortManager import PyPortManager
 
-	def get_name(self) -> str:
-		"""
-		Return the name of the object.
-		"""
-		return self.__target
+		# Store the object name to a class variable
+		# If this was used in a PyCall, then don't try to
+		# convert it since it's not a type, it's a function.
+		# For example:
+		# first_var: str = "Hello"  # Name used as type annotation
+		# second_var = str(10)  # Name used as type conversion/cast function
+		if isinstance(parent, PyCall):
+			# Check if this is a ported and linked object
+			if PyPortManager().is_loaded(expression.id):
+				# Then retrieve it from the manager
+				# Update target name (we will use the native function name)
+				self.__target = PyPortManager().call_port(expression.id, self).get_function_name()
+			else:
+				# Otherwise, use the function name directly.
+				# This line should be equivalent to using expression.id
+				# directly, although the Scope handler will throw an
+				# error if it can't retrieve the object (it does not exist).
+				self.__target = self.get_nearest_scope().get_object(expression.id).name
+		else:
+			# Otherwise, translate it as a type hint
+			self.__target = self.translate_builtin_name(expression.id)
 
 	def _transpile(self) -> str:
 		"""

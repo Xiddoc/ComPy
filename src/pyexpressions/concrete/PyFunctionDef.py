@@ -9,6 +9,7 @@ from typing import List, cast, Optional, Any
 from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyArg import PyArg
+from src.pyexpressions.concrete.PyExpr import PyExpr
 from src.pyexpressions.concrete.PyName import PyName
 from src.scopes.Scope import Scope
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE, AnyFunction
@@ -27,6 +28,8 @@ class PyFunctionDef(PyExpression):
 
 	def __init__(self, expression: FunctionDef, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
+		from src.pybuiltins.PyPortFunction import PyPortFunction
+
 		# Convert and store
 		self.__func_name = expression.name
 		# Create object scope (function body has it's own scope)
@@ -42,17 +45,45 @@ class PyFunctionDef(PyExpression):
 		returns = Util.get_attr(expression, 'returns')
 		self.__return_type = None if isinstance(returns, Constant) else PyName(returns, self)
 
+		# If this is not a ported object (we will handle duplicated objects externally using a set)
+		if not isinstance(parent, PyPortFunction):
+			# Get the nearest scope
+			# Add this function to the scope
+			self.get_nearest_scope().declare_function(
+				func_name=self.__func_name,
+				func_return_type=returns.id if self.__return_type else 'NoneType'
+			)
+
+	def get_func_name(self) -> str:
+		"""
+		:return: The name of the referenced function.
+		"""
+		return self.__func_name
+
 	def _transpile(self) -> str:
 		"""
 		Transpile the operation to a string.t
 		"""
-		return self.transpile_header() + " {" + '\n'.join([expr.transpile() for expr in self.__code]) + "\n}"
+		# Add the header
+		# Join the body together
+		return self.transpile_header() + " {\n" + '\n'.join([
+			# Transpile each line
+			expr.transpile() + ";" for expr in self.__code \
+			if not (isinstance(expr, PyExpr) and expr.is_empty_expression())
+		]) + "\n}"
+
+	def transpile_return_type(self):
+		"""
+		Transpiles the return type of the function to a native string.
+		:return:
+		"""
+		return self.__return_type.transpile() if self.__return_type else 'void'
 
 	def transpile_header(self) -> str:
 		"""
 		Transpiles the header of the function to a native string.
 		"""
-		return f"{self.__return_type.transpile() if self.__return_type else 'void'}" \
+		return f"{self.transpile_return_type()}" \
 		       f" {self.__func_name}(" \
 		       f"{', '.join([arg.transpile() for arg in self.__args])})"
 

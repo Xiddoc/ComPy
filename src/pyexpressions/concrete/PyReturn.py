@@ -27,4 +27,4 @@ class PyReturn(PyExpression):
 		"""
 		# If there is no return value, then just return
 		# If there is, then transpile it.
-		return "return;" if self.__value is None else f"return {self.__value.transpile()};"
+		return "return" if self.__value is None else f"return {self.__value.transpile()}"

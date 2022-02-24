@@ -5,12 +5,6 @@ Lots of escaped characters!
 ' " ` ; / % @ { } \
 """
 
-# # Importing a local file
-# import examples.testimport
-#
-# # Incrementing variables from imported file
-# examples.testimport.n += 1
-
 # Assignment of type and value of constant or binary operation
 a: int = (1 + 2) * 3
 
@@ -20,13 +14,17 @@ b: int = a + 4
 # Assignment of type and name
 c: int = b
 
-# Variables can be changed & built-in function calls
+# Variables can be changed
+# Linked function calls
 # noinspection PyUnresolvedReferences
-c = inc(c)
+c = add(c, b)
 
-# More built-in function calls
-print("The answer is... ")
-print(c)
+# Built-in function calls
+print("The answer is... " + str(c))
+
+user_input: str = input("Give me input: ")
+
+print("Testing input: " + user_input)
 
 
 # Function declaration
@@ -43,5 +41,5 @@ def mul(x: int, y: int) -> int:
 
 
 # Custom function usage
-mul(1, 2)
-mul(3, 4)
+print(mul(3, 4))
+print(mul(5, 6))
