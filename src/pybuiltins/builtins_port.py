@@ -64,7 +64,7 @@ ported_objs: Dict[str, PyPortFunctionSignature] = {
 	),
 	"input": PyPortFunctionSignature(
 		function=input,
-		code="print(print_string);std::string s;std::cin<<s;return s;",
+		code="print(print_string);std::string s;std::cin>>s;return s;",
 		dependencies={"iostream"},
 		linked_ports={"print"}
 	),
