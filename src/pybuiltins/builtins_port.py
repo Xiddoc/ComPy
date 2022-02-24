@@ -16,7 +16,7 @@ def print(print_string: Any) -> None:
 
 
 # noinspection PyUnusedLocal,PyShadowingBuiltins
-def input(print_string: Any) -> str:
+def input(print_string: str) -> str:
 	"""
 	Takes input from the user.
 
@@ -64,8 +64,9 @@ ported_objs: Dict[str, PyPortFunctionSignature] = {
 	),
 	"input": PyPortFunctionSignature(
 		function=input,
-		code="std::string s;std::cin<<s;return s;",
-		dependencies={"iostream"}
+		code="print(print_string);std::string s;std::cin<<s;return s;",
+		dependencies={"iostream"},
+		linked_ports={"print"}
 	),
 	"str": PyPortFunctionSignature(
 		function=str_cast,
