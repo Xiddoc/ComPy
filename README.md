@@ -36,10 +36,10 @@ to automatically install dependencies and such.
 Help menu:
 
 ```text
-compy.py [-h] [-v] [-c] [-o OUTPUT] [-g] file
+usage: compy.py [-h] [-v] [-c] [-o OUTPUT] [-g] [-l LINKS] file
 
 positional arguments:
-  file                  file to compile
+  file                  the file to compile
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -48,6 +48,8 @@ optional arguments:
   -o OUTPUT, --output OUTPUT
                         the file to output the ASM code to
   -g, --compile         compiles the output to an executable
+  -l LINKS, --links LINKS
+                        links ported libraries to the executable (seperate with the ; character)
 ```
 
 Basic usage (compiles the Python file `examples\testcode.py`
@@ -55,6 +57,12 @@ and outputs the C++ code to the file `examples\testcode.cpp`):
 
 ```cmd
 python compy.py -o examples\testcode.cpp examples\testcode.py
+```
+
+Compile the Python code to a native executable:
+
+```cmd
+python compy.py -g examples\testcode.py
 ```
 
 ## Advanced Usage
