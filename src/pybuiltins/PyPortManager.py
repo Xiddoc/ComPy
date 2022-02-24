@@ -47,9 +47,18 @@ class PyPortManager(metaclass=Singleton):
 		"""
 		# Check if called port is linked
 		if self.is_loaded(ported_name):
-			# Compile the function to a PyPortFunction expression/object
-			native_func: PyPortFunction = PyPortFunction(self.__linked_port_manager[ported_name], parent)
+			# Get the function signature from the manager
+			function_signature = self.__linked_port_manager[ported_name]
 
+			# If this port is linked to any other ports
+			if function_signature.linked_ports:
+				# For each linked port that this port uses
+				for linked_port in function_signature.linked_ports:
+					# Call that port in order to transpile it as well
+					self.call_port(linked_port, parent)
+
+			# Compile the function to a PyPortFunction expression/object
+			native_func: PyPortFunction = PyPortFunction(function_signature, parent)
 			# Inherit dependencies
 			parent.add_dependencies(native_func.get_dependencies())
 			# Add as dependency

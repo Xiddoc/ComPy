@@ -16,3 +16,4 @@ class PyPortFunctionSignature:
 	function: AnyFunction
 	code: str
 	dependencies: Optional[Iterable[str]] = None
+	linked_ports: Optional[Iterable[str]] = None
