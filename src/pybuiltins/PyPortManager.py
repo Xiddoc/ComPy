@@ -48,8 +48,15 @@ class PyPortManager(metaclass=Singleton):
 		# Check if called port is linked
 		if self.is_loaded(ported_name):
 			# Compile the function to a PyPortFunction expression/object
-			return PyPortFunction(self.__linked_port_manager[ported_name], parent)
+			native_func: PyPortFunction = PyPortFunction(self.__linked_port_manager[ported_name], parent)
 
+			# Inherit dependencies
+			parent.add_dependencies(native_func.get_dependencies())
+			# Add as dependency
+			parent.add_ported_dependency(native_func)
+
+			# Return the function
+			return native_func
 		else:
 			# Otherwise, throw an error
 			raise ObjectNotDefinedError(ported_name)

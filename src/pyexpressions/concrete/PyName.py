@@ -18,7 +18,6 @@ class PyName(PyExpression):
 		super().__init__(expression, parent)
 		# Import locally to avoid import error
 		from src.pyexpressions.concrete.PyCall import PyCall
-		from src.pybuiltins.PyPortFunction import PyPortFunction
 		from src.pybuiltins.PyPortManager import PyPortManager
 
 		# Store the object name to a class variable
@@ -31,15 +30,8 @@ class PyName(PyExpression):
 			# Check if this is a ported and linked object
 			if PyPortManager().is_loaded(expression.id):
 				# Then retrieve it from the manager
-				native_func: PyPortFunction = PyPortManager().call_port(expression.id, self)
-
 				# Update target name (we will use the native function name)
-				self.__target = native_func.get_func_name()
-
-				# Inherit dependencies
-				self.add_dependencies(native_func.get_dependencies())
-				# Add as dependency
-				self.add_ported_dependency(native_func)
+				self.__target = PyPortManager().call_port(expression.id, self).get_func_name()
 			else:
 				# Otherwise, use the function name directly
 				self.__target = expression.id
