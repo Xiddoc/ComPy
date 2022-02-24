@@ -43,6 +43,10 @@ class PyFunctionDef(PyExpression):
 		returns = Util.get_attr(expression, 'returns')
 		self.__return_type = None if isinstance(returns, Constant) else PyName(returns, self)
 
+		# Get the nearest scope
+		# Add this function to the scope
+		self.get_nearest_scope().declare_function(self.__func_name, self.transpile_return_type())
+
 	def get_func_name(self) -> str:
 		"""
 		:return: The name of the referenced function.
@@ -53,16 +57,26 @@ class PyFunctionDef(PyExpression):
 		"""
 		Transpile the operation to a string.t
 		"""
+		# Add the header
+		# Join the body together
 		return self.transpile_header() + " {\n" + '\n'.join([
+			# Transpile each line
 			expr.transpile() + ";" for expr in self.__code \
 			if not (isinstance(expr, PyExpr) and expr.is_empty_expression())
 		]) + "\n}"
+
+	def transpile_return_type(self):
+		"""
+		Transpiles the return type of the function to a native string.
+		:return:
+		"""
+		return self.__return_type.transpile() if self.__return_type else 'void'
 
 	def transpile_header(self) -> str:
 		"""
 		Transpiles the header of the function to a native string.
 		"""
-		return f"{self.__return_type.transpile() if self.__return_type else 'void'}" \
+		return f"{self.transpile_return_type()}" \
 		       f" {self.__func_name}(" \
 		       f"{', '.join([arg.transpile() for arg in self.__args])})"
 
