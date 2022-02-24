@@ -3,6 +3,7 @@ Compiler class for managing variables and their types between scopes.
 """
 from typing import Set, Optional
 
+from src.scopes.Function import Function
 from src.scopes.Object import Object
 from src.scopes.Type import Type
 from src.scopes.Variable import Variable
@@ -32,7 +33,7 @@ class Scope:
 		"""
 		return any(iter_var.name == object_name for iter_var in self.__objects)
 
-	def declare_var(self, var_name: str, var_type: str) -> None:
+	def declare_variable(self, var_name: str, var_type: str) -> None:
 		"""
 		Initialize a variable and add it to the handler's registry.
 
@@ -49,6 +50,23 @@ class Scope:
 			# All variables have immutable types, and
 			# currently we do not support freeing objects.
 			raise ObjectAlreadyDefinedError(var_name)
+
+	def declare_function(self, func_name: str, func_return_type: str) -> None:
+		"""
+		Initialize a function and add it to the handler's registry.
+
+		:param func_name: The name of the function.
+		:param func_return_type: The return type of the function.
+		"""
+		# If the object does not exist
+		if not self.does_object_exist(func_name):
+			# Make a new Object instance, then add it to the object set
+			self.__objects.add(Function(name=func_name, return_type=Type(func_return_type)))
+		else:
+			# Otherwise, raise an exception.
+			# All objects have immutable types, and
+			# currently we do not support freeing objects.
+			raise ObjectAlreadyDefinedError(func_name)
 
 	def get_object(self, object_name: str) -> Object:
 		"""
