@@ -66,7 +66,7 @@ def pow(value: int, exponent: int) -> int:
 	"""
 
 
-objs: Dict[str, PyPortFunctionSignature] = {
+ported_objs: Dict[str, PyPortFunctionSignature] = {
 	"print": PyPortFunctionSignature(
 		function=print,
 		code="std::cout<<print_string<<std::endl;",

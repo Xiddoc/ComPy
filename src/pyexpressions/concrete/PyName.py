@@ -19,18 +19,20 @@ class PyName(PyExpression):
 		# Import locally to avoid import error
 		from src.pyexpressions.concrete.PyCall import PyCall
 		from src.pybuiltins.PyPortFunction import PyPortFunction
-		from src.pybuiltins.builtins import objs
+		from src.pybuiltins.PyPortManager import PyPortManager
 
 		# Store the object name to a class variable
-		# If this was used in a PyCall, then don't try to convert it (it's not a type, it's a function)
+		# If this was used in a PyCall, then don't try to
+		# convert it since it's not a type, it's a function.
+		# For example:
+		# first_var: str = "Hello"  # Name used as type annotation
+		# second_var = str(10)  # Name used as type conversion/cast function
 		if isinstance(parent, PyCall):
-			# Set it directly
-			self.__target = expression.id
+			# Check if this is a ported and linked object
+			if PyPortManager().is_loaded(expression.id):
+				# Then retrieve it from the manager
+				native_func: PyPortFunction = PyPortManager().call_port(expression.id, self)
 
-			# Check if called function is a builtin module
-			if self.__target in objs:
-				# Compile the function to a PyPortFunction expression/object
-				native_func: PyPortFunction = PyPortFunction(objs[self.__target], self)
 				# Update target name (we will use the native function name)
 				self.__target = native_func.get_func_name()
 
@@ -38,6 +40,9 @@ class PyName(PyExpression):
 				self.add_dependencies(native_func.get_dependencies())
 				# Add as dependency
 				self.add_ported_dependency(native_func)
+			else:
+				# Otherwise, use the function name directly
+				self.__target = expression.id
 		else:
 			# Otherwise, translate it as a type hint
 			self.__target = self.translate_builtin_name(expression.id)
