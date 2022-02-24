@@ -15,6 +15,16 @@ def print(print_string: Any) -> None:
 	"""
 
 
+# noinspection PyUnusedLocal,PyShadowingBuiltins
+def input(print_string: Any) -> str:
+	"""
+	Takes input from the user.
+
+	:param print_string: A string to print before taking input.
+	:return: The user input, until the user presses the Enter key.
+	"""
+
+
 # noinspection PyUnusedLocal
 def str_cast(obj: Any) -> str:
 	"""
@@ -35,16 +45,6 @@ def int_cast(obj: str) -> str:
 	"""
 
 
-# noinspection PyUnusedLocal
-def inc(my_integer: int) -> int:
-	"""
-	Increments an integer.
-
-	:param my_integer: The integer to increment.
-	:return: The incremented value.
-	"""
-
-
 # noinspection PyShadowingBuiltins,PyUnusedLocal
 def pow(value: int, exponent: int) -> int:
 	"""
@@ -56,10 +56,15 @@ def pow(value: int, exponent: int) -> int:
 	"""
 
 
-objs: Dict[str, PyPortFunctionSignature] = {
+ported_objs: Dict[str, PyPortFunctionSignature] = {
 	"print": PyPortFunctionSignature(
 		function=print,
 		code="std::cout<<print_string<<std::endl;",
+		dependencies={"iostream"}
+	),
+	"input": PyPortFunctionSignature(
+		function=input,
+		code="std::string s;std::cin<<s;return s;",
 		dependencies={"iostream"}
 	),
 	"str": PyPortFunctionSignature(
@@ -71,10 +76,6 @@ objs: Dict[str, PyPortFunctionSignature] = {
 		function=int_cast,
 		code="return std::stoi(obj);",
 		dependencies={"iostream"}
-	),
-	"inc": PyPortFunctionSignature(
-		function=inc,
-		code="return ++my_integer;"
 	),
 	"pow": PyPortFunctionSignature(
 		function=pow,
