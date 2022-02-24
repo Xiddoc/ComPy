@@ -71,8 +71,7 @@ class PyPortManager(metaclass=Singleton):
 					imported_module = import_module(port_library_path)
 
 					# Try to get the ported objects
-					# noinspection PyUnresolvedReferences
-					obj_dict: Dict[str, PyPortFunctionSignature] = imported_module.ported_objs
+					obj_dict: Dict[str, PyPortFunctionSignature] = getattr(imported_module, "ported_objs")
 
 					# Then add them to the ported object manager
 					self.__linked_port_manager.update(obj_dict)
