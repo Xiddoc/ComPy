@@ -33,8 +33,11 @@ class PyName(PyExpression):
 				# Update target name (we will use the native function name)
 				self.__target = PyPortManager().call_port(expression.id, self).get_func_name()
 			else:
-				# Otherwise, use the function name directly
-				self.__target = expression.id
+				# Otherwise, use the function name directly.
+				# This line should be equivalent to using expression.id
+				# directly, although the Scope handler will throw an
+				# error if it can't retrieve the object (it does not exist).
+				self.__target = self.get_nearest_scope().get_object(expression.id).name
 		else:
 			# Otherwise, translate it as a type hint
 			self.__target = self.translate_builtin_name(expression.id)
