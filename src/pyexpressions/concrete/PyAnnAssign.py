@@ -20,9 +20,11 @@ class PyAnnAssign(PyExpression):
 
 	def __init__(self, expression: AnnAssign, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
+		from src.pyexpressions.concrete.PyName import PyName
+
 		# Store variable and type
 		self.__target = Util.get_attr(expression, "target.id")
-		self.__type = Util.get_attr(expression, "annotation.id")
+		self.__type = PyName.translate_builtin_name(Util.get_attr(expression, "annotation.id"))
 
 		# If a value is also being assigned
 		# (Then the value of expression.value will not be None)
@@ -35,7 +37,7 @@ class PyAnnAssign(PyExpression):
 
 		# Get the nearest scope
 		# Add this variable to the scope
-		self.get_nearest_scope().declare_var(self.__target, self.__type)
+		self.get_nearest_scope().declare_variable(self.__target, self.__type)
 
 	def _transpile(self) -> str:
 		"""

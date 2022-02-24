@@ -54,11 +54,20 @@ class PyPortFunction(PyExpression):
 		# Finally, add ourselves as a native dependency
 		self.add_ported_dependency(self)
 
-	def get_func_name(self) -> str:
+	def get_interface_function(self) -> PyFunctionDef:
+		"""
+		:return: The PyFunctionDef instance which represents how
+				the native function is represented in Python. This
+				means that the expression instance will look as
+				if the function was originally written in Python.
+		"""
+		return self.__func
+
+	def get_function_name(self) -> str:
 		"""
 		:return: The native name of the ported function.
 		"""
-		return self.__func.get_func_name()
+		return self.get_interface_function().get_func_name()
 
 	def _transpile(self) -> str:
 		"""

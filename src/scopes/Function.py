@@ -1,5 +1,5 @@
 """
-Variable class for scope handler.
+Function class for scope handler.
 """
 from dataclasses import dataclass
 
@@ -8,17 +8,14 @@ from src.scopes.Type import Type
 
 
 @dataclass
-class Variable(Object):
+class Function(Object):
 	"""
-	Variable class, which inherits from the Object class.
+	Function class, which inherits from the Object class.
 
-	Variables are objects which have a type and name:
-
-	- The name is inherited from the Object class.
-	- The type must be set **ONCE** and can not be changed (freeing variables is not supported).
+	Functions are objects which have a return type, value, and name (the name is inherited from the Object class).
 	"""
 
-	type: Type
+	return_type: Type
 
 	def __hash__(self) -> int:
 		"""

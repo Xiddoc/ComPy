@@ -58,9 +58,14 @@ class PyModule(PyExpression):
 			# For each dependency, insert the dependency as a string
 			dependency_code="\n".join([f"#include <{dependency}>" for dependency in self.get_dependencies()]),
 
-			# Inject native dependencies (transpile each one)
+			# Inject native dependency headers
+			ported_headers="\n".join([
+				port.get_interface_function().transpile_header() + ";" for port in self.get_ported_dependencies()
+			]),
+
+			# Inject native dependency bodies
 			ported_code="\n".join([
-				native_dependency.transpile() for native_dependency in self.get_ported_dependencies()
+				port.transpile() for port in self.get_ported_dependencies()
 			]),
 
 			# Flatten the current code
