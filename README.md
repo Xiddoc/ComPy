@@ -31,9 +31,9 @@ python -m pip install -r requirements.txt
 In future versions, we will hopefully have a `setup.py` file
 to automatically install dependencies and such.
 
-## Usage
+## Basic Usage
 
-Help menu:
+Help menu, describes all command-line arguments:
 
 ```text
 usage: compy.py [-h] [-v] [-c] [-o OUTPUT] [-g] [-l LINKS] file
@@ -52,17 +52,23 @@ optional arguments:
                         links ported libraries to the executable (seperate with the ; character)
 ```
 
-Basic usage (compiles the Python file `examples\testcode.py`
-and outputs the C++ code to the file `examples\testcode.cpp`):
+Basic compilation (transpilation) of Python code:
 
 ```cmd
-python compy.py -o examples\testcode.cpp examples\testcode.py
+python compy.py examples\test_code.py
 ```
 
-Compile the Python code to a native executable:
+Compile the Python code in `examples\test_code.py` and output
+the C++ code to the file `examples\test_code.cpp`:
 
 ```cmd
-python compy.py -g examples\testcode.py
+python compy.py -o examples\test_code.cpp examples\test_code.py
+```
+
+Compile the Python code to a native executable (requires you to have `g++` installed!):
+
+```cmd
+python compy.py -g examples\test_code.py
 ```
 
 ## Advanced Usage
@@ -84,7 +90,7 @@ simply allows for the transpiler to link these objects together
 again when it's time to transpile back to native code).
 
 That's a lot of explanation- let's see some examples. If you
-view `src/pybuiltins/builtins.py`, you'll see the built-in
+view `src/pybuiltins/builtins_port.py`, you'll see the built-in
 objects that ComPy has set up for the Python environment.
 One of these objects is an example increment function called
 `inc`.
@@ -102,15 +108,13 @@ def inc(my_integer: int) -> int:
 A few lines down, I then add it to the object storage like so:
 
 ```python
-objs = {
-    ...
+ported_objs: Dict[str, PyPortFunctionSignature] = {
 
     "inc": PyPortFunctionSignature(
         function=inc,
         code="return ++my_integer;"
     )
 
-    ...
 }
 ```
 
