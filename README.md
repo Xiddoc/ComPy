@@ -36,20 +36,20 @@ to automatically install dependencies and such.
 Help menu, describes all command-line arguments:
 
 ```text
-usage: compy.py [-h] [-v] [-c] [-o OUTPUT] [-g] [-l LINKS] file
+usage: compy.py [-h] [-o OUTPUT] [-l LINKS] [-g] [-c] [-v] file
 
 positional arguments:
   file                  the file to compile
 
 optional arguments:
   -h, --help            show this help message and exit
-  -v, --verbose         print verbose compilation steps
-  -c, --comment         adds verbose comments to the output file
   -o OUTPUT, --output OUTPUT
                         the file to output the ASM code to
-  -g, --compile         compiles the output to an executable
   -l LINKS, --links LINKS
                         links ported libraries to the executable (seperate with the ; character)
+  -g, --compile         compiles the output to an executable (you must have g++ installed and on the PATH)
+  -c, --compress        compresses the output executable (you must have UPX installed and on the PATH)
+  -v, --verbose         print verbose compilation steps
 ```
 
 Basic compilation (transpilation) of Python code:

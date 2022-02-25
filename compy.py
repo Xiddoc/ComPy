@@ -23,11 +23,13 @@ print(f"""
 parser = ArgumentParser()
 # Add args to the parser
 parser.add_argument('file', type=FileType(), help='the file to compile')
-parser.add_argument('-v', '--verbose', action='store_true', help='print verbose compilation steps')
-parser.add_argument('-c', '--compress', action='store_true', help='compresses the output file')
 parser.add_argument('-o', '--output', type=FileType('w'), help='the file to output the ASM code to')
-parser.add_argument('-g', '--compile', action='store_true', help='compiles the output to an executable')
 parser.add_argument('-l', '--links', help='links ported libraries to the executable (seperate with the ; character)')
+parser.add_argument('-g', '--compile', action='store_true', help='compiles the output to an executable (you must have '
+                                                                 'g++ installed and on the PATH)')
+parser.add_argument('-c', '--compress', action='store_true', help='compresses the output executable (you must have UPX '
+                                                                  'installed and on the PATH)')
+parser.add_argument('-v', '--verbose', action='store_true', help='print verbose compilation steps')
 
 # Parse args, then create
 # a singleton from arguments
