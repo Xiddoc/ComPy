@@ -1,12 +1,9 @@
 """
 Variable class for scope handler.
 """
-from collections import Callable
 from dataclasses import dataclass
-from typing import Any
 
 from src.scopes.Object import Object
-from src.structures.Errors import UnsupportedFeatureException
 
 
 @dataclass
