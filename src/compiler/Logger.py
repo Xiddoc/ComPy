@@ -96,5 +96,5 @@ class Logger:
 		elif self.__indentation > 1:
 			return "│" + "\t" * (self.__indentation - 1) + ("└" if point_upwards else "┌") + "── "
 		# Otherwise, if this is the root branch (layer zero)
-		# Make a newline to seperate from previous node tree.
+		# Make a newline to separate from previous node tree.
 		return "\n"

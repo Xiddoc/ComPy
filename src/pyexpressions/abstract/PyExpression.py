@@ -34,7 +34,7 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		Constructor for the expression.
 		"""
-		# Create depenency sets
+		# Create dependency sets
 		self.__depends = set()
 		# Assign parent node
 		self.__parent = parent
