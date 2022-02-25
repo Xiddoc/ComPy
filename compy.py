@@ -24,7 +24,7 @@ parser = ArgumentParser()
 # Add args to the parser
 parser.add_argument('file', type=FileType(), help='the file to compile')
 parser.add_argument('-v', '--verbose', action='store_true', help='print verbose compilation steps')
-parser.add_argument('-c', '--comment', action='store_true', help='adds verbose comments to the output file')
+parser.add_argument('-c', '--compress', action='store_true', help='compresses the output file')
 parser.add_argument('-o', '--output', type=FileType('w'), help='the file to output the ASM code to')
 parser.add_argument('-g', '--compile', action='store_true', help='compiles the output to an executable')
 parser.add_argument('-l', '--links', help='links ported libraries to the executable (seperate with the ; character)')
@@ -88,11 +88,13 @@ if Args().get_args().compile:
 	output_size = getsize(exe_path)
 	print(f"Successfully compiled: {Util.represent_file_size(output_size)}")
 
-	# Add even more optimizations (packing)
-	print(f"Packing file '{exe_path}'...")
-	Popen(["upx", "-q", "--best", exe_path], stdout=DEVNULL, stderr=DEVNULL).wait()
+	# If compression is enabled
+	if Args().get_args().compress:
+		# Add even more optimizations (packing)
+		print(f"Packing file '{exe_path}'...")
+		Popen(["upx", "-q", "--best", exe_path], stdout=DEVNULL, stderr=DEVNULL).wait()
 
-	# Get new output file size
-	packed_size = getsize(exe_path)
-	print(f"Successfully packed: {Util.represent_file_size(output_size)} -> {Util.represent_file_size(packed_size)} "
-	      f"({round(100 * packed_size / output_size)}% ratio)")
+		# Get new output file size
+		packed_size = getsize(exe_path)
+		print(f"Successfully packed: {Util.represent_file_size(output_size)} -> {Util.represent_file_size(packed_size)} "
+		      f"({round(100 * packed_size / output_size)}% ratio)")
