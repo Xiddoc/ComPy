@@ -6,7 +6,6 @@ from _ast import AST
 from abc import abstractmethod, ABCMeta
 from typing import Set, Iterable, Optional, TYPE_CHECKING, cast
 
-from src.compiler.Args import Args
 from src.compiler.Util import Util
 from src.scopes.Scope import Scope
 from src.structures.Errors import UnsupportedFeatureException
@@ -78,18 +77,11 @@ class PyExpression(metaclass=ABCMeta):
 		# Currently, the only wrapping that we will do is logging.
 		# However, this still allows for future useful extensions
 		# such as beautifying the code, for example.
-		from src.compiler.Compiler import Compiler
 		self.__logger.log_tree_down(
 			f"Compiled <{Util.get_name(self.get_expression())}> expression to: {Util.escape(transpiled_code)}"
 		)
-		# If comments are enabled
-		if Args().get_args().comment:
-			# Unparse the expression
-			# Return with comments
-			return f"/* {Compiler.unparse_escaped(self.get_expression())} */ {transpiled_code}"
-		else:
-			# Otherwise, return normal transpilation
-			return transpiled_code
+		# Return transpilation
+		return transpiled_code
 
 	def get_nearest_scope(self) -> Scope:
 		"""
