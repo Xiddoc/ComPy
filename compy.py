@@ -71,7 +71,18 @@ if Args().get_args().compile:
         exe_path = ioStream.name + ".exe"
     else:
         exe_path = ioStream.name.replace(".", "_")
+
     # Run G++ to compile the file
     print(f"Compiling to file '{exe_path}'...")
     Popen(["g++", "-o", exe_path, "-fconcepts", "-Os", "-s", "-fno-zero-initialized-in-bss", "-ffunction-sections", "-fdata-sections", "-Wl,--gc-sections", ioStream.name]).wait()
+    # Get output file size
+    output_size = getsize(exe_path)
+    print(f"Successfully compiled: {round(output_size / 1000)} kb")
+
+    # Add even more optimizations (packing)
+    print(f"Packing file '{exe_path}'...")
+    Popen(["upx", "-q", "--best", exe_path], stdout=DEVNULL, stderr=DEVNULL).wait()
+    # Get new output file size
+    packed_size = getsize(exe_path)
+    print(f"Successfully packed: {round(output_size / 1000)} kb -> {round(packed_size / 1000)} kb ({round(100 * packed_size / output_size)}% ratio)")
 
