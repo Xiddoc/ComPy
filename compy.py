@@ -6,9 +6,9 @@ performs the logic related to it.
 """
 from argparse import ArgumentParser, FileType
 from platform import system
-from subprocess import Popen
+from subprocess import Popen, DEVNULL
 from typing import IO
-
+from os.path import getsize
 from src.compiler.Args import Args
 from src.compiler.Compiler import Compiler
 
@@ -53,9 +53,9 @@ print("Successfully parsed!")
 ioStream = Args().get_args().output if Args().get_args().output else open(Args().get_args().file.name + '.cpp', "w")
 
 # Compile the file to a string
-print("Compiling the file...")
+print("Transpiling the file...")
 compiled_text: str = c.compile()
-print("Successfully compiled!")
+print("Successfully transpiled!")
 
 # Write to the file
 print(f"Writing to output file '{ioStream.name}'...")
@@ -73,4 +73,5 @@ if Args().get_args().compile:
         exe_path = ioStream.name.replace(".", "_")
     # Run G++ to compile the file
     print(f"Compiling to file '{exe_path}'...")
-    Popen(["g++", "-o", exe_path, "-fconcepts", ioStream.name]).wait()
+    Popen(["g++", "-o", exe_path, "-fconcepts", "-Os", "-s", "-fno-zero-initialized-in-bss", "-ffunction-sections", "-fdata-sections", "-Wl,--gc-sections", ioStream.name]).wait()
+
