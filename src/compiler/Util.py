@@ -5,6 +5,7 @@ and clean the code base.
 """
 from _ast import AST
 from functools import reduce
+from math import floor, log
 from typing import Any
 
 
@@ -75,3 +76,25 @@ class Util:
 
 		# Return escaped version
 		return string
+
+	@staticmethod
+	def represent_file_size(file_size: int) -> str:
+		"""
+		Convert a file size to a string representation.
+		For example, if you pass 2000
+		:param file_size:
+		:return:
+		"""
+		# Critical case
+		if file_size == 0:
+			return "0 B"
+
+		# All the different possible representations
+		size_names = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+		# How many orders of 1024 is the file size?
+		# (from each index, such as B to KB, the magnitude increases by 1024)
+		size_name_index = int(floor(log(file_size, 1024)))
+		# Convert the file size to the selected magnitude
+		# Get the size name by index
+		# Format into a string, then return the string
+		return f"{round(file_size / pow(1024, size_name_index), 2)} {size_names[size_name_index]}"

@@ -5,13 +5,13 @@ Takes command line arguments, parses them, and
 performs the logic related to it.
 """
 from argparse import ArgumentParser, FileType
+from os.path import getsize
 from platform import system
 from subprocess import Popen, DEVNULL
 from typing import IO
-from os.path import getsize
+from src.compiler.Util import Util
 from src.compiler.Args import Args
 from src.compiler.Compiler import Compiler
-from src.structures.TypeRenames import AnyFunction
 
 print(f"""
 ╔═╗ ┌─┐ ┌┬┐ ╔═╗ ┬ ┬
@@ -64,16 +64,6 @@ ioStream.write(compiled_text)
 # Close the stream
 ioStream.close()
 
-
-def repr_size(size: int) -> str:
-	"""
-	Represents the size of a file
-	:param size:
-	:return:
-	"""
-	return f"{round(size / 1000)} kb"
-
-
 # If compilation is enabled
 if Args().get_args().compile:
 	# Determine executable file name
@@ -96,7 +86,7 @@ if Args().get_args().compile:
 
 	# Get output file size
 	output_size = getsize(exe_path)
-	print(f"Successfully compiled: {repr_size(output_size)}")
+	print(f"Successfully compiled: {Util.represent_file_size(output_size)}")
 
 	# Add even more optimizations (packing)
 	print(f"Packing file '{exe_path}'...")
@@ -104,5 +94,5 @@ if Args().get_args().compile:
 
 	# Get new output file size
 	packed_size = getsize(exe_path)
-	print(f"Successfully packed: {repr_size(output_size)} -> {repr_size(packed_size)} "
+	print(f"Successfully packed: {Util.represent_file_size(output_size)} -> {Util.represent_file_size(packed_size)} "
 	      f"({round(100 * packed_size / output_size)}% ratio)")
