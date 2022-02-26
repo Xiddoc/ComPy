@@ -34,7 +34,7 @@ class PyPortFunction(PyExpression):
 		super().__init__(Pass(), parent)
 
 		# Convert the function to a PyFunctionDef that can be represented locally later (as function header)
-		self.__func: PyFunctionDef = PyFunctionDef.from_single_object(func_sig.function, self)
+		self.__func: PyFunctionDef = PyFunctionDef.from_single_object(func_sig.func, self)
 
 		# Set our expression to the FunctionDef AST expression
 		# We do this now instead of during the super since we must

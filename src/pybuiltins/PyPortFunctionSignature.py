@@ -12,7 +12,7 @@ class PyPortFunctionSignature(PyPortSignature):
 	Port a native function or object to Python.
 	"""
 
-	function: AnyFunction
+	func: AnyFunction
 	code: str
 
 	def __init__(self,
@@ -23,5 +23,5 @@ class PyPortFunctionSignature(PyPortSignature):
 		# Call to super class constructor
 		super().__init__(dependencies, linked_ports)
 		# Set to fields
-		self.function = function
+		self.func = function
 		self.code = code
