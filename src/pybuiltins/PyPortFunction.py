@@ -44,8 +44,6 @@ class PyPortFunction(PyExpression):
 		# Store the native code segment
 		self.__code = func_sig.code
 
-		# Initialize the dependency set
-		self.__native_depends = set()
 		# If there are any dependencies
 		if func_sig.dependencies is not None:
 			# Add them as an iterable
