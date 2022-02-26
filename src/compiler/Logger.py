@@ -81,7 +81,8 @@ class Logger:
 			# If it is, then print the message
 			print(message)
 
-	def __get_log_prepend(self, indentation: int, point_upwards: bool) -> str:
+	@staticmethod
+	def __get_log_prepend(indentation: int, point_upwards: bool) -> str:
 		"""
 		Creates the tree indentation string.
 
@@ -89,12 +90,12 @@ class Logger:
 		:return: A string of unicode symbols, spaces, and newlines which forms one line of the tree.
 		"""
 		# If first layer of tree, then use T symbol
-		if self.__indentation == 1:
+		if indentation == 1:
 			return "├── "
 		# If the indentation is any more than 1, then place root branch on first line
 		# Then, branch off of the previous node (hence, indentation - 1)
-		elif self.__indentation > 1:
-			return "│" + "\t" * (self.__indentation - 1) + ("└" if point_upwards else "┌") + "── "
+		elif indentation > 1:
+			return "│" + "\t" * (indentation - 1) + ("└" if point_upwards else "┌") + "── "
 		# Otherwise, if this is the root branch (layer zero)
-		# Make a newline to seperate from previous node tree.
+		# Make a newline to separate from previous node tree.
 		return "\n"
