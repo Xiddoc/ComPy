@@ -8,7 +8,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Object(metaclass=ABCMeta):
-	"""
+    """
 	Specifies basic attributes which all objects should have.
 	
 	An example of this would be a name- all objects have names:
@@ -18,4 +18,4 @@ class Object(metaclass=ABCMeta):
 	None).
 	"""
 
-	name: str
+    name: str
