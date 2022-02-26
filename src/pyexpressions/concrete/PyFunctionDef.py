@@ -72,10 +72,9 @@ class PyFunctionDef(PyExpression):
 			if not (isinstance(expr, PyExpr) and expr.is_empty_expression())
 		]) + "\n}"
 
-	def transpile_return_type(self):
+	def transpile_return_type(self) -> str:
 		"""
 		Transpiles the return type of the function to a native string.
-		:return:
 		"""
 		return self.__return_type.transpile() if self.__return_type else 'void'
 

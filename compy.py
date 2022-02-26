@@ -68,35 +68,36 @@ ioStream.close()
 
 # If compilation is enabled
 if Args().get_args().compile:
-	# Determine executable file name
-	exe_path: str
-	if system() == "Windows":
-		exe_path = ioStream.name + ".exe"
-	else:
-		exe_path = ioStream.name.replace(".", "_")
+    # Determine executable file name
+    exe_path: str
+    if system() == "Windows":
+        exe_path = ioStream.name + ".exe"
+    else:
+        exe_path = ioStream.name.replace(".", "_")
 
-	# Run G++ to compile the file
-	print(f"Compiling to file '{exe_path}'...")
-	Popen([
-		# Output options and warnings
-		"g++", "-o", exe_path, "-fconcepts",
-		# Optimizations
-		"-Os", "-s", "-fno-zero-initialized-in-bss", "-ffunction-sections", "-fdata-sections", "-Wl,--gc-sections",
-		# Input file
-		ioStream.name
-	]).wait()
+    # Run G++ to compile the file
+    print(f"Compiling to file '{exe_path}'...")
+    Popen([
+        # Output options and warnings
+        "g++", "-o", exe_path, "-fconcepts",
+        # Optimizations
+        "-Os", "-s", "-fno-zero-initialized-in-bss", "-ffunction-sections", "-fdata-sections", "-Wl,--gc-sections",
+        # Input file
+        ioStream.name
+    ]).wait()
 
-	# Get output file size
-	output_size = getsize(exe_path)
-	print(f"Successfully compiled: {Util.represent_file_size(output_size)}")
+    # Get output file size
+    output_size = getsize(exe_path)
+    print(f"Successfully compiled: {Util.represent_file_size(output_size)}")
 
-	# If compression is enabled
-	if Args().get_args().compress:
-		# Add even more optimizations (packing)
-		print(f"Packing file '{exe_path}'...")
-		Popen(["upx", "-q", "--best", exe_path], stdout=DEVNULL, stderr=DEVNULL).wait()
+    # If compression is enabled
+    if Args().get_args().compress:
+        # Add even more optimizations (packing)
+        print(f"Packing file '{exe_path}'...")
+        Popen(["upx", "-q", "--best", exe_path], stdout=DEVNULL, stderr=DEVNULL).wait()
 
-		# Get new output file size
-		packed_size = getsize(exe_path)
-		print(f"Successfully packed: {Util.represent_file_size(output_size)} -> {Util.represent_file_size(packed_size)} "
-		      f"({round(100 * packed_size / output_size)}% ratio)")
+        # Get new output file size
+        packed_size = getsize(exe_path)
+        print(
+            f"Successfully packed: {Util.represent_file_size(output_size)} -> {Util.represent_file_size(packed_size)} "
+            f"({round(100 * packed_size / output_size)}% ratio)")

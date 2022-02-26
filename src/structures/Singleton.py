@@ -20,7 +20,7 @@ class Singleton(type):
 		# Check if there is already an instance registered
 		if cls not in cls.__instances:
 			# If there are no instances for this type of class
-			# Then instanciate a new instance for this class
+			# Then instantiate a new instance for this class
 			# Add it to the dictionary
 			cls.__instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
 

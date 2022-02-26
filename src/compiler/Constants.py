@@ -2,7 +2,7 @@
 Constants and other 'singleton' objects and maps/dicts.
 """
 from _ast import Constant, BinOp, operator, Add, Sub, Mult, AnnAssign, AST, Expr, Name, Call, FunctionDef, arg, \
-	Return, Assign, Module, IfExp, If, cmpop, Eq, Compare, Lt, Gt, BoolOp, NotEq, Or, And, boolop, Div, Mod, FloorDiv
+    Return, Assign, Module, IfExp, If, cmpop, Eq, Compare, Lt, Gt, BoolOp, NotEq, Or, And, boolop, Div, Mod, FloorDiv
 from json import dumps
 from typing import Dict, Type, Any, Callable
 
@@ -24,64 +24,64 @@ from src.pyexpressions.concrete.PyName import PyName
 from src.pyexpressions.concrete.PyReturn import PyReturn
 
 AST_EXPR_TO_PYEXPR: Dict[Type[AST], Type[PyExpression]] = {
-	AnnAssign: PyAnnAssign,
-	Assign: PyAssign,
-	arg: PyArg,
-	BinOp: PyBinOp,
-	BoolOp: PyBoolOp,
-	Call: PyCall,
-	Compare: PyCompare,
-	Constant: PyConstant,
-	Expr: PyExpr,
-	FunctionDef: PyFunctionDef,
-	If: PyIf,
-	IfExp: PyIfExp,
-	Module: PyModule,
-	Name: PyName,
-	Return: PyReturn,
+    AnnAssign: PyAnnAssign,
+    Assign: PyAssign,
+    arg: PyArg,
+    BinOp: PyBinOp,
+    BoolOp: PyBoolOp,
+    Call: PyCall,
+    Compare: PyCompare,
+    Constant: PyConstant,
+    Expr: PyExpr,
+    FunctionDef: PyFunctionDef,
+    If: PyIf,
+    IfExp: PyIfExp,
+    Module: PyModule,
+    Name: PyName,
+    Return: PyReturn,
 }
 
 AST_OP_TO_STR: Dict[Type[operator], str] = {
-	Add: "+",
-	Sub: "-",
-	Mult: "*",
-	Div: "/",
-	FloorDiv: "//",
-	Mod: "%"
+    Add: "+",
+    Sub: "-",
+    Mult: "*",
+    Div: "/",
+    FloorDiv: "//",
+    Mod: "%"
 }
 
 AST_COMPARATOR_TO_STR: Dict[Type[cmpop], str] = {
-	Eq: "==",
-	NotEq: "!=",
-	Lt: "<",
-	Gt: ">"
+    Eq: "==",
+    NotEq: "!=",
+    Lt: "<",
+    Gt: ">"
 }
 
 AST_BOOLOP_TO_STR: Dict[Type[boolop], str] = {
-	Or: "||",
-	And: "&&"
+    Or: "||",
+    And: "&&"
 }
 
 PY_SPECIAL_CHARS: Dict[str, str] = {
-	"\r": "\\r",
-	"\n": "\\n",
-	"\t": "\\t",
-	"\b": "\\b"
+    "\r": "\\r",
+    "\n": "\\n",
+    "\t": "\\t",
+    "\b": "\\b"
 }
 
 PY_CONSTANT_CONVERSION_FUNC: Dict[str, Callable[[Any], str]] = {
-	"int": str,
-	"bool": str,
-	"str": dumps,
-	"NoneType": lambda _: "null"
+    "int": str,
+    "bool": str,
+    "str": dumps,
+    "NoneType": lambda _: "null"
 }
 
 PY_TYPES_TO_NATIVE_TYPES: Dict[str, str] = {
-	"int": "int",
-	"bool": "bool",
-	"str": "std::string",
-	"None": "null",
-	"Any": "auto"
+    "int": "int",
+    "bool": "bool",
+    "str": "std::string",
+    "None": "null",
+    "Any": "auto"
 }
 
 OUTPUT_CODE_TEMPLATE: str = """
@@ -94,8 +94,8 @@ OUTPUT_CODE_TEMPLATE: str = """
 {transpiled_funcs}
 
 int main() {{
-	/* Transpiled with ComPy */
-	{transpiled_code}
-	return 0;
+    /* Transpiled with ComPy */
+    {transpiled_code}
+    return 0;
 }}
 """

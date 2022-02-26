@@ -2,11 +2,10 @@
 Constant literal.
 """
 from _ast import Constant
-from typing import Any, Callable
+from typing import Any
 
 from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
-from src.scopes.Type import Type
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 

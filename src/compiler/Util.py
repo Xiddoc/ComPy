@@ -40,7 +40,7 @@ class Util:
 		# For example: "expression.target.id" becomes ["expression", "target", "id"]
 		attrs = attribute_path.split(".")
 
-		# Built in functools' reduce function to cumulatively execute the getattr function
+		# Cumulatively execute the "getattr" function
 		# On the first 2 arguments of the list
 		return reduce(getattr, attrs, obj)
 
