@@ -20,7 +20,8 @@ class PyPortFunctionSignature(PyPortSignature):
 	             code: str,
 	             dependencies: Optional[Iterable[str]] = None,
 	             linked_ports: Optional[Iterable[str]] = None) -> None:
+		# Call to super class constructor
+		super().__init__(dependencies, linked_ports)
+		# Set to fields
 		self.function = function
 		self.code = code
-		self.dependencies: Optional[Iterable[str]] = dependencies
-		self.linked_ports: Optional[Iterable[str]] = linked_ports
