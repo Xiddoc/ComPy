@@ -11,3 +11,10 @@ class PyPortSignature:
 
 	dependencies: Optional[Iterable[str]] = None
 	linked_ports: Optional[Iterable[str]] = None
+
+	def __init__(self,
+	             dependencies: Optional[Iterable[str]] = None,
+	             linked_ports: Optional[Iterable[str]] = None) -> None:
+		# Set to fields
+		self.dependencies: Optional[Iterable[str]] = dependencies
+		self.linked_ports: Optional[Iterable[str]] = linked_ports

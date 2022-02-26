@@ -4,9 +4,8 @@ Used in extending for other pyexpressions.
 """
 from _ast import AST
 from abc import abstractmethod, ABCMeta
-from typing import Set, Iterable, Optional, TYPE_CHECKING, cast
+from typing import Set, Iterable, Optional, TYPE_CHECKING, cast, Type
 
-from src.compiler.Args import Args
 from src.compiler.Util import Util
 from src.scopes.Scope import Scope
 from src.structures.Errors import UnsupportedFeatureException
@@ -35,7 +34,7 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		Constructor for the expression.
 		"""
-		# Create depenency sets
+		# Create dependency sets
 		self.__depends = set()
 		# Assign parent node
 		self.__parent = parent
@@ -78,18 +77,11 @@ class PyExpression(metaclass=ABCMeta):
 		# Currently, the only wrapping that we will do is logging.
 		# However, this still allows for future useful extensions
 		# such as beautifying the code, for example.
-		from src.compiler.Compiler import Compiler
 		self.__logger.log_tree_down(
 			f"Compiled <{Util.get_name(self.get_expression())}> expression to: {Util.escape(transpiled_code)}"
 		)
-		# If comments are enabled
-		if Args().get_args().comment:
-			# Unparse the expression
-			# Return with comments
-			return f"/* {Compiler.unparse_escaped(self.get_expression())} */ {transpiled_code}"
-		else:
-			# Otherwise, return normal transpilation
-			return transpiled_code
+		# Return transpilation
+		return transpiled_code
 
 	def get_nearest_scope(self) -> Scope:
 		"""
@@ -129,7 +121,7 @@ class PyExpression(metaclass=ABCMeta):
 		# Otherwise,
 		else:
 			# Recurse upwards (up the parent node, towards the outer scope)
-			self.get_parent().add_dependencies(dependencies)
+			cast(PyExpression, self.get_parent()).add_dependencies(dependencies)
 
 	def get_dependencies(self) -> Set[str]:
 		"""
@@ -150,7 +142,7 @@ class PyExpression(metaclass=ABCMeta):
 		# Otherwise,
 		else:
 			# Recurse upwards (up the parent node, towards the outer scope)
-			self.get_parent().add_ported_dependency(ported_dependency)
+			cast(PyExpression, self.get_parent()).add_ported_dependency(ported_dependency)
 
 	def add_ported_dependencies(self, ported_dependencies: Iterable["PyPortFunction"]) -> None:
 		"""
@@ -164,8 +156,9 @@ class PyExpression(metaclass=ABCMeta):
 			self.__ported_depends.update(ported_dependencies)
 		# Otherwise,
 		else:
+			# Case to PyExpression (the 'if' condition has just guaranteed that it is not None)
 			# Recurse upwards (up the parent node, towards the outer scope)
-			self.get_parent().add_ported_dependencies(ported_dependencies)
+			cast(PyExpression, self.get_parent()).add_ported_dependencies(ported_dependencies)
 
 	def get_ported_dependencies(self) -> Set["PyPortFunction"]:
 		"""
