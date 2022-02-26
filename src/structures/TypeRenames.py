@@ -17,4 +17,4 @@ if TYPE_CHECKING:
 AnyFunction = Callable[..., Any]
 
 # A PyExpression or a class that extends it
-GENERIC_PYEXPR_TYPE = Union[Type["PyExpression"], "PyExpression"]
+GENERIC_PYEXPR_TYPE = Union["PyExpression"]
