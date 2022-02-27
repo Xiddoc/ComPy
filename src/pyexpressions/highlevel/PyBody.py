@@ -1,7 +1,7 @@
 """
 Python "block", conjoined statements.
 """
-from _ast import Pass
+from _ast import Pass, AST
 from typing import List
 
 from src.pyexpressions.abstract.PyExpression import PyExpression
@@ -18,10 +18,11 @@ class PyBody(PyExpression):
 
 	__code: List[PyExpression]
 
-	def __init__(self, expressions: List[PyExpression], parent: GENERIC_PYEXPR_TYPE):
+	def __init__(self, expressions: List[AST], parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(Pass(), parent)
-		# Set lines of code to field
-		self.__code = expressions
+		# For each line of code, convert to expression
+		# Set expressions to field
+		self.__code = [self.from_ast(ast) for ast in expressions]
 
 	def _transpile(self) -> str:
 		"""

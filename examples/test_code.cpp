@@ -3,14 +3,14 @@
 #include <utility>
 
 void print(auto print_string);
+int add(int number_one, int number_two);
 std::string str_cast(auto obj);
 std::string input(std::string print_string);
-int add(int number_one, int number_two);
 
 void print(auto print_string){std::cout<<print_string<<std::endl;}
+int add(int number_one, int number_two){return number_one + number_two;}
 std::string str_cast(auto obj){return std::to_string(obj);}
 std::string input(std::string print_string){print(std::move(print_string));std::string s;std::cin>>s;return s;}
-int add(int number_one, int number_two){return number_one + number_two;}
 
 int mul(int x, int y) {
 int result = (x * y);
