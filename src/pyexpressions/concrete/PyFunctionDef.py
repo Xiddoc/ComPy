@@ -9,9 +9,8 @@ from typing import List, cast, Optional, Any
 from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyArg import PyArg
-from src.pyexpressions.concrete.PyExpr import PyExpr
 from src.pyexpressions.concrete.PyName import PyName
-from src.pyexpressions.concrete.PyPass import PyPass
+from src.pyexpressions.highlevel.PyBody import PyBody
 from src.scopes.Scope import Scope
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE, AnyFunction
 
@@ -23,7 +22,7 @@ class PyFunctionDef(PyExpression):
 
 	__func_name: str
 	__args: List[PyArg]
-	__code: List[PyExpression]
+	__code: PyBody
 	__return_type: Optional[PyName]
 	__scope: Scope
 
@@ -39,7 +38,7 @@ class PyFunctionDef(PyExpression):
 		# Convert to argument
 		self.__args = [PyArg(arg, self) for arg in expression.args.args]
 		# For each line of code, convert to expression
-		self.__code = [self.from_ast(ast) for ast in expression.body]
+		self.__code = PyBody(expression.body, self)
 		# If return is a Constant, then it is None (there is no return value)
 		# In which case in the transpilation stage, set as "void"
 		# Otherwise, use a proper name (int, str, etc.)
@@ -67,11 +66,7 @@ class PyFunctionDef(PyExpression):
 		"""
 		# Add the header
 		# Join the body together
-		return self.transpile_header() + " {\n" + '\n'.join([
-			# Transpile each line
-			expr.transpile() + ";" for expr in self.__code \
-			if not (isinstance(expr, PyExpr) and expr.is_empty_expression() or isinstance(expr, PyPass))
-		]) + "\n}"
+		return f"{self.transpile_header()} {{\n{self.__code.transpile()}\n}}"
 
 	def transpile_return_type(self) -> str:
 		"""
