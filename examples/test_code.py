@@ -26,6 +26,9 @@ user_input: str = input("Give me input: ")
 
 print("Testing input: " + user_input)
 
+# Pass statement (does literally nothing)
+pass
+
 
 # Function declaration
 def mul(x: int, y: int) -> int:

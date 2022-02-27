@@ -11,6 +11,7 @@ from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyArg import PyArg
 from src.pyexpressions.concrete.PyExpr import PyExpr
 from src.pyexpressions.concrete.PyName import PyName
+from src.pyexpressions.concrete.PyPass import PyPass
 from src.scopes.Scope import Scope
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE, AnyFunction
 
@@ -69,7 +70,7 @@ class PyFunctionDef(PyExpression):
 		return self.transpile_header() + " {\n" + '\n'.join([
 			# Transpile each line
 			expr.transpile() + ";" for expr in self.__code \
-			if not (isinstance(expr, PyExpr) and expr.is_empty_expression())
+			if not (isinstance(expr, PyExpr) and expr.is_empty_expression() or isinstance(expr, PyPass))
 		]) + "\n}"
 
 	def transpile_return_type(self) -> str:

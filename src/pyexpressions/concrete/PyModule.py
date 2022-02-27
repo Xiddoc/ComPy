@@ -7,6 +7,7 @@ from typing import List
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyExpr import PyExpr
 from src.pyexpressions.concrete.PyFunctionDef import PyFunctionDef
+from src.pyexpressions.concrete.PyPass import PyPass
 from src.scopes.Scope import Scope
 
 
@@ -44,7 +45,7 @@ class PyModule(PyExpression):
 			if isinstance(pyexpr, PyFunctionDef):
 				# Add it to the function list
 				function_list.append(pyexpr.transpile())
-			elif not (isinstance(pyexpr, PyExpr) and pyexpr.is_empty_expression()):
+			elif not (isinstance(pyexpr, PyExpr) and pyexpr.is_empty_expression() or isinstance(pyexpr, PyPass)):
 				# Otherwise, check that it's not a dead expression
 				# (Any expression which is not a PyExpr that is empty)
 				# Transpile and add to code segment
