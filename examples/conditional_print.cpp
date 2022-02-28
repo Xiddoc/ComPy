@@ -11,10 +11,10 @@ void conditional_print(int index) {
 if ((index == 0 && index != 2 && index != 3)) {
 print((str_cast(index) + ": Equals to 0!"));
 } else {
-if (1 < 2 < index < 5) {
+if (1 < 2 && 2 < index && index < 5) {
 print((str_cast(index) + ": Larger than 2 and smaller than 5!"));
 } else {
-if (7 < index < 12) {
+if (7 < index && index < 12) {
 print((str_cast(index) + ": Larger than 7 and smaller than 12!"));
 } else {
 print((str_cast(index) + ": Other..."));
