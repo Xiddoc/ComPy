@@ -1,11 +1,11 @@
 
 #include <iostream>
 
-std::string str_cast(auto obj);
 void print(auto print_string);
+std::string str_cast(auto obj);
 
-std::string str_cast(auto obj){return std::to_string(obj);}
 void print(auto print_string){std::cout<<print_string<<std::endl;}
+std::string str_cast(auto obj){return std::to_string(obj);}
 
 void conditional_print(int index) {
 if ((index == 0 && index != 2 && index != 3)) {
@@ -23,6 +23,9 @@ print((str_cast(index) + ": Test, got 4..."));
 };
 };
 };
+};
+if (index > 25) {
+return;
 };
 conditional_print((index + 1));
 }

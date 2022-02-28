@@ -32,10 +32,13 @@ def conditional_print(index: int) -> None:
         if index == 4:
             print(str(index) + ": Test, got 4...")
 
+    # Prevent stack overflow
+    if index > 25:
+        return
+
     # Recursion!
     conditional_print(index + 1)
 
 
-# Should cause a StackOverflow
-# due to excessive recursion...
+# Run the function
 conditional_print(0)
