@@ -6,6 +6,7 @@ from typing import Optional, List
 
 from src.pyexpressions.abstract.PyConditional import PyConditional
 from src.pyexpressions.abstract.PyExpression import PyExpression
+from src.pyexpressions.highlevel.PyBody import PyBody
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
@@ -15,7 +16,7 @@ class PyIf(PyConditional):
 	"""
 
 	__elif: Optional["PyIf"]
-	__else: Optional[List[PyExpression]]
+	__else: Optional[PyBody]
 
 	def __init__(self, expression: If, parent: GENERIC_PYEXPR_TYPE, if_type: str = "if"):
 		super().__init__(expression, if_type, parent)
@@ -32,7 +33,7 @@ class PyIf(PyConditional):
 				self.__elif = PyIf(orelse_list[0], self, if_type="else if")
 			else:
 				# Send to "else"
-				self.__else = [self.from_ast(ast) for ast in orelse_list]
+				self.__else = PyBody(orelse_list, self)
 
 	def _transpile(self) -> str:
 		"""
@@ -40,5 +41,5 @@ class PyIf(PyConditional):
 		"""
 		return super()._transpile() + \
 			self.__elif.transpile() if self.__elif is not None else \
-			f"else {{\n{''.join([expr.transpile() for expr in self.__else])}\n}}" if self.__else is not None else \
+			f"else {self.__else.transpile()}" if self.__else is not None else \
 			""

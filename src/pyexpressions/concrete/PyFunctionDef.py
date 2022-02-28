@@ -63,7 +63,7 @@ class PyFunctionDef(PyExpression):
 			self.get_scope().declare_variable(new_arg.get_name(), new_arg.get_type().get_target())
 
 		# For each line of code, convert to expression
-		self.__code = [self.from_ast(ast) for ast in expression.body]
+		self.__code = PyBody(expression.body, self)
 
 	def get_func_name(self) -> str:
 		"""
@@ -77,7 +77,7 @@ class PyFunctionDef(PyExpression):
 		"""
 		# Add the header
 		# Join the body together
-		return f"{self.transpile_header()} {{\n{self.__code.transpile()}\n}}"
+		return f"{self.transpile_header()} {self.__code.transpile()}"
 
 	def transpile_return_type(self) -> str:
 		"""

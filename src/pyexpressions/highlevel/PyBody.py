@@ -29,11 +29,11 @@ class PyBody(PyExpression):
 		Transpile the body to a string.
 		"""
 		# Join the body together with newlines
-		return '\n'.join([
+		return "{\n" + '\n'.join([
 			# Transpile each line
 			expr.transpile() + ";" for expr in self.__code \
 			# Don't transpile if:
 			# - This is a PyExpr which is an empty expression
 			# - This is a PyPass expression
 			if not (isinstance(expr, PyExpr) and expr.is_empty_expression() or isinstance(expr, PyPass))
-		])
+		]) + "\n}"
