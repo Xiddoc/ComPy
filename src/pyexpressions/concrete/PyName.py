@@ -48,6 +48,12 @@ class PyName(PyExpression):
 		"""
 		return self.__target
 
+	def get_target(self) -> str:
+		"""
+		:return: The target name. Considered the "ID" of the object.
+		"""
+		return self.__target
+
 	@staticmethod
 	def translate_builtin_name(object_name: str) -> str:
 		"""
