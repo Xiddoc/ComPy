@@ -36,8 +36,24 @@ class PyCompare(PyExpression):
 		# left  comparators[0]  right[0]    comparators[1]  right[1] ...
 		# 5     <               6           <               7
 
-		return self.__left.transpile() + " " + \
-			' '.join([f"{item[0]} {item[1].transpile()}" for item in zip(self.__comparators, self.__right)])
+		# So in order to iterate over this, and split up into comparisons like the following:
+		# 5 < 6 and 6 < 7 and ...
+
+		# Then we need to iterate like so:
+		# LEFT      COMPARATORS[0]  RIGHT[0]
+		# RIGHT[0]  COMPARATORS[1]  RIGHT[1]
+		# RIGHT[1]  COMPARATORS[2]  RIGHT[2]
+		# RIGHT[2]  COMPARATORS[3]  RIGHT[3]
+		# ...       ...             ...
+
+		# We will do this using the zip() function, and by making a new list where the LEFT expression is first
+		# Make the new list
+		left_list: List[PyExpression] = [self.__left] + self.__right
+		# Zip them together (iterate, where each iteration yields a LEFT, a COMPARATOR, and a RIGHT)
+		# Then, join all the comparisons together with the 'AND' boolean operation
+		return ' && '.join([
+			f"{L.transpile()} {C} {R.transpile()}" for L, C, R in zip(left_list, self.__comparators, self.__right)
+		])
 
 	@staticmethod
 	def comparator_to_str(comparator: cmpop) -> str:
