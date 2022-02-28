@@ -32,13 +32,7 @@ class PyFunctionDef(PyExpression):
 
 		# Convert and store
 		self.__func_name = expression.name
-		# Create object scope (function body has it's own scope)
-		self.__scope = Scope(self.get_nearest_scope())
-		# For each function argument
-		# Convert to argument
-		self.__args = [PyArg(arg, self) for arg in expression.args.args]
-		# For each line of code, convert to expression
-		self.__code = PyBody(expression.body, self)
+
 		# If return is a Constant, then it is None (there is no return value)
 		# In which case in the transpilation stage, set as "void"
 		# Otherwise, use a proper name (int, str, etc.)
@@ -53,6 +47,23 @@ class PyFunctionDef(PyExpression):
 				func_name=self.__func_name,
 				func_return_type=returns.id if self.__return_type else 'NoneType'
 			)
+
+		# Create object scope (function body has it's own scope)
+		# Inherit the scope from the previous scope
+		self.__scope = Scope(self.get_nearest_scope())
+
+		# For each function argument
+		self.__args = []
+		for arg in expression.args.args:
+			# Create current argument
+			new_arg = PyArg(arg, self)
+			# Add to argument list
+			self.__args.append(new_arg)
+			# Assign all stack variables to our scope
+			self.get_scope().declare_variable(new_arg.get_name(), new_arg.get_type().get_target())
+
+		# For each line of code, convert to expression
+		self.__code = [self.from_ast(ast) for ast in expression.body]
 
 	def get_func_name(self) -> str:
 		"""
