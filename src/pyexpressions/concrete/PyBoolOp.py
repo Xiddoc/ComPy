@@ -2,9 +2,10 @@
 Boolean operation.
 """
 from _ast import BoolOp, boolop
-from typing import List
+from typing import Union, List
 
 from src.pyexpressions.abstract.PyExpression import PyExpression
+from src.pyexpressions.concrete.PyCompare import PyCompare
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
@@ -15,13 +16,13 @@ class PyBoolOp(PyExpression):
 	(Conditional)
 	"""
 
-	__conditions: List[PyExpression]
+	__conditions: List[Union["PyBoolOp", PyCompare]]
 	__op_type: str
 
 	def __init__(self, expression: BoolOp, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
 		# Convert op to string
-		self.__op_type = self.boolop_to_str(expression.op)
+		self.__op_type = f" {self.boolop_to_str(expression.op)} "
 		# Store conditions
 		self.__conditions = [self.from_ast(condition) for condition in expression.values]
 
@@ -29,7 +30,7 @@ class PyBoolOp(PyExpression):
 		"""
 		Transpile the operation to a string.
 		"""
-		return "(" + f" {self.__op_type} ".join([condition.transpile() for condition in self.__conditions]) + ")"
+		return f"({self.__op_type.join([condition.transpile() for condition in self.__conditions])})"
 
 	@staticmethod
 	def boolop_to_str(operator: boolop) -> str:

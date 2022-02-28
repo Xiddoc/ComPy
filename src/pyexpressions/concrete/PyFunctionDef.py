@@ -9,8 +9,8 @@ from typing import List, cast, Optional, Any
 from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyArg import PyArg
-from src.pyexpressions.concrete.PyExpr import PyExpr
 from src.pyexpressions.concrete.PyName import PyName
+from src.pyexpressions.highlevel.PyBody import PyBody
 from src.scopes.Scope import Scope
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE, AnyFunction
 
@@ -22,7 +22,7 @@ class PyFunctionDef(PyExpression):
 
 	__func_name: str
 	__args: List[PyArg]
-	__code: List[PyExpression]
+	__code: PyBody
 	__return_type: Optional[PyName]
 	__scope: Scope
 
@@ -32,13 +32,7 @@ class PyFunctionDef(PyExpression):
 
 		# Convert and store
 		self.__func_name = expression.name
-		# Create object scope (function body has it's own scope)
-		self.__scope = Scope(self.get_nearest_scope())
-		# For each function argument
-		# Convert to argument
-		self.__args = [PyArg(arg, self) for arg in expression.args.args]
-		# For each line of code, convert to expression
-		self.__code = [self.from_ast(ast) for ast in expression.body]
+
 		# If return is a Constant, then it is None (there is no return value)
 		# In which case in the transpilation stage, set as "void"
 		# Otherwise, use a proper name (int, str, etc.)
@@ -54,6 +48,23 @@ class PyFunctionDef(PyExpression):
 				func_return_type=returns.id if self.__return_type else 'NoneType'
 			)
 
+		# Create object scope (function body has it's own scope)
+		# Inherit the scope from the previous scope
+		self.__scope = Scope(self.get_nearest_scope())
+
+		# For each function argument
+		self.__args = []
+		for arg in expression.args.args:
+			# Create current argument
+			new_arg = PyArg(arg, self)
+			# Add to argument list
+			self.__args.append(new_arg)
+			# Assign all stack variables to our scope
+			self.get_scope().declare_variable(new_arg.get_name(), new_arg.get_type().get_target())
+
+		# For each line of code, convert to expression
+		self.__code = PyBody(expression.body, self)
+
 	def get_func_name(self) -> str:
 		"""
 		:return: The name of the referenced function.
@@ -66,11 +77,7 @@ class PyFunctionDef(PyExpression):
 		"""
 		# Add the header
 		# Join the body together
-		return self.transpile_header() + " {\n" + '\n'.join([
-			# Transpile each line
-			expr.transpile() + ";" for expr in self.__code \
-			if not (isinstance(expr, PyExpr) and expr.is_empty_expression())
-		]) + "\n}"
+		return f"{self.transpile_header()} {self.__code.transpile()}"
 
 	def transpile_return_type(self) -> str:
 		"""
