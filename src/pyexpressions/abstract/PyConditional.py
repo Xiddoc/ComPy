@@ -23,7 +23,7 @@ class PyConditional(PyExpression):
         super().__init__(expression, parent)
         # Copy each PyExpression to the body
         code_instance = Util.get_attr(expression, 'body')
-        self.__code = PyBody(code_instance, self) if isinstance(code_instance, list) else code_instance
+        self.__code = PyBody(code_instance, self) if isinstance(code_instance, list) else self.from_ast(code_instance)
         # Get condition
         self.__condition = self.from_ast(Util.get_attr(expression, 'test'))
 
@@ -43,8 +43,8 @@ class PyConditional(PyExpression):
         """
         return self.__condition.transpile()
 
-    def transpile_body(self):
+    def transpile_body(self) -> str:
         """
         :return: The string representation of the conditional's body.
         """
-        self.__code.transpile()
+        return self.__code.transpile()

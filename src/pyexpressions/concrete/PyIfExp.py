@@ -18,7 +18,7 @@ class PyIfExp(PyConditional):
 	def __init__(self, expression: IfExp, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
 		# Send to "else"
-		self.__else = expression.orelse
+		self.__else = self.from_ast(expression.orelse)
 
 	def _transpile(self) -> str:
 		"""
