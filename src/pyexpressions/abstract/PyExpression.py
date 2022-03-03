@@ -4,7 +4,7 @@ Used in extending for other pyexpressions.
 """
 from _ast import AST
 from abc import abstractmethod, ABCMeta
-from typing import Set, Iterable, Optional, TYPE_CHECKING, cast, Type
+from typing import Set, Iterable, Optional, TYPE_CHECKING, cast
 
 from src.compiler.Util import Util
 from src.scopes.Scope import Scope

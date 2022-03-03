@@ -6,7 +6,7 @@ you will repeat a Union phrase often and will want to
 cut down on the times you need to copy the type hint.
 """
 
-from typing import Callable, Any, Union, Type, TYPE_CHECKING
+from typing import Callable, Any, Union, TYPE_CHECKING
 
 # Prevent cyclic (recursive) imports
 if TYPE_CHECKING:
