@@ -12,29 +12,39 @@ from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
 class PyConditional(PyExpression):
-	"""
-	PyConditional base class.
-	"""
+    """
+    PyConditional base class.
+    """
 
-	__prefix: str
-	__code: PyBody
-	__condition: PyExpression
+    __code: PyExpression
+    __condition: PyExpression
 
-	def __init__(self, expression: AST, prefix: str, parent: Optional[GENERIC_PYEXPR_TYPE]):
-		super().__init__(expression, parent)
-		# Set prefix to our prefix
-		self.__prefix = prefix
-		# Copy each PyExpression to the body
-		self.__code = PyBody(Util.get_attr(expression, 'body'), self)
-		# Get condition
-		self.__condition = self.from_ast(Util.get_attr(expression, 'test'))
+    def __init__(self, expression: AST, parent: Optional[GENERIC_PYEXPR_TYPE]):
+        super().__init__(expression, parent)
+        # Copy each PyExpression to the body
+        code_instance = Util.get_attr(expression, 'body')
+        self.__code = PyBody(code_instance, self) if isinstance(code_instance, list) else code_instance
+        # Get condition
+        self.__condition = self.from_ast(Util.get_attr(expression, 'test'))
 
-	def _transpile(self) -> str:
-		"""
-		Transpiles this expression to a C++ string.
+    def _transpile(self) -> str:
+        """
+        Transpiles this expression to a C++ string.
 
-		This is the *wrapped* method. We (the devs) will use this method
-		to *IMPLEMENT* the transpilation process. To actually transpile
-		the code, use the self.transpile method, which wraps this method.
-		"""
-		return f"{self.__prefix} ({self.__condition.transpile()}) {self.__code.transpile()}"
+        This is the *wrapped* method. We (the devs) will use this method
+        to *IMPLEMENT* the transpilation process. To actually transpile
+        the code, use the self.transpile method, which wraps this method.
+        """
+        return f"({self.transpile_condition()}) {self.transpile_body()}"
+
+    def transpile_condition(self) -> str:
+        """
+        :return: The string representation of the conditional's condition.
+        """
+        return self.__condition.transpile()
+
+    def transpile_body(self):
+        """
+        :return: The string representation of the conditional's body.
+        """
+        self.__code.transpile()
