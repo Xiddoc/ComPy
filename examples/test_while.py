@@ -9,4 +9,4 @@ while index < 100:
     # Print our index
     print("Index is: " + str(index))
     # Increment our index
-    index = index + 1
+    index += 1

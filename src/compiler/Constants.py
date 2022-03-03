@@ -3,7 +3,7 @@ Constants and other 'singleton' objects and maps/dicts.
 """
 from _ast import Constant, BinOp, operator, Add, Sub, Mult, AnnAssign, AST, Expr, Name, Call, FunctionDef, arg, \
     Return, Assign, Module, IfExp, If, cmpop, Eq, Compare, Lt, Gt, BoolOp, NotEq, Or, And, boolop, Div, Mod, FloorDiv, \
-    Pass, GtE, LtE, While
+    Pass, GtE, LtE, While, AugAssign
 from json import dumps
 from typing import Dict, Type, Any, Callable
 
@@ -11,6 +11,7 @@ from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyAnnAssign import PyAnnAssign
 from src.pyexpressions.concrete.PyArg import PyArg
 from src.pyexpressions.concrete.PyAssign import PyAssign
+from src.pyexpressions.concrete.PyAugAssign import PyAugAssign
 from src.pyexpressions.concrete.PyBinOp import PyBinOp
 from src.pyexpressions.concrete.PyBoolOp import PyBoolOp
 from src.pyexpressions.concrete.PyCall import PyCall
@@ -29,6 +30,7 @@ from src.pyexpressions.concrete.PyWhile import PyWhile
 AST_EXPR_TO_PYEXPR: Dict[Type[AST], Type[PyExpression]] = {
     AnnAssign: PyAnnAssign,
     Assign: PyAssign,
+    AugAssign: PyAugAssign,
     arg: PyArg,
     BinOp: PyBinOp,
     BoolOp: PyBoolOp,
