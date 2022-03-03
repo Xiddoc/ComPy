@@ -16,8 +16,8 @@ class PyIf(PyConditional):
 
 	__else: Optional[PyBody]
 
-	def __init__(self, expression: If, parent: GENERIC_PYEXPR_TYPE, if_type: str = "if"):
-		super().__init__(expression, if_type, parent)
+	def __init__(self, expression: If, parent: GENERIC_PYEXPR_TYPE):
+		super().__init__(expression, parent)
 		# Defaults
 		self.__else = None
 		# If there is an "or else" (list of expressions)
@@ -29,4 +29,4 @@ class PyIf(PyConditional):
 		"""
 		Transpile the conditional statement to a string.
 		"""
-		return super()._transpile() + (f" else {self.__else.transpile()}" if self.__else else "")
+		return "if " + super()._transpile() + (f" else {self.__else.transpile()}" if self.__else else "")
