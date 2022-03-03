@@ -21,7 +21,7 @@ class PyBinOp(PyExpression):
 	def __init__(self, expression: BinOp, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
 		# Convert op to string
-		self.__op_type = self.op_to_str(expression.op)
+		self.__op_type = self.bin_op_to_str(expression.op)
 		# Store sides
 		self.__left = self.from_ast(expression.left)
 		self.__right = self.from_ast(expression.right)
@@ -33,9 +33,9 @@ class PyBinOp(PyExpression):
 		return f"({self.__left.transpile()} {self.__op_type} {self.__right.transpile()})"
 
 	@staticmethod
-	def op_to_str(op: operator) -> str:
+	def bin_op_to_str(op: operator) -> str:
 		"""
-		Transpiles an operator to a string.
+		Transpiles a binary operator to a string.
 
 		:param op: The operator to translate
 		:return: The operator as a C++ string.
