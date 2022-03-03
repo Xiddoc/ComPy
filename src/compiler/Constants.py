@@ -3,7 +3,7 @@ Constants and other 'singleton' objects and maps/dicts.
 """
 from _ast import Constant, BinOp, operator, Add, Sub, Mult, AnnAssign, AST, Expr, Name, Call, FunctionDef, arg, \
     Return, Assign, Module, IfExp, If, cmpop, Eq, Compare, Lt, Gt, BoolOp, NotEq, Or, And, boolop, Div, Mod, FloorDiv, \
-    Pass
+    Pass, GtE, LtE
 from json import dumps
 from typing import Dict, Type, Any, Callable
 
@@ -57,7 +57,9 @@ AST_COMPARATOR_TO_STR: Dict[Type[cmpop], str] = {
     Eq: "==",
     NotEq: "!=",
     Lt: "<",
-    Gt: ">"
+    LtE: "<=",
+    Gt: ">",
+    GtE: ">="
 }
 
 AST_BOOLOP_TO_STR: Dict[Type[boolop], str] = {
