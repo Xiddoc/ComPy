@@ -10,3 +10,7 @@ while index < 100:
     print("Index is: " + str(index))
     # Increment our index
     index += 1
+
+    if index == 88:
+        # Test breaking the loop
+        break
