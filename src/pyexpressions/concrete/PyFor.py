@@ -1,7 +1,8 @@
 """
 Class for a conditional looped statement.
 """
-from _ast import For, AnnAssign, Name
+from _ast import For, AnnAssign, Name, Call
+from typing import cast
 
 from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
@@ -30,12 +31,12 @@ class PyFor(PyExpression):
 
         # Create and set iterator to field
         self.__target = PyAnnAssign(
-            expression=AnnAssign(Name(expression.target.id, None), Name("Any", None), None, simple=1),
+            expression=AnnAssign(Name(Util.get_attr(expression.target, "id"), None), Name("Any", None), None, simple=1),
             parent=self
         )
 
         # Set iterable to field
-        self.__iter = PyCall(expression.iter, self)
+        self.__iter = PyCall(cast(Call, expression.iter), self)
 
         # Create body, now that iterator exists
         self.__code = PyBody(Util.get_attr(expression, 'body'), parent)
