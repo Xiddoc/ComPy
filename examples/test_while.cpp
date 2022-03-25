@@ -1,11 +1,15 @@
 
 #include <iostream>
 
-void print(auto print_string);
 std::string str_cast(auto obj);
+void print(auto print_string);
 
-void print(auto print_string){std::cout<<print_string<<std::endl;}
-std::string str_cast(auto obj){return std::to_string(obj);}
+std::string str_cast(auto obj) {
+return std::to_string(obj);
+}
+void print(auto print_string) {
+std::cout<<print_string<<std::endl;
+}
 
 
 
