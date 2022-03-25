@@ -4,7 +4,8 @@
 auto range(int end);
 void print(auto print_string);
 
-auto range(int end){class range {
+auto range(int end) {
+class range {
 public:
 	class iterator {
 		friend class range;
@@ -48,8 +49,11 @@ private:
 	iterator begin_;
 	iterator end_;
 };
-return range(end);}
-void print(auto print_string){std::cout<<print_string<<std::endl;}
+return range(end);
+}
+void print(auto print_string) {
+std::cout<<print_string<<std::endl;
+}
 
 
 
