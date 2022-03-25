@@ -2,7 +2,7 @@
 Python "block", conjoined statements.
 """
 from _ast import Pass, AST
-from typing import List
+from typing import List, Sequence
 
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyExpr import PyExpr
@@ -18,7 +18,7 @@ class PyBody(PyExpression):
 
 	__code: List[PyExpression]
 
-	def __init__(self, expressions: List[AST], parent: GENERIC_PYEXPR_TYPE):
+	def __init__(self, expressions: Sequence[AST], parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(Pass(), parent)
 		# For each line of code, convert to expression
 		# Set expressions to field
