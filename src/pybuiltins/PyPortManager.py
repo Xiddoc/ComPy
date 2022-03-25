@@ -8,7 +8,7 @@ from typing import Dict
 from src.compiler.Args import Args
 from src.pybuiltins.PyPortFunction import PyPortFunction
 from src.pybuiltins.PyPortFunctionSignature import PyPortFunctionSignature
-from src.pybuiltins.builtins_port import ported_objs
+from src.pybuiltins.module.builtins_port import ported_objs
 from src.structures.Errors import InvalidArgumentError, ObjectNotDefinedError
 from src.structures.Singleton import Singleton
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
