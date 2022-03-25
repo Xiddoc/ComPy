@@ -13,6 +13,6 @@ def fib(index: int) -> int:
     return index if index <= 1 else fib(index - 1) + fib(index - 2)
 
 
-fib_index: int = 30
+fib_index: int = 35
 print("Calculating index " + str(fib_index) + " of fibonacci series...")
 print(fib(fib_index))

@@ -2,7 +2,7 @@
 
 An efficient and simple static Python to C++ source-to-source compiler.
 
-## Motives
+## Background
 
 The motive behind this project comes from there being almost no _native_
 transpilers for Python to other languages. At some point in the process,

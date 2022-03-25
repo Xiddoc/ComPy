@@ -2,4 +2,4 @@
 Importer script.
 """
 
-from .PyPortFunctionSignature import PyPortFunctionSignature
+from .PyPortFunctionSignature import PyPortFunctionSignature as PyPortFunctionSignature

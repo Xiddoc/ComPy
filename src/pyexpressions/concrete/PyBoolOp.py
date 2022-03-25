@@ -2,7 +2,7 @@
 Boolean operation.
 """
 from _ast import BoolOp, boolop
-from typing import Union, List
+from typing import Union, List, cast
 
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyCompare import PyCompare
@@ -22,9 +22,10 @@ class PyBoolOp(PyExpression):
 	def __init__(self, expression: BoolOp, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
 		# Convert op to string
-		self.__op_type = f" {self.boolop_to_str(expression.op)} "
+		self.__op_type = f" {self.bool_op_to_str(expression.op)} "
 		# Store conditions
-		self.__conditions = [self.from_ast(condition) for condition in expression.values]
+		self.__conditions = [cast(Union[PyBoolOp, PyCompare], self.from_ast(condition))
+		                     for condition in expression.values]
 
 	def _transpile(self) -> str:
 		"""
@@ -33,7 +34,7 @@ class PyBoolOp(PyExpression):
 		return f"({self.__op_type.join([condition.transpile() for condition in self.__conditions])})"
 
 	@staticmethod
-	def boolop_to_str(operator: boolop) -> str:
+	def bool_op_to_str(operator: boolop) -> str:
 		"""
 		Transpiles a boolean operator to a string.
 
