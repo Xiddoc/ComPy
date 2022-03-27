@@ -43,7 +43,7 @@ class PyName(PyExpression):
 				# This line should be equivalent to using expression.id
 				# directly, although the Scope handler will throw an
 				# error if it can't retrieve the object (it does not exist).
-				self.__target = self.get_nearest_scope().get_object(expression.id).name
+				self.__target = self.get_nearest_scope().get_object_if_exists(expression.id)
 		else:
 			# Otherwise, translate it as a type hint
 			self.__target = self.translate_builtin_name(expression.id)
