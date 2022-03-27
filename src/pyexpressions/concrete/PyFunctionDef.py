@@ -22,6 +22,7 @@ class PyFunctionDef(PyExpression):
 
 	__func_name: str
 	__args: List[PyArg]
+	__defaults: List[PyExpression]
 	__code: PyBody
 	__return_type: Optional[PyName]
 	__scope: Scope
@@ -62,6 +63,13 @@ class PyFunctionDef(PyExpression):
 			# Assign all stack variables to our scope
 			self.get_scope().declare_variable(new_arg.get_name(), new_arg.get_type().get_target())
 
+		# For each argument default
+		# In my opinion, this should be moved to the PyArg class, however
+		# for the sake of compatibility (maybe AST will change their class
+		# model in the future) I will implement it similar to the AST class-
+		# default values will go in the "Function Definition" AST node.
+		self.__defaults = [self.from_ast(default) for default in expression.args.defaults]
+
 		# For each line of code, convert to expression
 		self.__code = PyBody(expression.body, self)
 
@@ -89,9 +97,27 @@ class PyFunctionDef(PyExpression):
 		"""
 		Transpiles the header of the function to a native string.
 		"""
-		return f"{self.transpile_return_type()}" \
-		       f" {self.__func_name}(" \
-		       f"{', '.join([arg.transpile() for arg in self.__args])})"
+		# Transpile the arguments
+		transpiled_arguments: List[str] = []
+
+		#   def func(arg1, arg2, arg3 = 1, arg4 = 2)
+		#      ARGS [ - - - - - - - - - - - - - - -]
+		#  DEFAULTS              [ - - - - - - - - ]
+
+		# For each argument without a default
+		non_default_count = len(self.__args) - len(self.__defaults)
+		for i in range(non_default_count):
+			# Transpile it and add it to the list
+			transpiled_arguments.append(self.__args[i].transpile())
+
+		# Take the defaulted arguments from the end of __args
+		for i, j in zip(range(non_default_count, len(self.__args)), range(len(self.__defaults))):
+			# Transpile each argument, merge it with the default value, then add it to the list.
+			transpiled_arguments.append(f"{self.__args[i].transpile()} = {self.__defaults[j].transpile()}")
+
+		# Transpile the return type, then merge it with
+		# the function name and transpiled arguments.
+		return f"{self.transpile_return_type()} {self.__func_name}({', '.join(transpiled_arguments)})"
 
 	# noinspection PyUnusedFunction
 	def get_scope(self) -> Scope:
