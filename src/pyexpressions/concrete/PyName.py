@@ -4,6 +4,7 @@ Name statement (usage of an object).
 from _ast import Name
 
 from src.pyexpressions.abstract.PyExpression import PyExpression
+from src.structures.Errors import SyntaxSubsetError
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
@@ -15,6 +16,11 @@ class PyName(PyExpression):
 	__target: str
 
 	def __init__(self, expression: Name, parent: GENERIC_PYEXPR_TYPE):
+		# Make sure an expression was passed
+		if expression is None:
+			# If no expression was passed, then there is a bug somewhere.
+			raise SyntaxSubsetError("empty name")
+
 		super().__init__(expression, parent)
 		# Import locally to avoid import error
 		from src.pyexpressions.concrete.PyCall import PyCall
