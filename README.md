@@ -31,7 +31,45 @@ python -m pip install -r requirements.txt
 In future versions, we will hopefully have a `setup.py` file
 to automatically install dependencies and such.
 
-## Basic Usage
+## Syntax Subset
+
+In order to achieve the feat of compiling a duck-typed language,
+ComPy leverages the aid of type annotations. These annotations
+must be used on all annotatable names (objects)- variables,
+functions (return types), and function arguments. However,
+only the first time an object is initialized, the annotation
+must be used. This is similar to a lower level langauge:
+
+```c
+// This is a snippet of C code
+// You must use the type when initializing
+int my_var = 1;
+
+// However, when updating the value, no type is needed
+my_var = 5;
+
+// Usage of the object also requires no type annotations
+printf("%i", my_var);
+```
+
+The above code initializes an integer variable with the name
+`my_var`, assigns it the initial value of `1`, then later
+replaces this value with the number `5`. Afterwards, it prints
+the value of `my_var` to the screen. If we were to reimplement
+this code in the ComPy syntax subset, it would look like so:
+
+```python
+# Use type hint on initialization
+my_var: int = 1
+
+# No need for type hint afterwards
+my_var = 5
+
+# Again, usage does not need type hints
+print(my_var)
+```
+
+## Command Line Usage
 
 Help menu, describes all command-line arguments:
 
