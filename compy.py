@@ -51,15 +51,14 @@ c: Compiler = Compiler()
 c.parse(source)
 print("Successfully parsed!")
 
-# If there is an output file, then write there
-# Otherwise, add .cpp to the file and write there
-ioStream = Args().get_args().output if Args().get_args().output else open(Args().get_args().file.name + '.cpp', "w")
-
 # Compile the file to a string
 print("Transpiling the file...")
 compiled_text: str = c.compile()
 print("Successfully transpiled!")
 
+# If there is an output file, then write there
+# Otherwise, add .cpp to the file and write there
+ioStream = Args().get_args().output if Args().get_args().output else open(Args().get_args().file.name + '.cpp', "w")
 # Write to the file
 print(f"Writing to output file '{ioStream.name}'...")
 ioStream.write(compiled_text)
@@ -69,11 +68,7 @@ ioStream.close()
 # If compilation is enabled
 if Args().get_args().compile:
     # Determine executable file name
-    exe_path: str
-    if system() == "Windows":
-        exe_path = ioStream.name + ".exe"
-    else:
-        exe_path = ioStream.name.replace(".", "_")
+    exe_path: str = ioStream.name + ".exe" if system() == "Windows" else ioStream.name.replace(".", "_")
 
     # Run G++ to compile the file
     print(f"Compiling to file '{exe_path}'...")

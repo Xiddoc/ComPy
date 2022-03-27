@@ -1,11 +1,13 @@
 """
 Function argument name declaration.
 """
-from _ast import arg
+from _ast import arg, Name
+from typing import Optional
 
 from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyName import PyName
+from src.structures.Errors import SyntaxSubsetError
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
@@ -21,7 +23,13 @@ class PyArg(PyExpression):
 		super().__init__(expression, parent)
 		# Convert and store
 		self.__arg_name = expression.arg
-		self.__arg_type = PyName(Util.get_attr(expression, 'annotation'), self)
+		# Arg type annotation
+		type_hint: Optional[Name] = Util.get_attr(expression, 'annotation')
+		# Make sure type hint is passed
+		if type_hint is not None:
+			self.__arg_type = PyName(type_hint, self)
+		else:
+			raise SyntaxSubsetError("missing type")
 
 	def get_name(self) -> str:
 		"""

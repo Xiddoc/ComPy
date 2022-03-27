@@ -32,15 +32,15 @@ pass
 
 # Function declaration
 def mul(x: int, y: int) -> int:
-	"""
-	Test function.
-	"""
-	# Calculate
-	result: int = x * y
-	# Uncomment to show that variables
-	# can only be initialized once
-	# result: int = 123
-	return result
+    """
+    Test function.
+    """
+    # Calculate
+    result: int = x * y
+    # Uncomment to show that variables
+    # can only be initialized once
+    # result: int = 123
+    return result
 
 
 # Custom function usage
