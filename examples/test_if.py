@@ -3,7 +3,7 @@ Print a string forever, recursively.
 """
 
 
-def conditional_print(index: int) -> None:
+def conditional_print(index: int = 0) -> None:
     """
     Print a string, depending on the condition met.
     Should print:
@@ -41,4 +41,4 @@ def conditional_print(index: int) -> None:
 
 
 # Run the function
-conditional_print(0)
+conditional_print()

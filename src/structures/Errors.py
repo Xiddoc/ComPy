@@ -73,6 +73,20 @@ class InvalidArgumentError(ValueError):
 
 
 @dataclass(frozen=True)
+class SyntaxSubsetError(SyntaxError):
+	"""
+	An error to throw when the user's code does
+	not match the syntax subset specifications.
+	"""
+
+	warning: str = field()
+
+	def __str__(self) -> str:
+		# Error text
+		return f"Invalid usage of '{self.warning}' caused a syntax error (the code must comply to the syntax subset)."
+
+
+@dataclass(frozen=True)
 class InvalidTypeError(TypeError):
 	"""
 	An error to throw when the user gave an invalid type or

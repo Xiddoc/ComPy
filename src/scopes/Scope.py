@@ -69,7 +69,7 @@ class Scope:
 			# currently we do not support freeing objects.
 			raise ObjectAlreadyDefinedError(obj_instance.name)
 
-	def get_object(self, object_name: str) -> Object:
+	def get_object_if_exists(self, object_name: str) -> str:
 		"""
 		Retrieves the object from the manager.
 		Throws an error if it doesn't exist.
@@ -81,7 +81,7 @@ class Scope:
 			# If the variable has this name
 			if obj.name == object_name:
 				# Return this variable
-				return obj
+				return object_name
 		else:
 			# Otherwise, if no variables were found
 			raise ObjectNotDefinedError(object_name)
