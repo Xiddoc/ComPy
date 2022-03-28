@@ -33,7 +33,12 @@ class PyScoped(PyExpression, metaclass=ABCMeta):
         """
         Overwrites this scope with the nearest scope available.
         """
-        self.__scope = Scope(self.get_nearest_scope())
+        # Make sure we have a parent (Unlike head Module)
+        if self.get_parent() is None:
+            # We must be Module, so let's make a new scope
+            self.__scope = Scope()
+        else:
+            self.__scope = Scope(self.get_nearest_scope())
 
     # noinspection PyUnusedFunction
     def get_scope(self) -> Scope:
