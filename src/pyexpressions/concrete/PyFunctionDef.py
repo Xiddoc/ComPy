@@ -11,11 +11,11 @@ from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyArg import PyArg
 from src.pyexpressions.concrete.PyName import PyName
 from src.pyexpressions.highlevel.PyBody import PyBody
-from src.scopes.Scope import Scope
+from src.pyexpressions.highlevel.PyScoped import PyScoped
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE, AnyFunction
 
 
-class PyFunctionDef(PyExpression):
+class PyFunctionDef(PyScoped):
 	"""
 	Function defenition.
 	"""
@@ -25,7 +25,6 @@ class PyFunctionDef(PyExpression):
 	__defaults: List[PyExpression]
 	__code: PyBody
 	__return_type: Optional[PyName]
-	__scope: Scope
 
 	def __init__(self, expression: FunctionDef, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
@@ -51,7 +50,7 @@ class PyFunctionDef(PyExpression):
 
 		# Create object scope (function body has it's own scope)
 		# Inherit the scope from the previous scope
-		self.__scope = Scope(self.get_nearest_scope())
+		self.update_from_nearest_scope()
 
 		# For each function argument
 		self.__args = []
@@ -79,9 +78,10 @@ class PyFunctionDef(PyExpression):
 		"""
 		return self.__func_name
 
+	# noinspection PyUnusedFunction
 	def _transpile(self) -> str:
 		"""
-		Transpile the operation to a string.t
+		Transpile the statement to a string.
 		"""
 		# Add the header
 		# Join the body together
@@ -118,22 +118,6 @@ class PyFunctionDef(PyExpression):
 		# Transpile the return type, then merge it with
 		# the function name and transpiled arguments.
 		return f"{self.transpile_return_type()} {self.__func_name}({', '.join(transpiled_arguments)})"
-
-	# noinspection PyUnusedFunction
-	def get_scope(self) -> Scope:
-		"""
-		Returns the Scope (instance) of this function body.
-
-		Might have a warning in your IDE that labels it as "unused".
-		This is since it is not explicitly used (in PyExpression:
-		it *should* be casted to PyFunctionDef, then use obj.get_scope(),
-		but instead there is a type check, then we use get_scope.
-
-		What this means is that depending on the Python linter
-		implementation, your IDE could flag this function as useless.
-		It is not. Do **NOT** remove it.
-		"""
-		return self.__scope
 
 	@staticmethod
 	def from_single_object(obj: AnyFunction, parent: Optional[GENERIC_PYEXPR_TYPE]) -> "PyFunctionDef":

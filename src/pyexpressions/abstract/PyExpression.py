@@ -87,9 +87,7 @@ class PyExpression(metaclass=ABCMeta):
 		"""
 		Returns the nearest Scope instance to this instance.
 		"""
-		# Import locally to avoid cyclical import error
-		from src.pyexpressions.concrete.PyFunctionDef import PyFunctionDef
-		from src.pyexpressions.concrete.PyModule import PyModule
+		from src.pyexpressions.highlevel.PyScoped import PyScoped
 
 		# Assign our parent to a temporary variable for iterating
 		temp_parent = self.get_parent()
@@ -99,7 +97,7 @@ class PyExpression(metaclass=ABCMeta):
 		# lead to a lot of unnecessary type casting).
 		while True:
 			# If we hit a function or module
-			if isinstance(temp_parent, PyFunctionDef) or isinstance(temp_parent, PyModule):
+			if isinstance(temp_parent, PyScoped):
 				# Get the scope
 				return temp_parent.get_scope()
 			# Otherwise,
