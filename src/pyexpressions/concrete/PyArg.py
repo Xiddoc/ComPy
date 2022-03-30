@@ -2,7 +2,7 @@
 Function argument name declaration.
 """
 from _ast import arg, Name
-from typing import Optional
+from typing import Optional, cast
 
 from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
@@ -18,18 +18,48 @@ class PyArg(PyExpression):
 
 	__arg_name: str
 	__arg_type: PyName
+	__self_arg: bool
 
 	def __init__(self, expression: arg, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
+
 		# Convert and store
 		self.__arg_name = expression.arg
 		# Arg type annotation
 		type_hint: Optional[Name] = Util.get_attr(expression, 'annotation')
-		# Make sure type hint is passed
-		if type_hint is not None:
+		# By default, this will be a 'self' argument
+
+		# If the argument is 'self' (constructor parameter)
+		if self.__arg_name == "self":
+			# Get the name of the class we are referring to
+			class_name: str
+			try:
+				from src.pyexpressions.concrete.PyClassDef import PyClassDef
+				# Get the class name
+				# Case to PyExpression (our parent is a function)
+				# Cast to PyClassDef, then get the class name
+				# This might throw an error (hence the 'except' catch),
+				# but it follows the Python concept of "Try, and ask of forgiveness".
+				class_name = cast(PyClassDef, cast(PyExpression, self.get_parent()).get_parent()).get_class_name()
+			except AttributeError:
+				raise SyntaxSubsetError("missing type")
+
+			# Convert to PyName expression
+			self.__arg_type = PyName(Name(class_name, None), self)
+			self.__self_arg = True
+		# If it has a type, then it must be an argument
+		elif type_hint is not None:
+			# Then it's a normal argument
 			self.__arg_type = PyName(type_hint, self)
+			self.__self_arg = False
 		else:
 			raise SyntaxSubsetError("missing type")
+
+	def is_self_arg(self) -> bool:
+		"""
+		:return: Returns True if this argument is the instance self-reference.
+		"""
+		return self.__self_arg
 
 	def get_name(self) -> str:
 		"""
