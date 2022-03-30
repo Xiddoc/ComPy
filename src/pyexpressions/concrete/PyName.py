@@ -4,16 +4,15 @@ Name statement (usage of an object).
 from _ast import Name
 
 from src.pyexpressions.abstract.PyExpression import PyExpression
+from src.pyexpressions.highlevel.PyNamed import PyNamed
 from src.structures.Errors import SyntaxSubsetError
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
-class PyName(PyExpression):
+class PyName(PyExpression, PyNamed):
 	"""
 	Name statement (usage of an object).
 	"""
-
-	__target: str
 
 	def __init__(self, expression: Name, parent: GENERIC_PYEXPR_TYPE):
 		# Make sure an expression was passed
@@ -37,28 +36,22 @@ class PyName(PyExpression):
 			if PyPortManager().is_loaded(expression.id):
 				# Then retrieve it from the manager
 				# Update target name (we will use the native function name)
-				self.__target = PyPortManager().call_port(expression.id, self).get_function_name()
+				self._name = PyPortManager().call_port(expression.id, self).get_function_name()
 			else:
 				# Otherwise, use the function name directly.
 				# This line should be equivalent to using expression.id
 				# directly, although the Scope handler will throw an
 				# error if it can't retrieve the object (it does not exist).
-				self.__target = self.get_nearest_scope().get_object_if_exists(expression.id)
+				self._name = self.get_nearest_scope().get_object_if_exists(expression.id)
 		else:
 			# Otherwise, translate it as a type hint
-			self.__target = self.translate_builtin_name(expression.id)
+			self._name = self.translate_builtin_name(expression.id)
 
 	def _transpile(self) -> str:
 		"""
 		Transpiles the constant to a string.
 		"""
-		return self.__target
-
-	def get_target(self) -> str:
-		"""
-		:return: The target name. Considered the "ID" of the object.
-		"""
-		return self.__target
+		return self._name
 
 	@staticmethod
 	def translate_builtin_name(object_name: str) -> str:

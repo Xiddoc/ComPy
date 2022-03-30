@@ -47,7 +47,7 @@ class PyAnnAssign(PyExpression, PyNamed):
 
         # Get the nearest scope
         # Add this variable to the scope
-        self.get_nearest_scope().declare_variable(self._name, self.__type.get_target())
+        self.get_nearest_scope().declare_variable(self._name, self.__type.get_name())
 
     def _transpile(self) -> str:
         """
