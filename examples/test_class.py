@@ -11,4 +11,5 @@ class TestClass:
     test_field: int
 
     def __init__(self) -> None:
-        pass
+        a: int = 1
+        print(a)

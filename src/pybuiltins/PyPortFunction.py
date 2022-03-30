@@ -65,7 +65,7 @@ class PyPortFunction(PyExpression):
 		"""
 		:return: The native name of the ported function.
 		"""
-		return self.get_interface_function().get_func_name()
+		return self.get_interface_function().get_id()
 
 	def _transpile(self) -> str:
 		"""

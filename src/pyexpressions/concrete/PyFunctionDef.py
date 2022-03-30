@@ -75,20 +75,25 @@ class PyFunctionDef(PyScoped):
 		# For each line of code, convert to expression
 		self.__code = PyBody(expression.body, self)
 
-	def get_func_name(self) -> str:
+	def get_id(self) -> str:
 		"""
 		:return: The name of the referenced function.
 		"""
 		return self.__func_name
+
+	def transpile_code(self) -> str:
+		"""
+		Transpile the code body of the function.
+		"""
+		return self.__code.transpile()
 
 	# noinspection PyUnusedFunction
 	def _transpile(self) -> str:
 		"""
 		Transpile the statement to a string.
 		"""
-		# Add the header
-		# Join the body together
-		return f"{self.transpile_header()} {self.__code.transpile()}"
+		# Join the header and the body together
+		return f"{self.transpile_header()} {self.transpile_code()}"
 
 	def transpile_return_type(self) -> str:
 		"""
@@ -96,9 +101,9 @@ class PyFunctionDef(PyScoped):
 		"""
 		return self.__return_type.transpile() if self.__return_type else 'void'
 
-	def transpile_header(self) -> str:
+	def transpile_args(self) -> str:
 		"""
-		Transpiles the header of the function to a native string.
+		Transpiles the arguments of the function and merges them together.
 		"""
 		# Transpile the arguments
 		transpiled_arguments: List[str] = []
@@ -118,9 +123,16 @@ class PyFunctionDef(PyScoped):
 			# Transpile each argument, merge it with the default value, then add it to the list.
 			transpiled_arguments.append(f"{self.__args[i].transpile()} = {self.__defaults[j].transpile()}")
 
+		# Merge them together with commas
+		return ', '.join(transpiled_arguments)
+
+	def transpile_header(self) -> str:
+		"""
+		Transpiles the header of the function to a native string.
+		"""
 		# Transpile the return type, then merge it with
 		# the function name and transpiled arguments.
-		return f"{self.transpile_return_type()} {self.__func_name}({', '.join(transpiled_arguments)})"
+		return f"{self.transpile_return_type()} {self.__func_name}({self.transpile_args()})"
 
 	@staticmethod
 	def from_single_object(obj: AnyFunction, parent: Optional[GENERIC_PYEXPR_TYPE]) -> "PyFunctionDef":

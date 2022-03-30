@@ -2,7 +2,7 @@
 Class defenition.
 """
 from _ast import ClassDef
-from typing import List
+from typing import List, Optional
 
 from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
@@ -19,8 +19,11 @@ class PyClassDef(PyScoped):
     """
 
     __class_name: str
-    __methods: List[PyFunctionDef]
-    __fields: List[PyAnnAssign]
+    __constructor: Optional[PyFunctionDef]
+    __private_methods: List[PyFunctionDef]
+    __public_methods: List[PyFunctionDef]
+    __private_fields: List[PyAnnAssign]
+    __public_fields: List[PyAnnAssign]
 
     def __init__(self, expression: ClassDef, parent: GENERIC_PYEXPR_TYPE):
         super().__init__(expression, parent)
@@ -36,8 +39,11 @@ class PyClassDef(PyScoped):
         # self.__scope = Scope(self.get_nearest_scope())
 
         # Prepare to store methods and fields
-        self.__fields = []
-        self.__methods = []
+        self.__constructor = None
+        self.__private_fields = []
+        self.__public_fields = []
+        self.__private_methods = []
+        self.__public_methods = []
         # For each object in the body
         # We will have to assign each expression individually,
         # since unlike a Python class, C++ classes have an
@@ -49,16 +55,38 @@ class PyClassDef(PyScoped):
             if pyexpr.is_dead_expression():
                 # Then ignore it
                 continue
+
+            # If the expression's name starts with 2 underscores,
+            # then Python will mangle the name, hence "making it private"
+            # (it's not exactly private, since you can still access it, but
+            # it's the best way to use encapsulation in Python).
+
             # If the expression is an assignment
             elif isinstance(pyexpr, PyAnnAssign):
                 # Add it to the fields
-                self.__fields.append(pyexpr)
+                if pyexpr.get_id().startswith("__"):
+                    # Private field
+                    self.__private_fields.append(pyexpr)
+                else:
+                    # Public field
+                    self.__public_fields.append(pyexpr)
+
             # If the expression is a function definition
             elif isinstance(pyexpr, PyFunctionDef):
-                # Then it is a method, add it to the pack
-                self.__methods.append(pyexpr)
+                # Then it is a function method (class function)
+                # Check if it is the constructor
+                if pyexpr.get_id() == "__init__":
+                    # Constructor
+                    self.__constructor = pyexpr
+                elif pyexpr.get_id().startswith("__"):
+                    # Private method
+                    self.__private_methods.append(pyexpr)
+                else:
+                    # Public method
+                    self.__public_methods.append(pyexpr)
+
+            # Not sure what this is, but it can't be in the external body of the class
             else:
-                # Not sure what this is, but it can't be in the external body of the class
                 raise UnsupportedFeatureException(f"{Util.get_name(expr)} in class body")
 
     def get_class_name(self) -> str:
@@ -67,9 +95,26 @@ class PyClassDef(PyScoped):
         """
         return self.__class_name
 
+    def transpile_constructor(self) -> str:
+        """
+        Transpiles the class constructor, if there is one.
+        """
+        return "" if self.__constructor is None else \
+            f"{self.__class_name}({self.__constructor.transpile_args()}) {self.__constructor.transpile_code()};"
+
     # noinspection PyUnusedFunction
     def _transpile(self) -> str:
         """
         Transpile the statement to a string.
         """
-        return "/*class*/"
+        return "\n".join([
+            f"class {self.__class_name} {{",
+            "private:",
+            "\n".join([pyexpr.transpile() + ";" for pyexpr in self.__private_fields]),
+            "\n".join([pyexpr.transpile() + ";" for pyexpr in self.__private_methods]),
+            "public:",
+            "\n".join([pyexpr.transpile() + ";" for pyexpr in self.__public_fields]),
+            self.transpile_constructor(),
+            "\n".join([pyexpr.transpile() + ";" for pyexpr in self.__public_methods]),
+            "}"
+        ])

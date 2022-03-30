@@ -13,8 +13,8 @@ from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 class PyAnnAssign(PyExpression):
     """
-	Expression for assigning a variable.
-	"""
+    Expression for assigning a variable.
+    """
 
     __target: str
     __type: PyName
@@ -49,9 +49,15 @@ class PyAnnAssign(PyExpression):
         # Add this variable to the scope
         self.get_nearest_scope().declare_variable(self.__target, self.__type.get_target())
 
+    def get_id(self) -> str:
+        """
+        :return: Returns the name of the target from the expression.
+        """
+        return self.__target
+
     def _transpile(self) -> str:
         """
-		Transpile the operation to a string.
-		"""
+        Transpile the operation to a string.
+        """
         return f"{self.__type.transpile()} {self.__target}" + \
                (f" = {self.__value.transpile()}" if self.__value else "")  # Only transpile value if it exists
