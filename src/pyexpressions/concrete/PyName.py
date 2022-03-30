@@ -4,7 +4,7 @@ Name statement (usage of an object).
 from _ast import Name
 
 from src.pyexpressions.abstract.PyExpression import PyExpression
-from src.pyexpressions.highlevel.PyNamed import PyNamed
+from src.pyexpressions.highlevel.PyIdentifiable import PyNamed
 from src.structures.Errors import SyntaxSubsetError
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
@@ -36,22 +36,22 @@ class PyName(PyExpression, PyNamed):
 			if PyPortManager().is_loaded(expression.id):
 				# Then retrieve it from the manager
 				# Update target name (we will use the native function name)
-				self._name = PyPortManager().call_port(expression.id, self).get_function_name()
+				self.set_id(PyPortManager().call_port(expression.id, self).get_function_name())
 			else:
 				# Otherwise, use the function name directly.
 				# This line should be equivalent to using expression.id
 				# directly, although the Scope handler will throw an
 				# error if it can't retrieve the object (it does not exist).
-				self._name = self.get_nearest_scope().get_object_if_exists(expression.id)
+				self.set_id(self.get_nearest_scope().get_object_if_exists(expression.id))
 		else:
 			# Otherwise, translate it as a type hint
-			self._name = self.translate_builtin_name(expression.id)
+			self.set_id(self.translate_builtin_name(expression.id))
 
 	def _transpile(self) -> str:
 		"""
 		Transpiles the constant to a string.
 		"""
-		return self._name
+		return self.get_id()
 
 	@staticmethod
 	def translate_builtin_name(object_name: str) -> str:

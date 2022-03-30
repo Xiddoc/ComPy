@@ -7,7 +7,7 @@ from typing import Optional
 from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyName import PyName
-from src.pyexpressions.highlevel.PyNamed import PyNamed
+from src.pyexpressions.highlevel.PyIdentifiable import PyNamed
 from src.structures.Errors import SyntaxSubsetError
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
@@ -24,7 +24,7 @@ class PyAnnAssign(PyExpression, PyNamed):
         super().__init__(expression, parent)
 
         # Store variable
-        self._name = Util.get_attr(expression, "target.id")
+        self.set_id(Util.get_attr(expression, "target.id"))
 
         # Get type hint
         type_hint: Optional[Name] = Util.get_attr(expression, "annotation")
@@ -47,11 +47,11 @@ class PyAnnAssign(PyExpression, PyNamed):
 
         # Get the nearest scope
         # Add this variable to the scope
-        self.get_nearest_scope().declare_variable(self._name, self.__type.get_name())
+        self.get_nearest_scope().declare_variable(self.get_id(), self.__type.get_id())
 
     def _transpile(self) -> str:
         """
         Transpile the operation to a string.
         """
-        return f"{self.__type.transpile()} {self._name}" + \
+        return f"{self.__type.transpile()} {self.get_id()}" + \
                (f" = {self.__value.transpile()}" if self.__value else "")  # Only transpile value if it exists

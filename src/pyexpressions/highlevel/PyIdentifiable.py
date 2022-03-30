@@ -13,10 +13,18 @@ class PyNamed(metaclass=ABCMeta):
     this concept.
     """
 
-    _name: str
+    __id: str
 
-    def get_name(self) -> str:
+    def set_id(self, new_id) -> None:
+        """
+        Update the name (ID) of the object.
+
+        :param new_id: The new ID.
+        """
+        self.__id = new_id
+
+    def get_id(self) -> str:
         """
         Returns the name of the object.
         """
-        return self._name
+        return self.__id
