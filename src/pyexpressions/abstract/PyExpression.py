@@ -21,8 +21,8 @@ if TYPE_CHECKING:
 
 class PyExpression(metaclass=ABCMeta):
     """
-	PyExpression base class.
-	"""
+    PyExpression base class.
+    """
 
     __expression: AST
     __depends: Set[str]
@@ -32,8 +32,8 @@ class PyExpression(metaclass=ABCMeta):
     @abstractmethod
     def __init__(self, expression: AST, parent: Optional[GENERIC_PYEXPR_TYPE]):
         """
-		Constructor for the expression.
-		"""
+        Constructor for the expression.
+        """
         # Create dependency sets
         self.__depends = set()
         # Assign parent node
@@ -55,22 +55,22 @@ class PyExpression(metaclass=ABCMeta):
     @abstractmethod
     def _transpile(self) -> str:
         """
-		Transpiles this expression to a C++ string.
+        Transpiles this expression to a C++ string.
 
-		This is the *wrapped* method. We (the devs) will use this method
-		to *IMPLEMENT* the transpilation process. To actually transpile
-		the code, use the self.transpile method, which wraps this method.
-		"""
+        This is the *wrapped* method. We (the devs) will use this method
+        to *IMPLEMENT* the transpilation process. To actually transpile
+        the code, use the self.transpile method, which wraps this method.
+        """
 
     def transpile(self) -> str:
         """
-		Transpiles this expression to a C++ string.
+        Transpiles this expression to a C++ string.
 
-		This is the *wrapper* method. We (the devs) will use this
-		method to *EXECUTE* the transpilation process. To actually
-		implement the transpilation process, implement the
-		self._transpile method, which is wrapped by this method.
-		"""
+        This is the *wrapper* method. We (the devs) will use this
+        method to *EXECUTE* the transpilation process. To actually
+        implement the transpilation process, implement the
+        self._transpile method, which is wrapped by this method.
+        """
         # Execute the transpilation process by executing
         # the *IMPLEMENTATION* of the transpiler function
         transpiled_code: str = self._transpile()
@@ -85,8 +85,8 @@ class PyExpression(metaclass=ABCMeta):
 
     def get_nearest_scope(self) -> Scope:
         """
-		Returns the nearest Scope instance to this instance.
-		"""
+        Returns the nearest Scope instance to this instance.
+        """
         from src.pyexpressions.highlevel.PyScoped import PyScoped
 
         # Assign our parent to a temporary variable for iterating
@@ -108,10 +108,10 @@ class PyExpression(metaclass=ABCMeta):
 
     def add_dependencies(self, dependencies: Iterable[str]) -> None:
         """
-		Adds multiple dependencies to the dependency list.
+        Adds multiple dependencies to the dependency list.
 
-		:param dependencies: A list of native dependencies that this object relies on.
-		"""
+        :param dependencies: A list of native dependencies that this object relies on.
+        """
         # If we are on the outer scope
         if self.is_exterior_scope():
             # Then add the dependencies
@@ -123,16 +123,16 @@ class PyExpression(metaclass=ABCMeta):
 
     def get_dependencies(self) -> Set[str]:
         """
-		Returns the list of dependencies that this expression relies on.
-		"""
+        Returns the list of dependencies that this expression relies on.
+        """
         return self.__depends
 
     def add_ported_dependency(self, ported_dependency: "PyPortFunction") -> None:
         """
-		Adds a single ported (reimplemented in native language) dependency to the list.
+        Adds a single ported (reimplemented in native language) dependency to the list.
 
-		:param ported_dependency: The ported dependency to add.
-		"""
+        :param ported_dependency: The ported dependency to add.
+        """
         # If we are on the outer scope
         if self.is_exterior_scope():
             # Then add the dependencies
@@ -144,10 +144,10 @@ class PyExpression(metaclass=ABCMeta):
 
     def add_ported_dependencies(self, ported_dependencies: Iterable["PyPortFunction"]) -> None:
         """
-		Adds multiple ported (reimplemented in native language) dependencies to the dependency list.
+        Adds multiple ported (reimplemented in native language) dependencies to the dependency list.
 
-		:param ported_dependencies: A list of ported dependencies that this object relies on.
-		"""
+        :param ported_dependencies: A list of ported dependencies that this object relies on.
+        """
         # If we are on the outer scope
         if self.is_exterior_scope():
             # Then add the dependencies
@@ -160,41 +160,41 @@ class PyExpression(metaclass=ABCMeta):
 
     def get_ported_dependencies(self) -> Set["PyPortFunction"]:
         """
-		Returns the list of ported dependencies that this expression relies on.
-		"""
+        Returns the list of ported dependencies that this expression relies on.
+        """
         return self.__ported_depends
 
     def get_expression(self) -> AST:
         """
-		:return: Returns the expression this instance is holding (was initialized with).
-		"""
+        :return: Returns the expression this instance is holding (was initialized with).
+        """
         return self.__expression
 
     def get_parent(self) -> Optional[GENERIC_PYEXPR_TYPE]:
         """
-		:return: Returns an instance of the PyExpression object which created this object.
-		"""
+        :return: Returns an instance of the PyExpression object which created this object.
+        """
         return self.__parent
 
     def is_exterior_scope(self) -> bool:
         """
-		:return: Returns True if this is the outer-most scope.
-		"""
+        :return: Returns True if this is the outer-most scope.
+        """
         return self.get_parent() is None
 
     def set_expression(self, new_expression: AST) -> None:
         """
-		Updates the current AST node.
-		"""
+        Updates the current AST node.
+        """
         self.__expression = new_expression
 
     def is_dead_expression(self) -> bool:
         """
-		"Dead expression"- Any expression which does not run code.
-		For example, a PyExpr which only holds a Constant.
+        "Dead expression"- Any expression which does not run code.
+        For example, a PyExpr which only holds a Constant.
 
-		:return: Returns True if this expression does not transpile to anything.
-		"""
+        :return: Returns True if this expression does not transpile to anything.
+        """
         from src.pyexpressions.concrete.PyExpr import PyExpr
         from src.pyexpressions.concrete.PyPass import PyPass
         # Constant-holding PyExpr
@@ -205,26 +205,26 @@ class PyExpression(metaclass=ABCMeta):
 
     def from_ast(self, expression: AST) -> "PyExpression":
         """
-		Converts an AST expression to a PyExpression object.
+        Converts an AST expression to a PyExpression object.
 
-		As opposed to the static from_ast method, this one
-		inherits dependencies directly to the current object.
+        As opposed to the static from_ast method, this one
+        inherits dependencies directly to the current object.
 
-		:param expression: The expression to convert.
-		:return: A PyExpression object of the matching type.
-		"""
+        :param expression: The expression to convert.
+        :return: A PyExpression object of the matching type.
+        """
         # Convert to PyExpression and return
         return PyExpression.from_ast_statically(expression, self)
 
     @staticmethod
     def from_ast_statically(expression: AST, parent: Optional[GENERIC_PYEXPR_TYPE]) -> "PyExpression":
         """
-		Converts an AST expression to a PyExpression object.
+        Converts an AST expression to a PyExpression object.
 
-		:param expression: The expression to convert.
-		:param parent: The parent expression which uses this node.
-		:return: A PyExpression object of the matching type.
-		"""
+        :param expression: The expression to convert.
+        :param parent: The parent expression which uses this node.
+        :return: A PyExpression object of the matching type.
+        """
         # Local import to avoid circular import errors
         from src.compiler.Constants import AST_EXPR_TO_PYEXPR
 

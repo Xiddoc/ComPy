@@ -55,12 +55,15 @@ class PyFunctionDef(PyScoped):
 		# For each function argument
 		self.__args = []
 		for arg in expression.args.args:
+			# If this is a constructor self-reference ('self' argument)
 			# Create current argument
 			new_arg = PyArg(arg, self)
-			# Add to argument list
-			self.__args.append(new_arg)
-			# Assign all stack variables to our scope
-			self.get_scope().declare_variable(new_arg.get_name(), new_arg.get_type().get_target())
+			# Make sure that this is not an instance reference argument
+			if not new_arg.is_self_arg():
+				# Add to argument list
+				self.__args.append(new_arg)
+				# Assign all stack variables to our scope
+				self.get_scope().declare_variable(new_arg.get_name(), new_arg.get_type().get_target())
 
 		# For each argument default
 		# In my opinion, this should be moved to the PyArg class, however
