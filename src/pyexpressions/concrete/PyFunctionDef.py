@@ -11,16 +11,16 @@ from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyArg import PyArg
 from src.pyexpressions.concrete.PyName import PyName
 from src.pyexpressions.highlevel.PyBody import PyBody
+from src.pyexpressions.highlevel.PyIdentifiable import PyIdentifiable
 from src.pyexpressions.highlevel.PyScoped import PyScoped
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE, AnyFunction
 
 
-class PyFunctionDef(PyScoped):
+class PyFunctionDef(PyScoped, PyIdentifiable):
 	"""
 	Function defenition.
 	"""
 
-	__func_name: str
 	__args: List[PyArg]
 	__defaults: List[PyExpression]
 	__code: PyBody
@@ -31,7 +31,7 @@ class PyFunctionDef(PyScoped):
 		from src.pybuiltins.PyPortFunction import PyPortFunction
 
 		# Convert and store
-		self.__func_name = expression.name
+		self.set_id(expression.name)
 
 		# If return is a Constant, then it is None (there is no return value)
 		# In which case in the transpilation stage, set as "void"
@@ -44,7 +44,7 @@ class PyFunctionDef(PyScoped):
 			# Get the nearest scope
 			# Add this function to the scope
 			self.get_nearest_scope().declare_function(
-				func_name=self.__func_name,
+				func_name=self.get_id(),
 				func_return_type=returns.id if self.__return_type else 'NoneType'
 			)
 
@@ -63,7 +63,7 @@ class PyFunctionDef(PyScoped):
 				# Add to argument list
 				self.__args.append(new_arg)
 				# Assign all stack variables to our scope
-				self.get_scope().declare_variable(new_arg.get_name(), new_arg.get_type().get_target())
+				self.get_scope().declare_variable(new_arg.get_id(), new_arg.get_type().get_id())
 
 		# For each argument default
 		# In my opinion, this should be moved to the PyArg class, however
@@ -74,12 +74,6 @@ class PyFunctionDef(PyScoped):
 
 		# For each line of code, convert to expression
 		self.__code = PyBody(expression.body, self)
-
-	def get_id(self) -> str:
-		"""
-		:return: The name of the referenced function.
-		"""
-		return self.__func_name
 
 	def transpile_code(self) -> str:
 		"""
@@ -132,7 +126,7 @@ class PyFunctionDef(PyScoped):
 		"""
 		# Transpile the return type, then merge it with
 		# the function name and transpiled arguments.
-		return f"{self.transpile_return_type()} {self.__func_name}({self.transpile_args()})"
+		return f"{self.transpile_return_type()} {self.get_id()}({self.transpile_args()})"
 
 	@staticmethod
 	def from_single_object(obj: AnyFunction, parent: Optional[GENERIC_PYEXPR_TYPE]) -> "PyFunctionDef":
@@ -163,4 +157,4 @@ class PyFunctionDef(PyScoped):
 		return isinstance(other, PyFunctionDef) and hash(self) == hash(other)
 
 	def __hash__(self) -> int:
-		return hash(self.__func_name)
+		return hash(self.get_id())

@@ -8,17 +8,17 @@ from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyAnnAssign import PyAnnAssign
 from src.pyexpressions.concrete.PyFunctionDef import PyFunctionDef
+from src.pyexpressions.highlevel.PyIdentifiable import PyIdentifiable
 from src.pyexpressions.highlevel.PyScoped import PyScoped
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
-class PyClassDef(PyScoped):
+class PyClassDef(PyScoped, PyIdentifiable):
     """
     Class defenition.
     """
 
-    __class_name: str
     __constructor: Optional[PyFunctionDef]
     __private_methods: List[PyFunctionDef]
     __public_methods: List[PyFunctionDef]
@@ -29,7 +29,7 @@ class PyClassDef(PyScoped):
         super().__init__(expression, parent)
 
         # Store class name
-        self.__class_name = expression.name
+        self.set_id(expression.name)
 
         # Declare class
         # self.get_scope().declare_class
@@ -89,18 +89,12 @@ class PyClassDef(PyScoped):
             else:
                 raise UnsupportedFeatureException(f"{Util.get_name(expr)} in class body")
 
-    def get_class_name(self) -> str:
-        """
-        :return: The name of the referenced class.
-        """
-        return self.__class_name
-
     def transpile_constructor(self) -> str:
         """
         Transpiles the class constructor, if there is one.
         """
         return "" if self.__constructor is None else \
-            f"{self.__class_name}({self.__constructor.transpile_args()}) {self.__constructor.transpile_code()};"
+            f"{self.get_id()}({self.__constructor.transpile_args()}) {self.__constructor.transpile_code()};"
 
     # noinspection PyUnusedFunction
     def _transpile(self) -> str:
@@ -108,7 +102,7 @@ class PyClassDef(PyScoped):
         Transpile the statement to a string.
         """
         return "\n".join([
-            f"class {self.__class_name} {{",
+            f"class {self.get_id()} {{",
             "private:",
             "\n".join([pyexpr.transpile() + ";" for pyexpr in self.__private_fields]),
             "\n".join([pyexpr.transpile() + ";" for pyexpr in self.__private_methods]),
