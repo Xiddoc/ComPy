@@ -40,7 +40,7 @@ class PyArg(PyExpression):
 				# Cast to PyClassDef, then get the class name
 				# This might throw an error (hence the 'except' catch),
 				# but it follows the Python concept of "Try, and ask of forgiveness".
-				class_name = cast(PyClassDef, cast(PyExpression, self.get_parent()).get_parent()).get_class_name()
+				class_name = cast(PyClassDef, cast(PyExpression, self.get_parent()).get_parent()).get_id()
 			except AttributeError:
 				raise SyntaxSubsetError("missing type")
 
