@@ -63,7 +63,7 @@ class PyFunctionDef(PyScoped, PyIdentifiable):
 				# Add to argument list
 				self.__args.append(new_arg)
 				# Assign all stack variables to our scope
-				self.get_scope().declare_variable(new_arg.get_name(), new_arg.get_type().get_id())
+				self.get_scope().declare_variable(new_arg.get_id(), new_arg.get_type().get_id())
 
 		# For each argument default
 		# In my opinion, this should be moved to the PyArg class, however

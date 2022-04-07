@@ -7,16 +7,16 @@ from typing import Optional, cast
 from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyName import PyName
+from src.pyexpressions.highlevel.PyIdentifiable import PyIdentifiable
 from src.structures.Errors import SyntaxSubsetError
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
-class PyArg(PyExpression):
+class PyArg(PyExpression, PyIdentifiable):
 	"""
 	Function argument name declaration.
 	"""
 
-	__arg_name: str
 	__arg_type: PyName
 	__self_arg: bool
 
@@ -24,13 +24,13 @@ class PyArg(PyExpression):
 		super().__init__(expression, parent)
 
 		# Convert and store
-		self.__arg_name = expression.arg
+		self.set_id(expression.arg)
+
 		# Arg type annotation
 		type_hint: Optional[Name] = Util.get_attr(expression, 'annotation')
-		# By default, this will be a 'self' argument
 
 		# If the argument is 'self' (constructor parameter)
-		if self.__arg_name == "self":
+		if self.get_id() == "self":
 			# Get the name of the class we are referring to
 			class_name: str
 			try:
@@ -61,12 +61,6 @@ class PyArg(PyExpression):
 		"""
 		return self.__self_arg
 
-	def get_name(self) -> str:
-		"""
-		:return: The name of the function argument, as a string.
-		"""
-		return self.__arg_name
-
 	def get_type(self) -> PyName:
 		"""
 		:return: The type of the function argument, as a PyName instance.
@@ -77,4 +71,4 @@ class PyArg(PyExpression):
 		"""
 		Transpiles the constant to a string.
 		"""
-		return f"{self.__arg_type.transpile()} {self.__arg_name}"
+		return f"{self.__arg_type.transpile()} {self.get_id()}"
