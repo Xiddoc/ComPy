@@ -15,7 +15,7 @@ class PyIdentifiable(metaclass=ABCMeta):
 
     __id: str
 
-    def set_id(self, new_id) -> None:
+    def set_id(self, new_id: str) -> None:
         """
         Update the name (ID) of the object.
 
