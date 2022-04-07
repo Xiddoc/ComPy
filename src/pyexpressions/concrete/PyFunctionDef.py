@@ -11,12 +11,12 @@ from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyArg import PyArg
 from src.pyexpressions.concrete.PyName import PyName
 from src.pyexpressions.highlevel.PyBody import PyBody
-from src.pyexpressions.highlevel.PyIdentifiable import PyNamed
+from src.pyexpressions.highlevel.PyIdentifiable import PyIdentifiable
 from src.pyexpressions.highlevel.PyScoped import PyScoped
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE, AnyFunction
 
 
-class PyFunctionDef(PyScoped, PyNamed):
+class PyFunctionDef(PyScoped, PyIdentifiable):
 	"""
 	Function defenition.
 	"""

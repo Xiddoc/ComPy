@@ -7,12 +7,12 @@ from typing import Optional
 from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyName import PyName
-from src.pyexpressions.highlevel.PyIdentifiable import PyNamed
+from src.pyexpressions.highlevel.PyIdentifiable import PyIdentifiable
 from src.structures.Errors import SyntaxSubsetError
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
-class PyAnnAssign(PyExpression, PyNamed):
+class PyAnnAssign(PyExpression, PyIdentifiable):
     """
     Expression for assigning a variable.
     """

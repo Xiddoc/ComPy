@@ -4,7 +4,7 @@ Python object which has it's own name.
 from abc import ABCMeta
 
 
-class PyNamed(metaclass=ABCMeta):
+class PyIdentifiable(metaclass=ABCMeta):
     """
     Python object which has it's own name (identifier).
 

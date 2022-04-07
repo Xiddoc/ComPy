@@ -8,17 +8,17 @@ from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyAnnAssign import PyAnnAssign
 from src.pyexpressions.concrete.PyFunctionDef import PyFunctionDef
+from src.pyexpressions.highlevel.PyIdentifiable import PyIdentifiable
 from src.pyexpressions.highlevel.PyScoped import PyScoped
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
-class PyClassDef(PyScoped):
+class PyClassDef(PyScoped, PyIdentifiable):
     """
     Class defenition.
     """
 
-    __class_name: str
     __constructor: Optional[PyFunctionDef]
     __private_methods: List[PyFunctionDef]
     __public_methods: List[PyFunctionDef]
