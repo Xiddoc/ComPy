@@ -11,5 +11,10 @@ class TestClass:
     test_field: int
 
     def __init__(self) -> None:
-        a: int = 1
-        print(a)
+        # Initialize new temporary variable
+        test_var: int = 1
+        # Print it
+        print(test_var)
+
+
+test_instance: TestClass = TestClass()
