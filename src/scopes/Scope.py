@@ -3,10 +3,10 @@ Compiler class for managing variables and their types between scopes.
 """
 from typing import Set, Optional
 
-from src.scopes.Function import Function
-from src.scopes.Object import Object
-from src.scopes.Type import Type
-from src.scopes.Variable import Variable
+from src.scopes.objects.Function import Function
+from src.scopes.abstract.Object import Object
+from src.scopes.abstract.Type import Type
+from src.scopes.objects.Variable import Variable
 from src.structures.Errors import ObjectAlreadyDefinedError, ObjectNotDefinedError
 
 

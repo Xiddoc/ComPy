@@ -3,8 +3,8 @@ Function class for scope handler.
 """
 from dataclasses import dataclass
 
-from src.scopes.Object import Object
-from src.scopes.Type import Type
+from src.scopes.abstract.Object import Object
+from src.scopes.abstract.Type import Type
 
 
 @dataclass
