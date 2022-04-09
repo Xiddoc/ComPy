@@ -4,9 +4,7 @@ Call a function.
 from _ast import Call
 from typing import List
 
-from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
-from src.pyexpressions.concrete.PyName import PyName
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
@@ -16,12 +14,12 @@ class PyCall(PyExpression):
 	"""
 
 	__args: List[PyExpression]
-	__obj: PyName
+	__obj: PyExpression
 
 	def __init__(self, expression: Call, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
 		# Convert to name
-		self.__obj = PyName(Util.get_attr(expression, 'func'), self)
+		self.__obj = self.from_ast(expression.func)
 
 		# For each argument
 		# Convert to argument object and store

@@ -12,8 +12,8 @@ from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 class PyAttribute(PyExpression, PyIdentifiable):
     """
-	Attribute statement (object inside another object, usually classes).
-	"""
+    Attribute statement (object inside another object, usually classes).
+    """
 
     __parent_object: PyName
 
@@ -29,6 +29,12 @@ class PyAttribute(PyExpression, PyIdentifiable):
 
     def _transpile(self) -> str:
         """
-		Transpiles the constant to a string.
-		"""
-        return f"{self.__parent_object.transpile()}.{self.get_id()}"
+        Transpiles the constant to a string.
+        """
+        # If the parent is "self", then we are referencing a class field
+        if self.__parent_object.get_id() == "self":
+            # In C++ we don't use "self", we just reference the name directly
+            return self.get_id()
+        else:
+            # Otherwise, add the attribute parent
+            return f"{self.__parent_object.transpile()}.{self.get_id()}"
