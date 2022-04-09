@@ -3,10 +3,7 @@ Compiler class for managing variables and their types between scopes.
 """
 from typing import Set, Optional
 
-from src.scopes.Function import Function
-from src.scopes.Object import Object
-from src.scopes.Type import Type
-from src.scopes.Variable import Variable
+from src.scopes.abstract.Object import Object
 from src.structures.Errors import ObjectAlreadyDefinedError, ObjectNotDefinedError
 
 
@@ -33,41 +30,41 @@ class Scope:
 		"""
 		return any(iter_var.name == object_name for iter_var in self.__objects)
 
-	def declare_variable(self, var_name: str, var_type: str) -> None:
-		"""
-		Initialize a variable and add it to the handler's registry.
+	# def declare_variable(self, var_name: str, var_type: str) -> None:
+	# 	"""
+	# 	Initialize a variable and add it to the handler's registry.
+	#
+	# 	:param var_name: The name of the variable.
+	# 	:param var_type: The type of the variable.
+	# 	"""
+	# 	# Create the Object instance and declare it
+	# 	self.declare_object(Variable(name=var_name, type=Type(var_type)))
 
-		:param var_name: The name of the variable.
-		:param var_type: The type of the variable.
-		"""
-		# Create the Object instance and declare it
-		self.__declare_object(Variable(name=var_name, type=Type(var_type)))
+	# def declare_function(self, func_name: str, func_return_type: str) -> None:
+	# 	"""
+	# 	Initialize a function and add it to the handler's registry.
+	#
+	# 	:param func_name: The name of the function.
+	# 	:param func_return_type: The return type of the function.
+	# 	"""
+	# 	# Create the Object instance and declare it
+	# 	self.declare_object(Function(name=func_name, return_type=Type(func_return_type)))
 
-	def declare_function(self, func_name: str, func_return_type: str) -> None:
-		"""
-		Initialize a function and add it to the handler's registry.
-
-		:param func_name: The name of the function.
-		:param func_return_type: The return type of the function.
-		"""
-		# Create the Object instance and declare it
-		self.__declare_object(Function(name=func_name, return_type=Type(func_return_type)))
-
-	def __declare_object(self, obj_instance: Object) -> None:
+	def declare_object(self, new_obj: Object) -> None:
 		"""
 		Declare an object by adding it to the handler.
 
-		:param obj_instance: The Object instance to add to the handler.
+		:param new_obj: The Object instance to add to the handler.
 		"""
 		# If the object does not exist
-		if not self.does_object_exist(obj_instance.name):
+		if not self.does_object_exist(new_obj.name):
 			# Make a new Object instance, then add it to the object set
-			self.__objects.add(obj_instance)
+			self.__objects.add(new_obj)
 		else:
 			# Otherwise, raise an exception.
 			# All objects have immutable types, and
 			# currently we do not support freeing objects.
-			raise ObjectAlreadyDefinedError(obj_instance.name)
+			raise ObjectAlreadyDefinedError(new_obj.name)
 
 	def get_object_if_exists(self, object_name: str) -> str:
 		"""

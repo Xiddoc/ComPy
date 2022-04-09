@@ -5,24 +5,19 @@ from _ast import Module
 from typing import List
 
 from src.pyexpressions.abstract.PyExpression import PyExpression
-from src.pyexpressions.concrete.PyExpr import PyExpr
 from src.pyexpressions.concrete.PyFunctionDef import PyFunctionDef
-from src.pyexpressions.concrete.PyPass import PyPass
-from src.scopes.Scope import Scope
+from src.pyexpressions.highlevel.PyScoped import PyScoped
 
 
-class PyModule(PyExpression):
+class PyModule(PyScoped):
 	"""
 	Python module.
 	"""
 
 	__body: List[PyExpression]
-	__scope: Scope
 
 	def __init__(self, expression: Module):
 		super().__init__(expression, None)
-		# Create empty object scope
-		self.__scope = Scope()
 		# For each body expression
 		# Create a PyExpression from the AST node
 		self.__body = [self.from_ast(ast) for ast in expression.body]
@@ -45,9 +40,8 @@ class PyModule(PyExpression):
 			if isinstance(pyexpr, PyFunctionDef):
 				# Add it to the function list
 				function_list.append(pyexpr.transpile())
-			elif not (isinstance(pyexpr, PyExpr) and pyexpr.is_empty_expression() or isinstance(pyexpr, PyPass)):
-				# Otherwise, check that it's not a dead expression
-				# (Any expression which is not a PyExpr that is empty)
+			elif not pyexpr.is_dead_expression():
+				# Make sure it's not a dead expression
 				# Transpile and add to code segment
 				# https://stackoverflow.com/q/9997895/11985743
 				output_list.append(pyexpr.transpile() + ";")
@@ -75,19 +69,3 @@ class PyModule(PyExpression):
 			# Join the transpiled code
 			transpiled_code="\n".join(output_list)
 		)
-
-	# noinspection PyUnusedFunction
-	def get_scope(self) -> Scope:
-		"""
-		Returns the Scope (instance) of this module body.
-
-		Might have a warning in your IDE that labels it as "unused".
-		This is since it is not explicitly used (in PyExpression:
-		it *should* be casted to PyFunctionDef, then use obj.get_scope(),
-		but instead there is a type check, then we use get_scope.
-
-		What this means is that depending on the Python linter
-		implementation, your IDE could flag this function as useless.
-		It is not. Do **NOT** remove it.
-		"""
-		return self.__scope

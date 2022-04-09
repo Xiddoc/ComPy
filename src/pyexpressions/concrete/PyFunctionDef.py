@@ -11,28 +11,30 @@ from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyArg import PyArg
 from src.pyexpressions.concrete.PyName import PyName
 from src.pyexpressions.highlevel.PyBody import PyBody
-from src.scopes.Scope import Scope
+from src.pyexpressions.highlevel.PyIdentifiable import PyIdentifiable
+from src.pyexpressions.highlevel.PyScoped import PyScoped
+from src.scopes.objects.Type import Type
+from src.scopes.objects.Function import Function
+from src.scopes.objects.Variable import Variable
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE, AnyFunction
 
 
-class PyFunctionDef(PyExpression):
+class PyFunctionDef(PyScoped, PyIdentifiable):
 	"""
 	Function defenition.
 	"""
 
-	__func_name: str
 	__args: List[PyArg]
 	__defaults: List[PyExpression]
 	__code: PyBody
 	__return_type: Optional[PyName]
-	__scope: Scope
 
 	def __init__(self, expression: FunctionDef, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
 		from src.pybuiltins.PyPortFunction import PyPortFunction
 
 		# Convert and store
-		self.__func_name = expression.name
+		self.set_id(expression.name)
 
 		# If return is a Constant, then it is None (there is no return value)
 		# In which case in the transpilation stage, set as "void"
@@ -42,26 +44,33 @@ class PyFunctionDef(PyExpression):
 
 		# If this is not a ported object (we will handle duplicated objects externally using a set)
 		if not isinstance(parent, PyPortFunction):
-			# Get the nearest scope
-			# Add this function to the scope
-			self.get_nearest_scope().declare_function(
-				func_name=self.__func_name,
-				func_return_type=returns.id if self.__return_type else 'NoneType'
-			)
+			# Create a function scope signature
+			scope_sig = Function(name=self.get_id(), return_type=Type(returns.id if self.__return_type else 'NoneType'))
+			# Add this function to the nearest scope
+			self.get_nearest_scope().declare_object(scope_sig)
 
 		# Create object scope (function body has it's own scope)
 		# Inherit the scope from the previous scope
-		self.__scope = Scope(self.get_nearest_scope())
+		self.update_from_nearest_scope()
 
 		# For each function argument
 		self.__args = []
 		for arg in expression.args.args:
+			# If this is a constructor self-reference ('self' argument)
 			# Create current argument
 			new_arg = PyArg(arg, self)
-			# Add to argument list
-			self.__args.append(new_arg)
+
+			# Create scope signature for argument
+			arg_scope_sig = Variable(name=new_arg.get_id(), type=Type(new_arg.get_type().get_id()))
 			# Assign all stack variables to our scope
-			self.get_scope().declare_variable(new_arg.get_name(), new_arg.get_type().get_target())
+			self.get_scope().declare_object(arg_scope_sig)
+
+			# If this is not the "self" argument
+			if not new_arg.is_self_arg():
+				# Add to argument list
+				# A few lines up, we DO define it in the scope, since it might be referenced.
+				# However, we don't want to transpile it, since C++ does not use it for function arguments.
+				self.__args.append(new_arg)
 
 		# For each argument default
 		# In my opinion, this should be moved to the PyArg class, however
@@ -73,19 +82,19 @@ class PyFunctionDef(PyExpression):
 		# For each line of code, convert to expression
 		self.__code = PyBody(expression.body, self)
 
-	def get_func_name(self) -> str:
+	def transpile_code(self) -> str:
 		"""
-		:return: The name of the referenced function.
+		Transpile the code body of the function.
 		"""
-		return self.__func_name
+		return self.__code.transpile()
 
+	# noinspection PyUnusedFunction
 	def _transpile(self) -> str:
 		"""
-		Transpile the operation to a string.t
+		Transpile the statement to a string.
 		"""
-		# Add the header
-		# Join the body together
-		return f"{self.transpile_header()} {self.__code.transpile()}"
+		# Join the header and the body together
+		return f"{self.transpile_header()} {self.transpile_code()}"
 
 	def transpile_return_type(self) -> str:
 		"""
@@ -93,9 +102,9 @@ class PyFunctionDef(PyExpression):
 		"""
 		return self.__return_type.transpile() if self.__return_type else 'void'
 
-	def transpile_header(self) -> str:
+	def transpile_args(self) -> str:
 		"""
-		Transpiles the header of the function to a native string.
+		Transpiles the arguments of the function and merges them together.
 		"""
 		# Transpile the arguments
 		transpiled_arguments: List[str] = []
@@ -115,25 +124,16 @@ class PyFunctionDef(PyExpression):
 			# Transpile each argument, merge it with the default value, then add it to the list.
 			transpiled_arguments.append(f"{self.__args[i].transpile()} = {self.__defaults[j].transpile()}")
 
+		# Merge them together with commas
+		return ', '.join(transpiled_arguments)
+
+	def transpile_header(self) -> str:
+		"""
+		Transpiles the header of the function to a native string.
+		"""
 		# Transpile the return type, then merge it with
 		# the function name and transpiled arguments.
-		return f"{self.transpile_return_type()} {self.__func_name}({', '.join(transpiled_arguments)})"
-
-	# noinspection PyUnusedFunction
-	def get_scope(self) -> Scope:
-		"""
-		Returns the Scope (instance) of this function body.
-
-		Might have a warning in your IDE that labels it as "unused".
-		This is since it is not explicitly used (in PyExpression:
-		it *should* be casted to PyFunctionDef, then use obj.get_scope(),
-		but instead there is a type check, then we use get_scope.
-
-		What this means is that depending on the Python linter
-		implementation, your IDE could flag this function as useless.
-		It is not. Do **NOT** remove it.
-		"""
-		return self.__scope
+		return f"{self.transpile_return_type()} {self.get_id()}({self.transpile_args()})"
 
 	@staticmethod
 	def from_single_object(obj: AnyFunction, parent: Optional[GENERIC_PYEXPR_TYPE]) -> "PyFunctionDef":
@@ -164,4 +164,4 @@ class PyFunctionDef(PyExpression):
 		return isinstance(other, PyFunctionDef) and hash(self) == hash(other)
 
 	def __hash__(self) -> int:
-		return hash(self.__func_name)
+		return hash(self.get_id())

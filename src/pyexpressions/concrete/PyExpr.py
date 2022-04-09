@@ -23,9 +23,9 @@ class PyExpr(PyExpression):
 		# then mark this expression as empty (no code runs here)
 		self.__is_empty_expr = isinstance(expression.value, Constant)
 
-	def is_empty_expression(self) -> bool:
+	def is_constant_nest(self) -> bool:
 		"""
-		:return: True if this expression does not execute code, False if it does execute code.
+		:return: Returns True if this expression only holds a constant, otherwise False.
 		"""
 		return self.__is_empty_expr
 

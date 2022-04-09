@@ -3,24 +3,22 @@ Variable class for scope handler.
 """
 from dataclasses import dataclass
 
-from src.scopes.Object import Object
+from src.scopes.abstract.Object import Object
+from src.scopes.objects.Type import Type
 
 
 @dataclass
-class Type(Object):
+class Variable(Object):
 	"""
-	Type class, which inherits from the Object class.
+	Variable class, which inherits from the Object class.
 
-	Types are objects which have a name, and
-	are sometimes converted to native counterparts.
+	Variables are objects which have a type and name:
 
-	For example, when type hinting 'Any' in Python, the
-	pseudo-equivalent would be the 'auto' keyword. I am
-	aware that there are problems that could arise from
-	this, such as simple invalid types, but the compiler
-	is still in beta mode and this is the best we can do
-	for now.
+	- The name is inherited from the Object class.
+	- The type must be set **ONCE** and can not be changed (freeing variables is not supported).
 	"""
+
+	type: Type
 
 	def __hash__(self) -> int:
 		"""

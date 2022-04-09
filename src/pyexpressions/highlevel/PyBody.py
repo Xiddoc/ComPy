@@ -5,8 +5,6 @@ from _ast import Pass, AST
 from typing import List, Sequence
 
 from src.pyexpressions.abstract.PyExpression import PyExpression
-from src.pyexpressions.concrete.PyExpr import PyExpr
-from src.pyexpressions.concrete.PyPass import PyPass
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
@@ -32,8 +30,6 @@ class PyBody(PyExpression):
 		return "{\n" + '\n'.join([
 			# Transpile each line
 			expr.transpile() + ";" for expr in self.__code \
-			# Don't transpile if:
-			# - This is a PyExpr which is an empty expression
-			# - This is a PyPass expression
-			if not (isinstance(expr, PyExpr) and expr.is_empty_expression() or isinstance(expr, PyPass))
+			# Don't transpile if this is a dead expression
+			if not expr.is_dead_expression()
 		]) + "\n}"

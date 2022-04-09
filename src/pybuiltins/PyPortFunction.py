@@ -15,7 +15,7 @@ class PyPortFunction(PyExpression):
 	Port a native function or object to Python.
 	"""
 
-	# __func has a type of PyFunctionDef, but you
+	# __obj has a type of PyFunctionDef, but you
 	# can't specify it here without a circular import
 	# error so we will (overwrite) type hint in the constructor instead.
 	__func: PyFunctionDef
@@ -65,7 +65,7 @@ class PyPortFunction(PyExpression):
 		"""
 		:return: The native name of the ported function.
 		"""
-		return self.get_interface_function().get_func_name()
+		return self.get_interface_function().get_id()
 
 	def _transpile(self) -> str:
 		"""

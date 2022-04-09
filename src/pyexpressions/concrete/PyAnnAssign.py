@@ -7,16 +7,18 @@ from typing import Optional
 from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyName import PyName
+from src.pyexpressions.highlevel.PyIdentifiable import PyIdentifiable
+from src.scopes.objects.Type import Type
+from src.scopes.objects.Variable import Variable
 from src.structures.Errors import SyntaxSubsetError
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
-class PyAnnAssign(PyExpression):
+class PyAnnAssign(PyExpression, PyIdentifiable):
     """
-	Expression for assigning a variable.
-	"""
+    Expression for assigning a variable.
+    """
 
-    __target: str
     __type: PyName
     __value: Optional[PyExpression]
 
@@ -24,7 +26,7 @@ class PyAnnAssign(PyExpression):
         super().__init__(expression, parent)
 
         # Store variable
-        self.__target = Util.get_attr(expression, "target.id")
+        self.set_id(Util.get_attr(expression, "target.id"))
 
         # Get type hint
         type_hint: Optional[Name] = Util.get_attr(expression, "annotation")
@@ -45,13 +47,14 @@ class PyAnnAssign(PyExpression):
             # Otherwise, leave as None
             self.__value = None
 
-        # Get the nearest scope
-        # Add this variable to the scope
-        self.get_nearest_scope().declare_variable(self.__target, self.__type.get_target())
+        # Create scope signature
+        var_scope_sig = Variable(name=self.get_id(), type=Type(self.__type.get_id()))
+        # Add this variable to the nearest scope
+        self.get_nearest_scope().declare_object(var_scope_sig)
 
     def _transpile(self) -> str:
         """
-		Transpile the operation to a string.
-		"""
-        return f"{self.__type.transpile()} {self.__target}" + \
+        Transpile the operation to a string.
+        """
+        return f"{self.__type.transpile()} {self.get_id()}" + \
                (f" = {self.__value.transpile()}" if self.__value else "")  # Only transpile value if it exists
