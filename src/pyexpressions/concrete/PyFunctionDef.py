@@ -59,14 +59,18 @@ class PyFunctionDef(PyScoped, PyIdentifiable):
 			# If this is a constructor self-reference ('self' argument)
 			# Create current argument
 			new_arg = PyArg(arg, self)
-			# Make sure that this is not an instance reference argument
+
+			# Create scope signature for argument
+			arg_scope_sig = Variable(name=new_arg.get_id(), type=Type(new_arg.get_type().get_id()))
+			# Assign all stack variables to our scope
+			self.get_scope().declare_object(arg_scope_sig)
+
+			# If this is not the "self" argument
 			if not new_arg.is_self_arg():
 				# Add to argument list
+				# A few lines up, we DO define it in the scope, since it might be referenced.
+				# However, we don't want to transpile it, since C++ does not use it for function arguments.
 				self.__args.append(new_arg)
-				# Create scope signature for argument
-				arg_scope_sig = Variable(name=new_arg.get_id(), type=Type(new_arg.get_type().get_id()))
-				# Assign all stack variables to our scope
-				self.get_scope().declare_object(arg_scope_sig)
 
 		# For each argument default
 		# In my opinion, this should be moved to the PyArg class, however
