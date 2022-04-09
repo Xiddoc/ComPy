@@ -102,14 +102,32 @@ class PyClassDef(PyScoped, PyIdentifiable):
         """
         Transpile the statement to a string.
         """
-        return "\n".join([
-            f"class {self.get_id()} {{",
-            "private:",
-            "\n".join([pyexpr.transpile() + ";" for pyexpr in self.__private_fields]),
-            "\n".join([pyexpr.transpile() + ";" for pyexpr in self.__private_methods]),
-            "public:",
-            "\n".join([pyexpr.transpile() + ";" for pyexpr in self.__public_fields]),
-            self.transpile_constructor(),
-            "\n".join([pyexpr.transpile() + ";" for pyexpr in self.__public_methods]),
-            "}"
-        ])
+        # Class header
+        transpiled_class = [f"class {self.get_id()} {{"]
+
+        # If there are any private attributes
+        if self.__private_methods or self.__private_fields:
+            # Then mark this section as private
+            transpiled_class.append("private:")
+            # Add transpiled private fields and methods
+            if self.__private_fields:
+                transpiled_class.append("\n".join([pyexpr.transpile() + ";" for pyexpr in self.__private_fields]))
+            if self.__private_methods:
+                transpiled_class.append("\n".join([pyexpr.transpile() + ";" for pyexpr in self.__private_methods]))
+
+        # If there are any public attributes (or a constructor)
+        if self.__constructor or self.__public_methods or self.__public_fields:
+            # Then mark this section as public
+            transpiled_class.append("public:")
+            # Transpile and add public attributes
+            if self.__public_fields:
+                transpiled_class.append("\n".join([pyexpr.transpile() + ";" for pyexpr in self.__public_fields]))
+            if self.__constructor:
+                transpiled_class.append(self.transpile_constructor())
+            if self.__public_methods:
+                transpiled_class.append("\n".join([pyexpr.transpile() + ";" for pyexpr in self.__public_methods]))
+
+        # Add ending bracket
+        transpiled_class.append("}")
+        # Join transpiled segments together
+        return "\n".join(transpiled_class)
