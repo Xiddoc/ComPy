@@ -1,22 +1,22 @@
 """
-Break statement.
+Continue statement.
 """
-from _ast import Break
+from _ast import Continue
 
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
-class PyBreak(PyExpression):
+class PyContinue(PyExpression):
     """
-    Break statement.
+    Continue statement.
     """
 
-    def __init__(self, expression: Break, parent: GENERIC_PYEXPR_TYPE):
+    def __init__(self, expression: Continue, parent: GENERIC_PYEXPR_TYPE):
         super().__init__(expression, parent)
 
     def _transpile(self) -> str:
         """
         Transpiles the statement to a string.
         """
-        return "break"
+        return "continue"
