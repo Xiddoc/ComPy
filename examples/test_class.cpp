@@ -24,5 +24,6 @@ print(test_var);
 
 };
 TestClass test_instance = TestClass();
+print(test_instance.test_field);
     return 0;
 }

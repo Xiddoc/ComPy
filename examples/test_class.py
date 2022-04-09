@@ -17,4 +17,8 @@ class TestClass:
         print(test_var)
 
 
+# Initialize the class
 test_instance: TestClass = TestClass()
+
+# Get a public field
+print(test_instance.test_field)
