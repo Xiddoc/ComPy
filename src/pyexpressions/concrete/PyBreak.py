@@ -8,15 +8,15 @@ from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
 class PyBreak(PyExpression):
-	"""
-	Break statement.
-	"""
+    """
+    Break statement.
+    """
 
-	def __init__(self, expression: Break, parent: GENERIC_PYEXPR_TYPE):
-		super().__init__(expression, parent)
+    def __init__(self, expression: Break, parent: GENERIC_PYEXPR_TYPE):
+        super().__init__(expression, parent)
 
-	def _transpile(self) -> str:
-		"""
-		Transpiles the constant to a string.
-		"""
-		return "break"
+    def _transpile(self) -> str:
+        """
+        Transpiles the constant to a string.
+        """
+        return "break"

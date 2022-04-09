@@ -8,29 +8,29 @@ from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
 class PyExpr(PyExpression):
-	"""
-	Expression statement.
-	"""
+    """
+    Expression statement.
+    """
 
-	__value: PyExpression
-	__is_empty_expr: bool
+    __value: PyExpression
+    __is_empty_expr: bool
 
-	def __init__(self, expression: Expr, parent: GENERIC_PYEXPR_TYPE):
-		super().__init__(expression, parent)
-		# Convert value and assign to field
-		self.__value = self.from_ast(expression.value)
-		# If the entire expression is just a constant literal,
-		# then mark this expression as empty (no code runs here)
-		self.__is_empty_expr = isinstance(expression.value, Constant)
+    def __init__(self, expression: Expr, parent: GENERIC_PYEXPR_TYPE):
+        super().__init__(expression, parent)
+        # Convert value and assign to field
+        self.__value = self.from_ast(expression.value)
+        # If the entire expression is just a constant literal,
+        # then mark this expression as empty (no code runs here)
+        self.__is_empty_expr = isinstance(expression.value, Constant)
 
-	def is_constant_nest(self) -> bool:
-		"""
-		:return: Returns True if this expression only holds a constant, otherwise False.
-		"""
-		return self.__is_empty_expr
+    def is_constant_nest(self) -> bool:
+        """
+        :return: Returns True if this expression only holds a constant, otherwise False.
+        """
+        return self.__is_empty_expr
 
-	def _transpile(self) -> str:
-		"""
-		Transpile the operation to a string.
-		"""
-		return self.__value.transpile()
+    def _transpile(self) -> str:
+        """
+        Transpile the operation to a string.
+        """
+        return self.__value.transpile()

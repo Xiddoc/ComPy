@@ -8,15 +8,15 @@ from src import PyPortFunctionSignature
 
 # noinspection PyUnusedLocal
 def add(number_one: int, number_two: int) -> int:
-	"""
-	Adds two numbers.
-	"""
+    """
+    Adds two numbers.
+    """
 
 
 # noinspection PyUnusedName
 ported_objs: Dict[str, PyPortFunctionSignature] = {
-	"add": PyPortFunctionSignature(
-		function=add,
-		code="return number_one + number_two;"
-	)
+    "add": PyPortFunctionSignature(
+        function=add,
+        code="return number_one + number_two;"
+    )
 }
