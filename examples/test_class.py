@@ -3,6 +3,7 @@ Testing a class in Python.
 """
 
 
+# noinspection PyMissingOrEmptyDocstring
 class TestClass:
     """
     Class documentation.
@@ -15,6 +16,9 @@ class TestClass:
         test_var: int = 1
         # Print it
         print(test_var)
+
+    def increment_test(self) -> None:
+        self.test_field += 1
 
 
 # Initialize the class
