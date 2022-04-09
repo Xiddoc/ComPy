@@ -55,13 +55,11 @@ def int_cast(obj: str) -> str:
 
 
 # noinspection PyShadowingBuiltins,PyUnusedLocal
-def pow(value: int, exponent: int) -> int:
+def exit_program(exit_code: int = 0) -> None:
     """
-    Calculates a number to the power of the given exponent.
+    Terminates the program.
 
-    :param value: The base value.
-    :param exponent: The exponent's value.
-    :return: The power of the base to the exponent.
+    :param exit_code: Returns this value as the status code.
     """
 
 
@@ -103,9 +101,8 @@ ported_objs: Dict[str, PyPortFunctionSignature] = {
         code="return std::stoi(obj);",
         dependencies={"iostream"}
     ),
-    "pow": PyPortFunctionSignature(
-        function=pow,
-        code="return pow(value, exponent);",
-        dependencies={"cmath"}
+    "exit": PyPortFunctionSignature(
+        function=exit_program,
+        code="exit(exit_code);"
     )
 }
