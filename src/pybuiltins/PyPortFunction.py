@@ -15,7 +15,7 @@ class PyPortFunction(PyExpression):
 	Port a native function or object to Python.
 	"""
 
-	# __func has a type of PyFunctionDef, but you
+	# __obj has a type of PyFunctionDef, but you
 	# can't specify it here without a circular import
 	# error so we will (overwrite) type hint in the constructor instead.
 	__func: PyFunctionDef

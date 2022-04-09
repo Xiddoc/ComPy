@@ -8,6 +8,8 @@ from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.concrete.PyName import PyName
 from src.pyexpressions.highlevel.PyIdentifiable import PyIdentifiable
+from src.scopes.objects.Type import Type
+from src.scopes.objects.Variable import Variable
 from src.structures.Errors import SyntaxSubsetError
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
@@ -45,9 +47,10 @@ class PyAnnAssign(PyExpression, PyIdentifiable):
             # Otherwise, leave as None
             self.__value = None
 
-        # Get the nearest scope
-        # Add this variable to the scope
-        self.get_nearest_scope().declare_variable(self.get_id(), self.__type.get_id())
+        # Create scope signature
+        var_scope_sig = Variable(name=self.get_id(), type=Type(self.__type.get_id()))
+        # Add this variable to the nearest scope
+        self.get_nearest_scope().declare_object(var_scope_sig)
 
     def _transpile(self) -> str:
         """

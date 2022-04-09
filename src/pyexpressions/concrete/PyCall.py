@@ -16,12 +16,12 @@ class PyCall(PyExpression):
 	"""
 
 	__args: List[PyExpression]
-	__func: PyName
+	__obj: PyName
 
 	def __init__(self, expression: Call, parent: GENERIC_PYEXPR_TYPE):
 		super().__init__(expression, parent)
 		# Convert to name
-		self.__func = PyName(Util.get_attr(expression, 'func'), self)
+		self.__obj = PyName(Util.get_attr(expression, 'func'), self)
 
 		# For each argument
 		# Convert to argument object and store
@@ -37,4 +37,4 @@ class PyCall(PyExpression):
 		# For each argument, transpile
 		# Join the arguments together with commas
 		# FUNC_NAME ( ARG1 , ARG2 , ... )
-		return f"{self.__func.transpile()}({','.join([arg.transpile() for arg in self.__args])})"
+		return f"{self.__obj.transpile()}({','.join([arg.transpile() for arg in self.__args])})"

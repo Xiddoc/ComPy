@@ -13,6 +13,9 @@ from src.pyexpressions.concrete.PyName import PyName
 from src.pyexpressions.highlevel.PyBody import PyBody
 from src.pyexpressions.highlevel.PyIdentifiable import PyIdentifiable
 from src.pyexpressions.highlevel.PyScoped import PyScoped
+from src.scopes.objects.Type import Type
+from src.scopes.objects.Function import Function
+from src.scopes.objects.Variable import Variable
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE, AnyFunction
 
 
@@ -41,12 +44,10 @@ class PyFunctionDef(PyScoped, PyIdentifiable):
 
 		# If this is not a ported object (we will handle duplicated objects externally using a set)
 		if not isinstance(parent, PyPortFunction):
-			# Get the nearest scope
-			# Add this function to the scope
-			self.get_nearest_scope().declare_function(
-				func_name=self.get_id(),
-				func_return_type=returns.id if self.__return_type else 'NoneType'
-			)
+			# Create a function scope signature
+			scope_sig = Function(name=self.get_id(), return_type=Type(returns.id if self.__return_type else 'NoneType'))
+			# Add this function to the nearest scope
+			self.get_nearest_scope().declare_object(scope_sig)
 
 		# Create object scope (function body has it's own scope)
 		# Inherit the scope from the previous scope
@@ -62,8 +63,10 @@ class PyFunctionDef(PyScoped, PyIdentifiable):
 			if not new_arg.is_self_arg():
 				# Add to argument list
 				self.__args.append(new_arg)
+				# Create scope signature for argument
+				arg_scope_sig = Variable(name=new_arg.get_id(), type=Type(new_arg.get_type().get_id()))
 				# Assign all stack variables to our scope
-				self.get_scope().declare_variable(new_arg.get_id(), new_arg.get_type().get_id())
+				self.get_scope().declare_object(arg_scope_sig)
 
 		# For each argument default
 		# In my opinion, this should be moved to the PyArg class, however

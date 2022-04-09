@@ -10,6 +10,7 @@ from src.pyexpressions.concrete.PyAnnAssign import PyAnnAssign
 from src.pyexpressions.concrete.PyFunctionDef import PyFunctionDef
 from src.pyexpressions.highlevel.PyIdentifiable import PyIdentifiable
 from src.pyexpressions.highlevel.PyScoped import PyScoped
+from src.scopes.objects.Class import Class
 from src.structures.Errors import UnsupportedFeatureException
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
@@ -32,11 +33,11 @@ class PyClassDef(PyScoped, PyIdentifiable):
         self.set_id(expression.name)
 
         # Declare class
-        # self.get_scope().declare_class
+        self.get_nearest_scope().declare_object(Class(self.get_id(), self.get_scope()))
 
-        # Create object scope (function body has it's own scope)
+        # Create object scope (class body has it's own scope)
         # Inherit the scope from the previous scope
-        # self.__scope = Scope(self.get_nearest_scope())
+        self.update_from_nearest_scope()
 
         # Prepare to store methods and fields
         self.__constructor = None
