@@ -5,6 +5,8 @@ Lots of escaped characters!
 ' " ` ; / % @ { } \
 """
 
+import examples.test_import
+
 # Assignment of type and value of constant or binary operation
 a: int = (1 + 2) * 3
 
