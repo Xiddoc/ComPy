@@ -1,39 +1,40 @@
 """
 Compiler class.
 """
-from ast import AST, parse, unparse, Module
+from ast import AST, parse, unparse
 
-from src.compiler.Args import Args
 from src.compiler.Util import Util
 from src.pyexpressions.concrete.PyModule import PyModule
 
 
 class Compiler:
     """
-    Compiler class to convert operations to ASM ops.
+    Compiler class to convert code to transpiled syntax trees.
     """
 
-    __node: Module
-    __pymodule: PyModule
-
-    def parse(self, source: str) -> None:
+    @staticmethod
+    def parse(source: str) -> PyModule:
         """
         Initiates the parsing sequence.
         This turns the code into a series of nodes, filled
         with the proper data structures alongside other nested nodes.
-        """
-        # Parse the node into an abstract tree
-        # Cast node to proper type
-        self.__node = parse(source, Args().get_args().file.name)
 
-        # Initiate module
-        self.__pymodule = PyModule(self.__node)
+        :param source: The source code to compile.
+        :return: A transpiled AST head node.
+        """
+        # Instantiate PyModule using AST
+        return PyModule(parse(source))
 
-    def compile(self) -> str:
+    @classmethod
+    def compile(cls, source: str) -> str:
         """
-        Returns the compiled output as a string.
+        Automatically parses the file, then transpiles it.
+        This is essentially a wrapper function for parse().
+
+        :param source: The source code to compile.
+        :return: The transpiled source code.
         """
-        return self.__pymodule.transpile()
+        return cls.parse(source).transpile()
 
     @staticmethod
     def unparse(expression: AST) -> str:
