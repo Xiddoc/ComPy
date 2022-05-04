@@ -12,7 +12,7 @@ from src.structures.Errors import SyntaxSubsetError
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
-class PyArg(PyExpression, PyIdentifiable):
+class PyArg(PyIdentifiable):
     """
     Function argument name declaration.
     """

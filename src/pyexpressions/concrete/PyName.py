@@ -3,13 +3,12 @@ Name statement (usage of an object).
 """
 from _ast import Name
 
-from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.highlevel.PyIdentifiable import PyIdentifiable
 from src.structures.Errors import SyntaxSubsetError
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
-class PyName(PyExpression, PyIdentifiable):
+class PyName(PyIdentifiable):
     """
     Name statement (usage of an object).
     """

@@ -5,17 +5,16 @@ from _ast import Attribute
 
 from src.compiler.Util import Util
 from src.pyexpressions.abstract.PyExpression import PyExpression
-from src.pyexpressions.concrete.PyName import PyName
 from src.pyexpressions.highlevel.PyIdentifiable import PyIdentifiable
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
-class PyAttribute(PyExpression, PyIdentifiable):
+class PyAttribute(PyIdentifiable):
     """
     Attribute statement (object inside another object, usually classes).
     """
 
-    __parent_object: PyName
+    __parent_object: PyIdentifiable
 
     def __init__(self, expression: Attribute, parent: GENERIC_PYEXPR_TYPE):
         super().__init__(expression, parent)
@@ -23,9 +22,8 @@ class PyAttribute(PyExpression, PyIdentifiable):
         # Get the attribute name
         self.set_id(expression.attr)
 
-        # Set the attribute's parent-object
-        # Value might reveal a method later in the future
-        self.__parent_object = PyName(Util.get_attr(expression, "value"), self)
+        # Set the attribute's parent object
+        self.__parent_object = self.from_ast(Util.get_attr(expression, "value"))
 
     def _transpile(self) -> str:
         """
