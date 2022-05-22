@@ -17,6 +17,7 @@ from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 # therefore no ImportError will occur.
 if TYPE_CHECKING:
     from src.pybuiltins.PyPortFunction import PyPortFunction
+    from src.compiler.Logger import Logger
 
 
 class PyExpression(metaclass=ABCMeta):
@@ -40,13 +41,13 @@ class PyExpression(metaclass=ABCMeta):
         self.__parent = parent
         # Local import to avoid error
         self.__ported_depends = set()
+        # Set base expression (might be needed later for throwing errors, will be useful for getting line #)
+        self.__expression = expression
         # Create logger for this node
         # Import dependencies locally to avoid import errors
         from src.compiler.Logger import Logger
         from src.compiler.Compiler import Compiler
         self.__logger = Logger(self)
-        # Set base expression (might be needed later for throwing errors, will be useful for getting line #)
-        self.__expression = expression
         # Print logging statement for creation of node
         self.__logger.log_tree_up(
             f"Creating expression <{Util.get_name(expression)}>: {Compiler.unparse_escaped(expression)} "
@@ -175,6 +176,12 @@ class PyExpression(metaclass=ABCMeta):
         :return: Returns an instance of the PyExpression object which created this object.
         """
         return self.__parent
+
+    def get_logger(self) -> "Logger":
+        """
+        :return: Returns this expression's Logger instance.
+        """
+        return self.__logger
 
     def is_exterior_scope(self) -> bool:
         """

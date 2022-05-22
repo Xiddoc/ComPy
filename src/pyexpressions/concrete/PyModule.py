@@ -21,6 +21,8 @@ class PyModule(PyScoped):
         # For each body expression
         # Create a PyExpression from the AST node
         self.__body = [self.from_ast(ast) for ast in expression.body]
+        # Update the logging GUI, now that we have parsed the entire module
+        self.get_logger().update_debug_viewer()
 
     def _transpile(self) -> str:
         """
