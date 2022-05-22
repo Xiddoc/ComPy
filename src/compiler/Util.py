@@ -6,7 +6,11 @@ and clean the code base.
 from _ast import AST
 from functools import reduce
 from math import floor, log
-from typing import Any
+from typing import Any, Union
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from src.pyexpressions.abstract.PyExpression import PyExpression
 
 
 class Util:
@@ -45,7 +49,7 @@ class Util:
         return reduce(getattr, attrs, obj)
 
     @classmethod
-    def get_name(cls, obj: AST) -> str:
+    def get_name(cls, obj: Union[AST, "PyExpression"]) -> str:
         """
         Retrieves the name of the AST node's class.
         For example, instead of seeing: <ast.AnnAssign object at 0x000002CC7FE5A310>
@@ -82,8 +86,9 @@ class Util:
         """
         Convert a file size to a string representation.
         For example, if you pass 2000
-        :param file_size:
-        :return:
+
+        :param file_size: The file size (in bytes) to convert to a string.
+        :return: A string representing the file size with an abbreviation.
         """
         # Critical case
         if file_size == 0:
