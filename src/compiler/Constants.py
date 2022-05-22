@@ -3,7 +3,7 @@ Constants and other 'singleton' objects and maps/dicts.
 """
 from _ast import Constant, BinOp, operator, Add, Sub, Mult, AnnAssign, AST, Expr, Name, Call, FunctionDef, arg, \
     Return, Assign, Module, IfExp, If, cmpop, Eq, Compare, Lt, Gt, BoolOp, NotEq, Or, And, boolop, Div, Mod, FloorDiv, \
-    Pass, GtE, LtE, While, AugAssign, Break, For, ClassDef, Attribute, Is, IsNot
+    Pass, GtE, LtE, While, AugAssign, Break, For, ClassDef, Attribute, Is, IsNot, Continue
 from json import dumps
 from typing import Dict, Type, Any, Callable
 
@@ -20,6 +20,7 @@ from src.pyexpressions.concrete.PyCall import PyCall
 from src.pyexpressions.concrete.PyClassDef import PyClassDef
 from src.pyexpressions.concrete.PyCompare import PyCompare
 from src.pyexpressions.concrete.PyConstant import PyConstant
+from src.pyexpressions.concrete.PyContinue import PyContinue
 from src.pyexpressions.concrete.PyExpr import PyExpr
 from src.pyexpressions.concrete.PyFor import PyFor
 from src.pyexpressions.concrete.PyFunctionDef import PyFunctionDef
@@ -44,6 +45,7 @@ AST_EXPR_TO_PYEXPR: Dict[Type[AST], Type[PyExpression]] = {
     ClassDef: PyClassDef,
     Compare: PyCompare,
     Constant: PyConstant,
+    Continue: PyContinue,
     Expr: PyExpr,
     For: PyFor,
     FunctionDef: PyFunctionDef,

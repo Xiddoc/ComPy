@@ -1,3 +1,7 @@
+<p align="center">
+    <img src="resources/compy.png" alt="ComPy Logo" width="250">
+</p>
+
 # ComPy
 
 An efficient and simple static Python to C++ source-to-source compiler.
