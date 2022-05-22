@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="resources/compy.png" alt="ComPy Logo" width="150">
+    <img src="resources/compy.png" alt="ComPy Logo" width="250">
 </p>
 
 # ComPy
