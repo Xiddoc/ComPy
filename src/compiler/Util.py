@@ -19,7 +19,7 @@ class Util:
     """
 
     @staticmethod
-    def get_attr(obj: AST, attribute_path: str) -> Any:
+    def get_attr(obj: Union[AST, "PyExpression"], attribute_path: str) -> Any:
         """
         A function that recursively traverses down an "attribute path"
         and retrieves the value at the end of the path.

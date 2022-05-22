@@ -179,13 +179,13 @@ class LoggerGUI(metaclass=Singleton):
         self.__window_ready.wait()
         # The parameter takes a blank string to set no parent (top level)
         # Otherwise, pass the memory ID of the parent expression
-        parent = '' if node.get_parent() is None else id(node.get_parent())
+        parent: str = '' if node.get_parent() is None else str(id(node.get_parent()))
         # Insert the node into the tree, at the end of the parent list
         # Set the node's tree ID to its object's ID
         self.__tree.insert(
             parent=parent,
             index=END,
-            iid=id(node),
+            iid=str(id(node)),
             text="Loading..."
         )
         # Add the node to our cache so we can update it later
@@ -213,4 +213,4 @@ class LoggerGUI(metaclass=Singleton):
                 # Get the virtual ID of the expression
                 extra_text = node.get_id()
             # Update the debug info in the GUI element
-            self.__tree.item(id(node), text=f"{Util.get_name(node)}: {extra_text}")
+            self.__tree.item(str(id(node)), text=f"{Util.get_name(node)}: {extra_text}")
