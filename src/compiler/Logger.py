@@ -2,8 +2,8 @@
 Logging utilities and functions.
 """
 from threading import Thread, Event
-from tkinter import Tk, END
-from tkinter.ttk import Treeview
+from tkinter import Tk, END, PhotoImage
+from tkinter.ttk import Treeview, Style
 from typing import cast, List
 
 from src.compiler.Args import Args
@@ -154,12 +154,18 @@ class LoggerGUI(metaclass=Singleton):
         # Create a root window
         self.__window = Tk()
         self.__window.title('ComPy AST Viewer')
-        self.__window.geometry('600x400')
+        self.__window.geometry('700x500')
+        # noinspection PyArgumentEqualDefault
+        self.__window.wm_iconphoto(False, PhotoImage(file="resources/compy.png"))
         # Tkinter uses a grid-based layout
         self.__window.rowconfigure(0, weight=1)
         self.__window.columnconfigure(0, weight=1)
-        # Create a tree view to display the AST
-        self.__tree = Treeview(self.__window)
+        # Create style for fonts and overall window theme
+        custom_style = Style()
+        custom_style.theme_use("clam")  # Themes: 'winnative', 'clam', 'alt', 'default', 'classic', 'vista', 'xpnative'
+        custom_style.configure("Treeview", font=('Lucida Console', 11))
+        # Create a tree view to display the AST (second parameter removes the header line)
+        self.__tree = Treeview(self.__window, show="tree")
         # Place the element inside the root window's grid, and expand it to the max size
         # (NSEW = North, East, South, West)
         self.__tree.grid(row=0, column=0, sticky='NESW')
