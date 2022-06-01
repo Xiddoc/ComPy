@@ -27,12 +27,13 @@ class Logger:
 
     def __init__(self, py_expr: PyExpression) -> None:
         # Check if logging is enabled
-        if not Args().get_args().verbose:
+        if not self.is_debug():
             # If not then no need to calculate expensive recursive logging operations
             return
 
         # Add this expression to the AST GUI
-        LoggerGUI().add_node(py_expr)
+        if Args().get_args().debug_gui:
+            LoggerGUI().add_node(py_expr)
 
         # Figure out indentation level
         # We do this by figuring out how many parents there are to this node.
@@ -52,12 +53,22 @@ class Logger:
         self.__indentation = indentation
 
     @staticmethod
+    def is_debug() -> bool:
+        """
+        :return: True if any debugging flags are turned on.
+        """
+        return \
+            Args().get_args().debug_gui or \
+            Args().get_args().debug_text or \
+            Args().get_args().debug_image
+
+    @staticmethod
     def update_debug_viewer() -> None:
         """
         Wrapper method to update the AST debug GUI.
         """
         # Check if logging is enabled
-        if Args().get_args().verbose:
+        if Args().get_args().debug_gui:
             # Update the tree
             LoggerGUI().update_tree()
 
@@ -103,7 +114,7 @@ class Logger:
         :param message: The message to log.
         """
         # Check if logging is enabled
-        if Args().get_args().verbose:
+        if Args().get_args().debug_text:
             # If it is, then print the message
             print(message)
 
