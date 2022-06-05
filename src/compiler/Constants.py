@@ -3,11 +3,12 @@ Constants and other 'singleton' objects and maps/dicts.
 """
 from _ast import Constant, BinOp, operator, Add, Sub, Mult, AnnAssign, AST, Expr, Name, Call, FunctionDef, arg, \
     Return, Assign, Module, IfExp, If, cmpop, Eq, Compare, Lt, Gt, BoolOp, NotEq, Or, And, boolop, Div, Mod, FloorDiv, \
-    Pass, GtE, LtE, While, AugAssign, Break, For, ClassDef, Attribute, Is, IsNot, Continue
+    Pass, GtE, LtE, While, AugAssign, Break, For, ClassDef, Attribute, Is, IsNot, Continue, Import
 from json import dumps
 from typing import Dict, Type, Any, Callable
 
 from src.pyexpressions.abstract.PyExpression import PyExpression
+from src.pyexpressions.concrete.PyImport import PyImport
 from src.pyexpressions.concrete.PyAnnAssign import PyAnnAssign
 from src.pyexpressions.concrete.PyArg import PyArg
 from src.pyexpressions.concrete.PyAssign import PyAssign
@@ -51,6 +52,7 @@ AST_EXPR_TO_PYEXPR: Dict[Type[AST], Type[PyExpression]] = {
     FunctionDef: PyFunctionDef,
     If: PyIf,
     IfExp: PyIfExp,
+    Import: PyImport,
     Module: PyModule,
     Name: PyName,
     Pass: PyPass,
