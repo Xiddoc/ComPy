@@ -23,14 +23,19 @@ print(f"ComPy Release v{__version__} {'Stable' if __stable__ else 'Alpha (might 
 # Get arguments with argument parser class
 parser = ArgumentParser()
 # Add args to the parser
-parser.add_argument('file', type=FileType(), help='the file to compile')
-parser.add_argument('-o', '--output', type=FileType('w'), help='the file to output the ASM code to')
-parser.add_argument('-l', '--links', help='links ported libraries to the executable (seperate with the ; character)')
-parser.add_argument('-g', '--compile', action='store_true', help='compiles the output to an executable (you must have '
+parser.add_argument('file', type=FileType(), help='The file to compile')
+parser.add_argument('-o', '--output', type=FileType('w'), help='The file to output the ASM code to')
+parser.add_argument('-l', '--links', help='Links the ported libraries to the executable '
+                                          '(seperate with the ; character)')
+parser.add_argument('-g', '--compile', action='store_true', help='Compiles the output to an executable (you must have '
                                                                  'g++ installed and on the PATH)')
-parser.add_argument('-c', '--compress', action='store_true', help='compresses the output executable (you must have UPX '
+parser.add_argument('-c', '--compress', action='store_true', help='Compresses the output executable (you must have UPX '
                                                                   'installed and on the PATH)')
-parser.add_argument('-v', '--verbose', action='store_true', help='print verbose compilation steps')
+parser.add_argument('-dg', '--debug-gui', action='store_true', help='Opens the debugging GUI, mainly used to display '
+                                                                    'information about the AST')
+parser.add_argument('-dt', '--debug-text', action='store_true', help='Prints out more logging information, mainly the '
+                                                                     'AST tree in text form')
+parser.add_argument('-di', '--debug-image', action='store_true', help='Renders the AST as an image')
 
 # Parse args, then create
 # a singleton from arguments

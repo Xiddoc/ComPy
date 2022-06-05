@@ -126,20 +126,22 @@ print(my_var)
 Help menu, describes all command-line arguments:
 
 ```text
-usage: compy.py [-h] [-o OUTPUT] [-l LINKS] [-g] [-c] [-v] file
+usage: compy.py [-h] [-o OUTPUT] [-l LINKS] [-g] [-c] [-dg] [-dt] [-di] file
 
 positional arguments:
-  file                  the file to compile
+  file                  The file to compile
 
 optional arguments:
   -h, --help            show this help message and exit
   -o OUTPUT, --output OUTPUT
-                        the file to output the ASM code to
+                        The file to output the ASM code to
   -l LINKS, --links LINKS
-                        links ported libraries to the executable (seperate with the ; character)
-  -g, --compile         compiles the output to an executable (you must have g++ installed and on the PATH)
-  -c, --compress        compresses the output executable (you must have UPX installed and on the PATH)
-  -v, --verbose         print verbose compilation steps
+                        Links the ported libraries to the executable (seperate with the ; character)
+  -g, --compile         Compiles the output to an executable (you must have g++ installed and on the PATH)
+  -c, --compress        Compresses the output executable (you must have UPX installed and on the PATH)
+  -dg, --debug-gui      Opens the debugging GUI, mainly used to display information about the AST
+  -dt, --debug-text     Prints out more logging information, mainly the AST tree in text form
+  -di, --debug-image    Renders the AST as an image
 ```
 
 Basic compilation (transpilation) of Python code:
