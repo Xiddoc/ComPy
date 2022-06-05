@@ -14,7 +14,7 @@ from src.structures.Errors import SyntaxSubsetError
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
-class PyAnnAssign(PyExpression, PyIdentifiable):
+class PyAnnAssign(PyIdentifiable):
     """
     Expression for assigning a variable.
     """

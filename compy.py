@@ -13,11 +13,12 @@ from src.compiler.Util import Util
 from src.compiler.Args import Args
 from src.compiler.Compiler import Compiler
 
-print(f"""
-╔═╗ ┌─┐ ┌┬┐ ╔═╗ ┬ ┬
-║   │ │ │││ ╠═╝ └┬┘
-╚═╝ └─┘ ┴ ┴ ╩    ┴ 
-""")
+# Version information, will be moved to a setup.py in the future
+__version__ = 1.0
+__stable__ = False
+
+# Print the relevant version information
+print(f"ComPy Release v{__version__} {'Stable' if __stable__ else 'Alpha (might have bugs/unsupported features)'}")
 
 # Get arguments with argument parser class
 parser = ArgumentParser()
@@ -43,17 +44,9 @@ source = ioStream.read()
 # Close the file
 ioStream.close()
 
-# Send parser data to compiler
-print("Parsing the file...")
-c: Compiler = Compiler()
-
-# Compile the file
-c.parse(source)
-print("Successfully parsed!")
-
 # Compile the file to a string
-print("Transpiling the file...")
-compiled_text: str = c.compile()
+print("Parsing and transpiling the file...")
+compiled_text: str = Compiler.compile(source)
 print("Successfully transpiled!")
 
 # If there is an output file, then write there

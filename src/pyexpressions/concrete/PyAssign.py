@@ -9,7 +9,7 @@ from src.pyexpressions.highlevel.PyIdentifiable import PyIdentifiable
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 
-class PyAssign(PyExpression, PyIdentifiable):
+class PyAssign(PyIdentifiable):
     """
     Expression for assigning a variable.
     """
