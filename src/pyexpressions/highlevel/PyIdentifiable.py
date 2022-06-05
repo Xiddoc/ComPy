@@ -3,8 +3,10 @@ Python object which has it's own name.
 """
 from abc import ABCMeta
 
+from src.pyexpressions.abstract.PyExpression import PyExpression
 
-class PyIdentifiable(metaclass=ABCMeta):
+
+class PyIdentifiable(PyExpression, metaclass=ABCMeta):
     """
     Python object which has it's own name (identifier).
 
