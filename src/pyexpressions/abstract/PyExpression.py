@@ -17,7 +17,7 @@ from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 # therefore no ImportError will occur.
 if TYPE_CHECKING:
     from src.pybuiltins.PyPortFunction import PyPortFunction
-    from src.compiler.Logger import Logger
+    from src.compiler.logging.Logger import Logger
 
 
 class PyExpression(metaclass=ABCMeta):
@@ -45,7 +45,7 @@ class PyExpression(metaclass=ABCMeta):
         self.__expression = expression
         # Create logger for this node
         # Import dependencies locally to avoid import errors
-        from src.compiler.Logger import Logger
+        from src.compiler.logging.Logger import Logger
         from src.compiler.Compiler import Compiler
         self.__logger = Logger(self)
         # Print logging statement for creation of node
