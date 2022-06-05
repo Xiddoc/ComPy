@@ -28,12 +28,60 @@ code to C++ projects, or vice versa.
 
 ## Installation
 
+### ComPy Installation
+
 Open a command prompt and run:
 ```cmd
 python -m pip install -r requirements.txt
 ```
-In future versions, we will hopefully have a `setup.py` file
-to automatically install dependencies and such.
+
+### g++ Installation
+
+`g++` is the C++ compiler that ComPy uses under the hood to turn the transpiled C++
+code into a running executable. C++ can't run on its own, it needs to be compiled
+to an executable in order for the OS to understand how to read and run it. Therefore,
+`g++` acts as a "translator" to turn our readable C++ code into computer-readable
+machine/binary code.
+
+If you are on Windows and don't have `g++` installed, then you can install it using
+the [MinGW Project](https://www.mingw-w64.org/downloads/#cygwin). You should be able to
+download and install it via the [Cygwin installer](https://cygwin.com/install.html), by
+following the instructions on the MinGW downloads page under the "Cygwin" section.
+After that, make sure to add `g++` to your Windows PATH so that you can access and run
+`g++` from anywhere. You can verify this by opening a CMD shell and running:
+```cmd
+g++ --version
+```
+... which should display your installed version of the compiler.
+
+If you are on Ubuntu, then you can easily install `g++`
+using the following commands:
+```bash
+sudo apt-get update
+sudo apt-get install g++
+```
+
+### UPX Installation
+
+`upx` is a tool used by ComPy to compress the output executable, making the final file
+size much smaller. This can make it easier to transfer the executable between computers,
+or to upload it online quicker. Do note that by using the `upx` compression flag when
+compiling with ComPy, the resulting executable will be marginally slower. This is because
+the `upx` tool will have to decompress all the code at the start, before running it.
+
+In order to install `upx`, go to the [UPX GitHub Releases page](https://github.com/upx/upx/releases)
+and download the version that matches your system. For example, if you are using
+32-bit Windows, then you should download the `upx-VERSION-win32.zip` file, which is
+labelled accordingly as `UPX - X86 Win32 version` in the Asset/Description table.
+
+After that, you should unzip the file, take out the `upx.EXTENSION` (for Windows,
+this will be a `.exe`) and put it somewhere that you can add to the PATH. After
+updating the PATH, make sure that it is properly installed by opening a CMD shell
+and running:
+```cmd
+upx -V
+```
+... to display the version number.
 
 ## Syntax Subset
 
