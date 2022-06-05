@@ -5,9 +5,9 @@ Lots of escaped characters!
 ' " ` ; / % @ { } \
 """
 
+# Importing code from another file
+# noinspection PyUnresolvedReferences
 import examples.example_import
-
-examples.example_import.imported_function()
 
 # Assignment of type and value of constant or binary operation
 a: int = (1 + 2) * 3
@@ -29,6 +29,7 @@ print("The answer is... " + str(c))
 user_input: str = input("Give me input: ")
 
 print("Testing input: " + user_input)
+print("More testing input: " + str(int(user_input) * 100))
 
 # Pass statement (does literally nothing)
 pass

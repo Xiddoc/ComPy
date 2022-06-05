@@ -45,7 +45,7 @@ def str_cast(obj: Any) -> str:
 
 
 # noinspection PyUnusedLocal
-def int_cast(obj: str) -> str:
+def int_cast(obj: str) -> int:
     """
     Casts a string object to an integer.
 
