@@ -4,7 +4,6 @@ Attribute statement (object inside another object, usually classes).
 from _ast import Attribute
 
 from src.compiler.Util import Util
-from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.pyexpressions.highlevel.PyIdentifiable import PyIdentifiable
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 

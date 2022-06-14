@@ -8,7 +8,6 @@ from json import dumps
 from typing import Dict, Type, Any, Callable
 
 from src.pyexpressions.abstract.PyExpression import PyExpression
-from src.pyexpressions.concrete.PyImport import PyImport
 from src.pyexpressions.concrete.PyAnnAssign import PyAnnAssign
 from src.pyexpressions.concrete.PyArg import PyArg
 from src.pyexpressions.concrete.PyAssign import PyAssign
@@ -27,6 +26,7 @@ from src.pyexpressions.concrete.PyFor import PyFor
 from src.pyexpressions.concrete.PyFunctionDef import PyFunctionDef
 from src.pyexpressions.concrete.PyIf import PyIf
 from src.pyexpressions.concrete.PyIfExp import PyIfExp
+from src.pyexpressions.concrete.PyImport import PyImport
 from src.pyexpressions.concrete.PyModule import PyModule
 from src.pyexpressions.concrete.PyName import PyName
 from src.pyexpressions.concrete.PyPass import PyPass

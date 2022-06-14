@@ -31,7 +31,7 @@ class PyExpression(metaclass=ABCMeta):
     __parent: Optional[GENERIC_PYEXPR_TYPE]
 
     @abstractmethod
-    def __init__(self, expression: AST, parent: Optional[GENERIC_PYEXPR_TYPE]):
+    def __init__(self, expression: AST, parent: Optional[GENERIC_PYEXPR_TYPE]) -> None:
         """
         Constructor for the expression.
         """
@@ -50,7 +50,7 @@ class PyExpression(metaclass=ABCMeta):
         self.__logger = Logger(self)
         # Print logging statement for creation of node
         self.__logger.log_tree_up(
-            f"Creating expression <{Util.get_name(expression)}>: {Compiler.unparse_escaped(expression)} "
+            f"Creating expression <{Util.get_name(expression)}>: {Util.escape(Compiler.unparse(expression))} "
         )
 
     @abstractmethod
