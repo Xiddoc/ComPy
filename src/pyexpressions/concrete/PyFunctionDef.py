@@ -13,8 +13,8 @@ from src.pyexpressions.concrete.PyName import PyName
 from src.pyexpressions.highlevel.PyBody import PyBody
 from src.pyexpressions.highlevel.PyIdentifiable import PyIdentifiable
 from src.pyexpressions.highlevel.PyScoped import PyScoped
-from src.scopes.objects.Type import Type
 from src.scopes.objects.Function import Function
+from src.scopes.objects.Type import Type
 from src.scopes.objects.Variable import Variable
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE, AnyFunction
 

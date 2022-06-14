@@ -105,14 +105,16 @@ class Logger:
 
         :param message: The message to log.
         """
-        # Merge the tree branches with the message
-        # Log it
-        self.log(
-            self.__get_log_prepend(
-                indentation=self.__indentation,
-                point_upwards=True
-            ) + message
-        )
+        # Check if logging is enabled
+        if Args().get_args().debug_text:
+            # Merge the tree branches with the message
+            # Log it
+            self.log(
+                self.__get_log_prepend(
+                    indentation=self.__indentation,
+                    point_upwards=True
+                ) + message
+            )
 
     def log_tree_down(self, message: str) -> None:
         """
@@ -122,26 +124,30 @@ class Logger:
 
         :param message: The message to log.
         """
-        # Merge the tree branches with the message
-        # Log it
-        self.log(
-            self.__get_log_prepend(
-                indentation=self.__indentation,
-                point_upwards=False
-            ) + message
-        )
+        # Check if logging is enabled
+        if Args().get_args().debug_text:
+            # Merge the tree branches with the message
+            # Log it
+            self.log(
+                self.__get_log_prepend(
+                    indentation=self.__indentation,
+                    point_upwards=False
+                ) + message
+            )
 
     @staticmethod
     def log(message: str) -> None:
         """
         Logs a string to standard output.
+        While this seems unnecessary, this is good practice for developing
+        wrapper functions. Later, if I want, I only have to change this function
+        if I want to alter the console logging across the entire project.
+        For example, if I wanted to add colors to the console output, I could add it here.
 
         :param message: The message to log.
         """
-        # Check if logging is enabled
-        if Args().get_args().debug_text:
-            # If it is, then print the message
-            print(message)
+        # Print the input message
+        print(message)
 
     @staticmethod
     def __get_log_prepend(indentation: int, point_upwards: bool) -> str:
@@ -161,5 +167,3 @@ class Logger:
         # Otherwise, if this is the root branch (layer zero)
         # Make a newline to separate from previous node tree.
         return "\n"
-
-

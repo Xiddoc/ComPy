@@ -105,7 +105,7 @@ class PyModule(PyScoped):
 
             # Inject native dependency bodies
             ported_code="\n".join([
-                port.transpile() for port in self.get_ported_dependencies()
+                port.transpile() + ";" for port in self.get_ported_dependencies()
             ]),
 
             # Flatten the current code
