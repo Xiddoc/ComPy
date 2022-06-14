@@ -119,4 +119,8 @@ class LoggerImage(metaclass=Singleton):
             node.add_face(TextFace(text=node.name, fsize=13, tight_text=True), column=0)
 
         # Render the tree to an image
-        t.render(file_name=Args().get_args().file.name + ".png", tree_style=self.__const_style)
+        from src.compiler.logging.Logger import Logger
+        Logger.log(f"Rendering debugging image...")
+        output_file = Args().get_args().file.name + ".png"
+        t.render(file_name=output_file, tree_style=self.__const_style)
+        Logger.log(f"Wrote image to output file '{output_file}'...")

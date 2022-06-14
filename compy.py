@@ -9,9 +9,10 @@ from os.path import getsize
 from platform import system
 from subprocess import Popen, DEVNULL
 from typing import IO
-from src.compiler.Util import Util
+
 from src.compiler.Args import Args
 from src.compiler.Compiler import Compiler
+from src.compiler.Util import Util
 
 # Version information, will be moved to a setup.py in the future
 __version__ = 1.0
