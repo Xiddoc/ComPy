@@ -1,3 +1,7 @@
 dataclasses
 ete3
 future
+
+six
+numpy
+PyQt5
