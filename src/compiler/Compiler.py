@@ -3,7 +3,6 @@ Compiler class.
 """
 from ast import AST, parse, unparse
 
-from src.compiler.Util import Util
 from src.pyexpressions.concrete.PyModule import PyModule
 
 
@@ -46,19 +45,3 @@ class Compiler:
         :return: The Python representation of the node.
         """
         return unparse(expression)
-
-    @classmethod
-    def unparse_escaped(cls, expression: AST) -> str:
-        """
-        Takes an AST expression or node and unparses it back
-        to Python code (or a Python expression, that is).
-        Following that, it escapes all special characters
-        so that it is now a printable literal where
-        the special characters are not interpreted.
-
-        :param expression: The AST node to unparse.
-        :return: The *string-escaped* Python representation of the node.
-        """
-        # First, unparse the expression
-        # Then, escape the string
-        return Util.escape(cls.unparse(expression))

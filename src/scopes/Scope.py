@@ -1,5 +1,5 @@
 """
-Compiler class for managing variables and their types between scopes.
+Compiler class for managing objects and their types between scopes.
 """
 from typing import Set, Optional
 
@@ -9,7 +9,7 @@ from src.structures.Errors import ObjectAlreadyDefinedError, ObjectNotDefinedErr
 
 class Scope:
     """
-    Handler for variables.
+    Handler for objects.
     """
 
     __objects: Set[Object]
@@ -29,26 +29,6 @@ class Scope:
         :param object_name: The name of the object to check.
         """
         return any(iter_var.name == object_name for iter_var in self.__objects)
-
-    # def declare_variable(self, var_name: str, var_type: str) -> None:
-    #     """
-    #     Initialize a variable and add it to the handler's registry.
-    #
-    #     :param var_name: The name of the variable.
-    #     :param var_type: The type of the variable.
-    #     """
-    #     # Create the Object instance and declare it
-    #     self.declare_object(Variable(name=var_name, type=Type(var_type)))
-
-    # def declare_function(self, func_name: str, func_return_type: str) -> None:
-    #     """
-    #     Initialize a function and add it to the handler's registry.
-    #
-    #     :param func_name: The name of the function.
-    #     :param func_return_type: The return type of the function.
-    #     """
-    #     # Create the Object instance and declare it
-    #     self.declare_object(Function(name=func_name, return_type=Type(func_return_type)))
 
     def declare_object(self, new_obj: Object) -> None:
         """
