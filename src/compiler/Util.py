@@ -29,7 +29,7 @@ class Util:
         instead of statically declaring them in their respective classes.
 
         Due to this, mypy will throw a type-checking error since it will
-        not find these attributes in the class defenition. Hence, to work
+        not find these attributes in the class definition. Hence, to work
         around this bug, we will use the getattr function to retrieve the
         attributes directly.
 
@@ -85,7 +85,7 @@ class Util:
     def represent_file_size(file_size: int) -> str:
         """
         Convert a file size to a string representation.
-        For example, if you pass 2000
+        For example, if you pass the integer 2048, then you will get "2.0 KB" returned.
 
         :param file_size: The file size (in bytes) to convert to a string.
         :return: A string representing the file size with an abbreviation.

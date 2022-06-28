@@ -33,7 +33,7 @@ class PyClassDef(PyScoped, PyIdentifiable):
         self.set_id(expression.name)
 
         # Declare class
-        self.get_nearest_scope().declare_object(Class(self.get_id(), self.get_scope()))
+        self.get_nearest_scope().declare_object(Class(self.get_id()))
 
         # Create object scope (class body has it's own scope)
         # Inherit the scope from the previous scope

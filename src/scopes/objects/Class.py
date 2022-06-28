@@ -3,7 +3,6 @@ Class class for scope handler.
 """
 from dataclasses import dataclass
 
-from src.scopes.Scope import Scope
 from src.scopes.abstract.Object import Object
 
 
@@ -16,8 +15,6 @@ class Class(Object):
     We don't need to hold any "type" since the class is it's own type.
     In the future, we might want to check inheritance, for example.
     """
-
-    scope: Scope
 
     def __hash__(self) -> int:
         """

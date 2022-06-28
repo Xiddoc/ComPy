@@ -3,7 +3,7 @@ Conditional expression.
 """
 from _ast import IfExp
 
-from src.pyexpressions.abstract.PyConditional import PyConditional
+from src.pyexpressions.highlevel.PyConditional import PyConditional
 from src.pyexpressions.abstract.PyExpression import PyExpression
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 

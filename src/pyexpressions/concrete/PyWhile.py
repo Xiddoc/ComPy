@@ -3,7 +3,7 @@ Class for a conditional looped statement.
 """
 from _ast import While
 
-from src.pyexpressions.abstract.PyConditional import PyConditional
+from src.pyexpressions.highlevel.PyConditional import PyConditional
 from src.structures.TypeRenames import GENERIC_PYEXPR_TYPE
 
 

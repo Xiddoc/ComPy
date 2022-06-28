@@ -26,9 +26,9 @@ class ObjectAlreadyDefinedError(NameError):
 @dataclass(frozen=True)
 class ObjectNotDefinedError(NameError):
     """
-    As stated in ObjectAlreadyDefinedError, a object must have an explicit type hint the first time it is used.
+    As stated in ObjectAlreadyDefinedError, an object must have an explicit type hint the first time it is used.
     This is referred to as "defining" or "initializing".
-    If a object is referenced without being defined, then the compiler should throw this error.
+    If an object is referenced without being defined, then the compiler should throw this error.
     """
 
     object_name: str
@@ -42,7 +42,6 @@ class ObjectNotDefinedError(NameError):
 class UnsupportedFeatureException(SyntaxError):
     """
     An error to raise whenever a Python feature is used which is not implemented in the compiler.
-    Examples (currently) include classes, for example. (Boo hoo, no OOP for you)
     """
 
     feature: Union[AST, str]

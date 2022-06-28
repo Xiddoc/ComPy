@@ -1,13 +1,12 @@
 """
 Object class for scope handler.
 """
-from abc import ABCMeta
 
 from dataclasses import dataclass
 
 
 @dataclass
-class Object(metaclass=ABCMeta):
+class Object:
     """
     Specifies basic attributes which all objects should have.
 
